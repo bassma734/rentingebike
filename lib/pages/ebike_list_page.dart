@@ -1,5 +1,7 @@
+// ebike_list_page.dart
 import 'package:flutter/material.dart';
-
+import '../pages/ebike_model.dart';
+import '../pages/reservation_form_page.dart';
 
 class EbikeListPage extends StatefulWidget {
   const EbikeListPage({super.key});
@@ -9,21 +11,19 @@ class EbikeListPage extends StatefulWidget {
 }
 
 class EbikeListPageState extends State<EbikeListPage> {
-  final List<Map<String, dynamic>> _ebikes = [
-    {
-      'name': 'Ebike 1',
-      'photo': 'assets/images/ebike1.jpg',
-      'chargingPercentage': 80,
-      'mileage': 70,
-      'reservationUrl': '/reservation/ebike1',
-    },
-    {
-      'name': 'Ebike 2',
-      'photo': 'assets/images/ebike1.jpg',
-      'chargingPercentage': 90,
-      'mileage': 100,
-      'reservationUrl': '/reservation/ebike2',
-    },
+  final List<Ebike> ebikesList = [
+    Ebike(
+      name: 'Ebike 1',
+      photo: 'assets/images/ebike1.jpg',
+      chargingPercentage: 80,
+      mileage: 70,
+    ),
+    Ebike(
+      name: 'Ebike 2',
+      photo: 'assets/images/ebike1.jpg',
+      chargingPercentage: 90,
+      mileage: 100,
+    ),
   ];
 
   @override
@@ -33,41 +33,51 @@ class EbikeListPageState extends State<EbikeListPage> {
         title: const Text('E-bike Renting'),
       ),
       body: ListView.builder(
-        itemCount: _ebikes.length,
+        itemCount: ebikesList.length,
         itemBuilder: (context, index) {
-          final ebike = _ebikes[index];
-          return GestureDetector(
-            onTap: () {
-              // Navigate to the reservation page for the selected bike.
-              Navigator.pushNamed(context, ebike['reservationUrl']);
-            },
-            child: ListTile(
-              leading: Image.asset(
-                ebike['photo'],
-                width: 50,
-                height: 50,
-                fit: BoxFit.cover,
-              ),
-              title: Text(
-                ebike['name'],
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Charging percentage: ${ebike['chargingPercentage']}%'),
-                  Text('Kelometrage: ${ebike['kelometrage']} km'),
-                ],
-              ),
-              trailing: ElevatedButton(
-                onPressed: () {
-                  // Handle the reservation button press event.
-                },
-                child: const Text('Reserve'),
-              ),
-            ),
-          );
+          final ebike = ebikesList[index];
+          return _buildEbikeListTile(ebike);
         },
+      ),
+    );
+  }
+
+  Widget _buildEbikeListTile(Ebike ebike) {
+    return GestureDetector(
+      
+      child: ListTile(
+        leading: Image.asset(
+          ebike.photo,
+          width: 50,
+          height: 50,
+          fit: BoxFit.cover,
+        ),
+        title: Text(
+          ebike.name,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Charging percentage: ${ebike.chargingPercentage}%'),
+            Text('Kelometrage: ${ebike.mileage} km'),
+          ],
+        ),
+        trailing: ElevatedButton(
+          onPressed: () {
+            _handleReservationButtonPress(ebike);
+          },
+          child: const Text('Reserve'),
+        ),
+      ),
+    );
+  }
+
+  void _handleReservationButtonPress(Ebike ebike) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ReservationFormPage(ebike: ebike),
       ),
     );
   }

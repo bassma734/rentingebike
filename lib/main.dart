@@ -39,9 +39,9 @@ class MyApp extends StatelessWidget {
                 backgroundColor: background,
                 titleTextStyle: const TextStyle(
                   color: primary,
-                  fontSize: 32,
+                  fontSize: 18,
                   fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w100,
                 ),
               ),
         ),
