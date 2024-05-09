@@ -66,7 +66,7 @@ class _MainPageState extends State<MainPage> {
     // Navigate to the station details page
     Navigator.push(
       context,
-       MaterialPageRoute(
+      MaterialPageRoute(
         builder: (_) => const EbikeListPage(),
         ),
     );
@@ -80,7 +80,6 @@ class CustomButton extends StatelessWidget {
   final void Function()? onPressed;
 
   @override
- 
   Widget build(BuildContext context) {
   return SizedBox(
     width: 280, // adjust the size as needed
@@ -104,4 +103,4 @@ class CustomButton extends StatelessWidget {
 
 }
   
-   
+g
