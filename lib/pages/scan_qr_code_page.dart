@@ -1,18 +1,41 @@
-// scan_qr_code_page.dart
 import 'package:flutter/material.dart';
-
-class ScanQRCodePage extends StatelessWidget {
+import 'package:qr_mobile_vision/qr_camera.dart';
+import 'money_time_counter_page.dart';
+class ScanQRCodePage extends StatefulWidget {
   const ScanQRCodePage({super.key});
 
   @override
+  ScanQRCodePageState createState() => ScanQRCodePageState();
+}
+
+class ScanQRCodePageState extends State<ScanQRCodePage> {
+  String qrCode = '';
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Scan QR Code'),
+    return QrCamera(
+      qrCodeCallback: (code) {
+        setState(() {
+          qrCode = code!;
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MoneyTimeCounterPage(qrCode: code),
+            ),
+          );
+        });
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.red, width: 10),
+        ),
       ),
-      body: const Center(
-        child: Text('Scan QR Code'),
-      ),
+      notStartedBuilder: (context) {
+        return const Text("Loading the QR Code scanner");
+      },
+      offscreenBuilder: (context) {
+        return const Text("QR Code scanner paused");
+      },
     );
   }
 }

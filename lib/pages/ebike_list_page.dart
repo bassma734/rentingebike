@@ -30,7 +30,7 @@ class EbikeListPageState extends State<EbikeListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('E-bike Renting'),
+        title: const Text('E-bike List'),
       ),
       body: ListView.builder(
         itemCount: ebikesList.length,
@@ -48,8 +48,8 @@ class EbikeListPageState extends State<EbikeListPage> {
       child: ListTile(
         leading: Image.asset(
           ebike.photo,
-          width: 50,
-          height: 50,
+          width : 50,
+          height : 50,
           fit: BoxFit.cover,
         ),
         title: Text(
@@ -60,7 +60,7 @@ class EbikeListPageState extends State<EbikeListPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Charging percentage: ${ebike.chargingPercentage}%'),
-            Text('Kelometrage: ${ebike.mileage} km'),
+            Text('Mileage: ${ebike.mileage} km'),
           ],
         ),
         trailing: ElevatedButton(

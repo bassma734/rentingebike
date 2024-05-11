@@ -68,15 +68,15 @@ class _MainPageState extends State<MainPage> {
               width:250,
               child: ElevatedButton(
                 onPressed: () {
-                 Navigator.push(
-                   context,
-                   MaterialPageRoute(builder: (context) => const ScanQRCodePage()),
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ScanQRCodePage()),
                   );
                 },
                 child: const Text("Scan QR code" , style: TextStyle(fontSize: 25),),
               ),
             ),
-             
+          
             const Spacer(),
 
           ],
@@ -118,7 +118,4 @@ class CustomButton extends StatelessWidget {
       ),
   );
 }
-
 }
-  
-g

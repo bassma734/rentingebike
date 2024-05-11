@@ -1,7 +1,7 @@
 // reservation_form_page.dart
 import 'package:flutter/material.dart';
 import '../pages/ebike_model.dart';
-import '../pages/scan_qr_code_page.dart'; 
+import 'successful_confirmation.dart';
 
 class ReservationFormPage extends StatefulWidget {
   final Ebike ebike;
@@ -79,7 +79,7 @@ class ReservationFormPageState extends State<ReservationFormPage> {
                       ? () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const ScanQRCodePage()),
+                            MaterialPageRoute(builder: (context) => const SuccessfulConfirmationPage()),
                           );
                         }
                       : null,
