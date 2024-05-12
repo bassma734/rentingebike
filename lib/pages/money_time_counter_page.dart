@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:renting_app/pages/scan_qr_code_page.dart';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -52,6 +53,17 @@ class MoneyTimeCounterPageState extends State<MoneyTimeCounterPage> {
             Text('Scanned QR Code: ${widget.qrCode}'),
             Text('Money: $_moneyCounterFormatted'),
             Text('Time: ${_timer!.tick} seconds'),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ScanQRCodePage(),
+                  ),
+                );
+              },
+              child: const Text('Scan QR Code'),
+            ),
           ],
         ),
       ),
