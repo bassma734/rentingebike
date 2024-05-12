@@ -17,13 +17,14 @@ class ScanQRCodePageState extends State<ScanQRCodePage> {
       qrCodeCallback: (code) {
         setState(() {
           qrCode = code!;
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => MoneyTimeCounterPage(qrCode: code),
+          if (qrCode == 'Ebike' ){
+            Navigator.pushReplacement(
+             context,
+             MaterialPageRoute(
+               builder: (context) => MoneyTimeCounterPage(qrCode: code),
             ),
           );
-        });
+        }});
       },
       
       notStartedBuilder: (context) {

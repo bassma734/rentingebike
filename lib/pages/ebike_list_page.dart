@@ -1,8 +1,8 @@
-// ebike_list_page.dart
 import 'package:flutter/material.dart';
+import 'package:mqtt_client/mqtt_client.dart';
 import '../pages/ebike_model.dart';
 import '../pages/reservation_form_page.dart';
-//import '../services/mqtt_service.dart' ;
+import '../services/mqtt_service.dart';
 
 class EbikeListPage extends StatefulWidget {
   const EbikeListPage({super.key});
@@ -27,6 +27,30 @@ class EbikeListPageState extends State<EbikeListPage> {
     ),
   ];
 
+  late MqttService _mqttService;
+  bool isReservationButtonEnabled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _mqttService = MqttService();
+    _mqttService.subscribe('ir_sensor_detection');
+    _mqttService.client.updates!.listen((List<MqttReceivedMessage<MqttMessage>> c) {
+      final MqttPublishMessage recMess = c[0].payload as MqttPublishMessage;
+      final message = MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+
+      if (message == 'NO') {
+        setState(() {
+          isReservationButtonEnabled = false;
+        });
+      } else if (message == 'YES') {
+        setState(() {
+          isReservationButtonEnabled = true;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,12 +69,14 @@ class EbikeListPageState extends State<EbikeListPage> {
 
   Widget _buildEbikeListTile(Ebike ebike) {
     return GestureDetector(
-      
+      onTap: isReservationButtonEnabled ? () {
+        _handleReservationButtonPress(ebike);
+      } : null,
       child: ListTile(
         leading: Image.asset(
           ebike.photo,
-          width : 50,
-          height : 50,
+          width: 50,
+          height: 50,
           fit: BoxFit.cover,
         ),
         title: Text(
@@ -65,9 +91,9 @@ class EbikeListPageState extends State<EbikeListPage> {
           ],
         ),
         trailing: ElevatedButton(
-          onPressed: () {
+          onPressed: isReservationButtonEnabled ? () {
             _handleReservationButtonPress(ebike);
-          },
+          } : null,
           child: const Text('Reserve'),
         ),
       ),

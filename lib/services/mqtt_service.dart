@@ -5,22 +5,22 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
 class MqttService {
-  late MqttServerClient _client;
+  //late MqttServerClient client;
+  final client = MqttServerClient('192.168.0.6', 'FlutterApp'); 
 
   Future<void> connect(String brokerAddress) async {
-    _client = MqttServerClient(brokerAddress, '');
-    _client.logging(on: true);
-    _client.autoReconnect = true;
-    _client.onAutoReconnect = onAutoReconnect;
-    _client.onAutoReconnected = onAutoReconnected;
-    _client.onConnected = onConnected;
-    _client.onDisconnected = onDisconnected;
-    _client.onSubscribed = onSubscribed;
-    _client.onSubscribeFail = onSubscribeFail;
-    _client.pongCallback = pong;
-
+    //client = MqttServerClient(brokerAddress, 'Flutter_App');
+    client.logging(on: true);
+    client.autoReconnect = true;
+    client.onAutoReconnect = onAutoReconnect;
+    client.onAutoReconnected = onAutoReconnected;
+    client.onConnected = onConnected;
+    client.onDisconnected = onDisconnected;
+    client.onSubscribed = onSubscribed;
+    client.onSubscribeFail = onSubscribeFail;
+    client.pongCallback = pong;
     try {
-      await _client.connect();
+      await client.connect();
     } catch (e) {
       debugPrint('Exception: $e' );
       disconnect();
@@ -28,21 +28,21 @@ class MqttService {
   }
 
   void disconnect() {
-    _client.disconnect();
+    client.disconnect();
   }
 
   void subscribe(String topic) {
-    _client.subscribe(topic, MqttQos.atLeastOnce);
+    client.subscribe(topic, MqttQos.atLeastOnce);
   }
 
   void unsubscribe(String topic) {
-    _client.unsubscribe(topic);
+    client.unsubscribe(topic);
   }
 
   void publish(String topic, String message) {
     final builder = MqttClientPayloadBuilder();
     builder.addString(message);
-    _client.publishMessage(topic, MqttQos.atLeastOnce, builder.payload!);
+    client.publishMessage(topic, MqttQos.atLeastOnce, builder.payload!);
   }
 
   void onAutoReconnect() {
