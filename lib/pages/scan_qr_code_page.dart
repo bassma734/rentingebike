@@ -25,11 +25,7 @@ class ScanQRCodePageState extends State<ScanQRCodePage> {
           );
         });
       },
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.red, width: 10),
-        ),
-      ),
+
       notStartedBuilder: (context) {
         return const Text("");
       },
