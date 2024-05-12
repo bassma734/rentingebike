@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:renting_app/pages/scan_qr_code_page.dart';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
