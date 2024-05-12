@@ -40,32 +40,32 @@ class _MainPageState extends State<MainPage> {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           children: [
-            const SizedBox(height: 50),
+            const SizedBox(height : 50),
             const Text("Welcome ",
                 style: TextStyle(fontSize: 50, fontWeight: FontWeight.w500),textAlign: TextAlign.center,),
-            const SizedBox(height: 50),
+            const SizedBox(height : 50),
             const Text(
               "Please click on the station button for rental reservation",
               style: TextStyle(fontSize: 14),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height:30),
+            const SizedBox(height :30),
             // Add your station widget here
             // For example:
             CustomButton(
               label: "Station",
               onPressed: () => goToEbikeListPage(context),
               ),
-            const SizedBox(height:50),
+            const SizedBox(height :50),
             const Text(
               "or click on the scan QRcode button for the preffered on-site e-bike rental ",
               style: TextStyle(fontSize: 14),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height:30),
+            const SizedBox(height :30),
             SizedBox(
-              height: 120,
-              width:250,
+              height : 120,
+              width :250,
               child: ElevatedButton(
                 onPressed: () {
                 Navigator.push(
@@ -105,8 +105,8 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
   return SizedBox(
-    width: 300, // adjust the size as needed
-    height: 100, // adjust the size as needed
+    width : 300, // adjust the size as needed
+    height : 100, // adjust the size as needed
       
       child: ElevatedButton(
         onPressed: onPressed,

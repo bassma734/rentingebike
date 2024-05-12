@@ -18,12 +18,12 @@ class SuccessfulConfirmationPage extends StatelessWidget {
               'Your reservation has been confirmed successfully.',
               style: TextStyle(fontSize: 24),
             ),
-            const SizedBox(height : 20), // Removed problematic characters from here
+            const SizedBox(height : 20), 
             const Text(
               'Scan the QR code when you get there.',
               style: TextStyle(fontSize: 18),
             ),
-            const SizedBox(height : 40), // Removed problematic characters from here
+            const SizedBox(height : 40),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(

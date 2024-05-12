@@ -93,10 +93,10 @@ packages:
     dependency: transitive
     description:
       name: dart_quill_delta
-      sha256: b0c608cc1e83a0d0975cf4c303437ea44bad1b3f81739e085a2c1b6bbe5291c2
+      sha256: "598b1636fb946422f79e63f2b03cced67d59dd2d408291a0441b7380d47a10c0"
       url: "https://pub.dev"
     source: hosted
-    version: "9.3.10"
+    version: "9.3.11"
   device_info_plus:
     dependency: transitive
     description:
@@ -287,10 +287,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_quill
-      sha256: a97c32a14bcb901611f249c8c3f9596defe41fe87a1d73414cbb2321f6605db2
+      sha256: f5c56ca799bc80fd30ff2a279f6990df2af3aef398083ec8676a04ac89c2eb05
       url: "https://pub.dev"
     source: hosted
-    version: "9.3.10"
+    version: "9.3.11"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -401,10 +401,10 @@ packages:
     dependency: transitive
     description:
       name: irondash_engine_context
-      sha256: "4f5e2629296430cce08cdff42e47cef07b8f74a64fdbdfb0525d147bc1a969a2"
+      sha256: e8398cca5e28dc280c87b8c35a6ff4e15be844eabec51e713631f83903563681
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.2"
+    version: "0.5.3"
   irondash_message_channel:
     dependency: transitive
     description:
@@ -678,10 +678,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher_ios
-      sha256: "9149d493b075ed740901f3ee844a38a00b33116c7c5c10d7fb27df8987fb51d5"
+      sha256: "7068716403343f6ba4969b4173cbf3b84fc768042124bc2c011e5d782b24fe89"
       url: "https://pub.dev"
     source: hosted
-    version: "6.2.5"
+    version: "6.3.0"
   url_launcher_linux:
     dependency: transitive
     description:
@@ -694,10 +694,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher_macos
-      sha256: b7244901ea3cf489c5335bdacda07264a6e960b1c1b1a9f91e4bc371d9e68234
+      sha256: "9a1a42d5d2d95400c795b2914c36fdcb525870c752569438e4ebb09a2b5d90de"
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.0"
+    version: "3.2.0"
   url_launcher_platform_interface:
     dependency: transitive
     description:
