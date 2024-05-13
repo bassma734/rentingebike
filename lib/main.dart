@@ -11,7 +11,7 @@ import 'firebase_options.dart';
 import 'pages/main_page.dart';
 import 'pages/registration_page.dart';
 import 'services/auth_service.dart';
-import 'services/mqtt_service.dart';
+//import 'services/mqtt_service.dart';
 
 
 Future<void> main() async {
@@ -21,8 +21,8 @@ Future<void> main() async {
   );
   //final client = MqttServerClient('192.168.0.6', '1883'); // Replace with your broker's address
   //client.connect('flutter_App'); // Replace with a unique client ID
-  final mqttService = MqttService();
-  mqttService.connect('192.168.0.6');
+  /*final mqttService = MqttService();
+  mqttService.connect('192.168.0.6');*/
   runApp( const MyApp());
 }
 

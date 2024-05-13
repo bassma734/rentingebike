@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:renting_app/pages/scan_qr_code_page.dart';
+import 'package:renting_app/pages/scan_qr_code_res.dart';
+//import 'reservation_form_page.dart';
+import '../pages/ebike_model.dart';
+
 
 class SuccessfulConfirmationPage extends StatelessWidget {
-  const SuccessfulConfirmationPage({super.key});
+  final Ebike ebike ;
+
+  const SuccessfulConfirmationPage({  required this.ebike ,super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +34,7 @@ class SuccessfulConfirmationPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const ScanQRCodePage(),
+                    builder: (context) => ScanQRCodeResPage(ebike : ebike),
                   ),
                 );
               },

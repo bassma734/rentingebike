@@ -2,7 +2,7 @@ import 'package:renting_app/pages/ebike_list_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:renting_app/pages/scan_qr_code_page.dart';
+import 'package:renting_app/pages/scan_qr_code_onsite.dart';
 
 import '../core/dialogs.dart';
 import '../services/auth_service.dart';
