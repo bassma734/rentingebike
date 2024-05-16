@@ -122,13 +122,9 @@ class EbikeListPageState extends State<EbikeListPage> {
             _reservationButtonStates[1] = false ;
           }});
           debugPrint('MQTTClient::Message received on topic: <${c[0].topic}> is $pt\n');
-  });
+    });
   }
-
-
-
-
-
+  
   @override
   void dispose() {
     mqttService.disconnect();
