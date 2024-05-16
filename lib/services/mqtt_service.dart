@@ -1,75 +1,81 @@
-import 'dart:async';
-import 'dart:math';
-import 'package:flutter/material.dart';
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
 class MqttService {
-  late MqttServerClient _client;
+  MqttServerClient client =
+      MqttServerClient.withPort('192.168.0.6', 'mobile_App', 1883);
 
-  Future<void> connect(String brokerAddress) async {
-    _client = MqttServerClient(brokerAddress, '');
-    _client.logging(on: true);
-    _client.autoReconnect = true;
-    _client.onAutoReconnect = onAutoReconnect;
-    _client.onAutoReconnected = onAutoReconnected;
-    _client.onConnected = onConnected;
-    _client.onDisconnected = onDisconnected;
-    _client.onSubscribed = onSubscribed;
-    _client.onSubscribeFail = onSubscribeFail;
-    _client.pongCallback = pong;
+  Future<int> connect() async {
+    client.logging(on: true);
+    client.keepAlivePeriod = 60;
+    client.onConnected = onConnected;
+    client.onDisconnected = onDisconnected;
+    client.onSubscribed = onSubscribed;
+    client.pongCallback = pong;
+
+    final connMessage =
+        MqttConnectMessage().startClean().withWillQos(MqttQos.atLeastOnce);
+    client.connectionMessage = connMessage;
 
     try {
-      await _client.connect();
-    } catch (e) {
-      debugPrint('Exception: $e' );
-      disconnect();
+      await client.connect();
+    } on NoConnectionException catch (e) {
+      if (kDebugMode) {
+        print('MQTTClient::Client exception - $e');
+      }
+      client.disconnect();
+    } on SocketException catch (e) {
+      if (kDebugMode) {
+        print('MQTTClient::Socket exception - $e');
+      }
+      client.disconnect();
     }
+
+    return 0;
   }
 
-  void disconnect() {
-    _client.disconnect();
+  void disconnect(){
+    client.disconnect();
   }
 
   void subscribe(String topic) {
-    _client.subscribe(topic, MqttQos.atLeastOnce);
-  }
-
-  void unsubscribe(String topic) {
-    _client.unsubscribe(topic);
-  }
-
-  void publish(String topic, String message) {
-    final builder = MqttClientPayloadBuilder();
-    builder.addString(message);
-    _client.publishMessage(topic, MqttQos.atLeastOnce, builder.payload!);
-  }
-
-  void onAutoReconnect() {
-    log('Client auto reconnection sequence will start' as num);
-  }
-
-  void onAutoReconnected() {
-    debugPrint('Client auto reconnection sequence has completed');
+    client.subscribe(topic, MqttQos.atLeastOnce);
   }
 
   void onConnected() {
-    debugPrint('Connected');
+    if (kDebugMode) {
+      print('MQTTClient::Connected');
+    }
   }
 
   void onDisconnected() {
-    debugPrint('Disconnected');
+    if (kDebugMode) {
+      print('MQTTClient::Disconnected');
+    }
   }
 
   void onSubscribed(String topic) {
-    debugPrint('Subscribed topic: $topic');
-  }
-
-  void onSubscribeFail(String topic) {
-    debugPrint('Failed to subscribe $topic');
+    if (kDebugMode) {
+      print('MQTTClient::Subscribed to topic: $topic');
+    }
   }
 
   void pong() {
-    debugPrint('Ping response client callback invoked');
+    if (kDebugMode) {
+      print('MQTTClient::Ping response received');
+    }
+  }
+
+  void publishMessage(String topic, String message) {
+    final builder = MqttClientPayloadBuilder();
+    builder.addString(message);
+    client.publishMessage(topic, MqttQos.exactlyOnce, builder.payload!);
+  }
+
+  Stream<List<MqttReceivedMessage<MqttMessage>>>? getMessagesStream() {
+    return client.updates;
   }
 }

@@ -1,4 +1,6 @@
 // reservation_form_page.dart
+//import 'dart:js_util';
+
 import 'package:flutter/material.dart';
 import '../pages/ebike_model.dart';
 import 'successful_confirmation.dart';
@@ -49,8 +51,7 @@ class ReservationFormPageState extends State<ReservationFormPage> {
                       widget.ebike.name,
                       style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                    Text('Charging percentage: ${widget.ebike.chargingPercentage}%'),
-                    Text('Mileage: ${widget.ebike.mileage} km'),
+
                   ],
                 ),
               ],
@@ -64,7 +65,7 @@ class ReservationFormPageState extends State<ReservationFormPage> {
             ),
             const SizedBox(height : 16),
             ElevatedButton(
-              onPressed: () => _selectTime(context),
+              onPressed: () => _showTimePickerDialog(context),
               child: const Text('Select time'),
             ),
             Text('Selected time: ${_selectedTime.format(context)}'),
@@ -72,20 +73,18 @@ class ReservationFormPageState extends State<ReservationFormPage> {
             // Time slot selector
 
             // Confirmation button
-            StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
-                return ElevatedButton(
-                  onPressed: _isReservationTimeSelected
-                      ? () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const SuccessfulConfirmationPage()),
-                          );
-                        }
-                      : null,
-                  child: const Text('Confirm Reservation'),
-                );
-              },
+            ElevatedButton(
+              onPressed: _isReservationTimeSelected
+                  ? () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SuccessfulConfirmationPage(ebike: widget.ebike),
+                        ),
+                      );
+                    }
+                  : null,
+              child: const Text('Confirm Reservation'),
             ),
           ],
         ),
@@ -93,7 +92,7 @@ class ReservationFormPageState extends State<ReservationFormPage> {
     );
   }
 
-  Future<void> _selectTime(BuildContext context) async {
+  Future<void> _showTimePickerDialog(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: _selectedTime,
@@ -110,5 +109,36 @@ class ReservationFormPageState extends State<ReservationFormPage> {
         _isReservationTimeSelected = true;
       });
     }
+  }
+}
+
+class EbikeDetails extends StatelessWidget {
+  final Ebike ebike;
+
+  const EbikeDetails(this.ebike, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Image.asset(
+          ebike.photo,
+          width : 100,
+          height : 100,
+          fit: BoxFit.cover,
+        ),
+        const SizedBox(width : 16),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              ebike.name,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+           
+          ],
+        ),
+      ],
+    );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_mobile_vision/qr_camera.dart';
-import '../pages/paiement_page.dart';
+import 'money_time_counter_page.dart';
 class ScanQRCodePage extends StatefulWidget {
   const ScanQRCodePage({super.key});
 
@@ -17,15 +17,17 @@ class ScanQRCodePageState extends State<ScanQRCodePage> {
       qrCodeCallback: (code) {
         setState(() {
           qrCode = code!;
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>const PaiementPage(),
+          if (qrCode.startsWith('Ebike'))
+       {
+            Navigator.pushReplacement(
+             context,
+             MaterialPageRoute(
+               builder: (context) => MoneyTimeCounterPage(qrCode: code),
             ),
           );
-        });
+        }});
       },
-      
+
       notStartedBuilder: (context) {
         return const Text("");
       },

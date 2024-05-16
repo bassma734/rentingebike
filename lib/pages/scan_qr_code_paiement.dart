@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:qr_mobile_vision/qr_camera.dart';
-import 'money_time_counter_page.dart';
-class ScanQRCodePage extends StatefulWidget {
-  const ScanQRCodePage({super.key});
+import '../pages/paiement_page.dart';
+
+
+
+
+class ScanQRPCodePage extends StatefulWidget {
+  final String name  ;
+
+  const ScanQRPCodePage({super.key, required this.name });
 
   @override
-  ScanQRCodePageState createState() => ScanQRCodePageState();
+  ScanQRPCodePageState createState() => ScanQRPCodePageState();
 }
 
-class ScanQRCodePageState extends State<ScanQRCodePage> {
+class ScanQRPCodePageState extends State<ScanQRPCodePage> {
   String qrCode = '';
 
   @override
@@ -17,15 +23,17 @@ class ScanQRCodePageState extends State<ScanQRCodePage> {
       qrCodeCallback: (code) {
         setState(() {
           qrCode = code!;
-          Navigator.pushReplacement(
+          if (code == widget.name )
+      {
+           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => MoneyTimeCounterPage(qrCode: code),
+              builder: (context) =>const PaiementPage(),
             ),
           );
-        });
+        }});
       },
-
+      
       notStartedBuilder: (context) {
         return const Text("");
       },
