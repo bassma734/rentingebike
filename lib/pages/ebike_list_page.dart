@@ -8,9 +8,7 @@ import 'package:mqtt_client/mqtt_client.dart';
 
 
 class EbikeListPage extends StatefulWidget {
-  //final String state ;
   const EbikeListPage({super.key  });
-
   @override
   EbikeListPageState createState() => EbikeListPageState();
 }
@@ -19,7 +17,6 @@ class EbikeListPageState extends State<EbikeListPage> {
   MqttService mqttService = MqttService();
   final String irTopic = "ir_sensor_detection";
   final _reservationButtonStates = List<bool>.filled(2, false);
-  //String msg ='';
 
 
 
@@ -124,7 +121,7 @@ class EbikeListPageState extends State<EbikeListPage> {
           debugPrint('MQTTClient::Message received on topic: <${c[0].topic}> is $pt\n');
     });
   }
-  
+
   @override
   void dispose() {
     mqttService.disconnect();
