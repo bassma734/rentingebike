@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:qr_mobile_vision/qr_camera.dart';
 import '../pages/paiement_page.dart';
+
+
+
+
 class ScanQRPCodePage extends StatefulWidget {
-  const ScanQRPCodePage({super.key});
+  final String name  ;
+
+  const ScanQRPCodePage({super.key, required this.name });
 
   @override
   ScanQRPCodePageState createState() => ScanQRPCodePageState();
@@ -17,7 +23,7 @@ class ScanQRPCodePageState extends State<ScanQRPCodePage> {
       qrCodeCallback: (code) {
         setState(() {
           qrCode = code!;
-          if (code.startsWith('Ebike'))
+          if (code == widget.name )
       {
            Navigator.pushReplacement(
             context,

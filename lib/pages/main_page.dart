@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:renting_app/pages/scan_qr_code_onsite.dart';
-
 import '../core/dialogs.dart';
 import '../services/auth_service.dart';
 import '../widgets/note_icon_button_outlined.dart';
+
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -16,6 +16,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,11 +91,12 @@ class _MainPageState extends State<MainPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => const EbikeListPage(),
+        builder: (_) => const  EbikeListPage(),
         ),
     );
-
   }
+
+
 }
       
 class CustomButton extends StatelessWidget {
@@ -117,5 +119,6 @@ class CustomButton extends StatelessWidget {
         
       ),
   );
-}
+ }
+
 }

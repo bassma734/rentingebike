@@ -116,8 +116,7 @@ class EbikeDetails extends StatelessWidget {
               ebike.name,
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            Text('Charging percentage: ${ebike.chargingPercentage}%'),
-            Text('Mileage: ${ebike.mileage} km'),
+           
           ],
         ),
       ],

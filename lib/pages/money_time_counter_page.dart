@@ -58,7 +58,7 @@ class MoneyTimeCounterPageState extends State<MoneyTimeCounterPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const ScanQRPCodePage(),
+                    builder: (context) =>  ScanQRPCodePage(name : widget.qrCode ),
                   ),
                 );
               },
