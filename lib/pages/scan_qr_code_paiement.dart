@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:qr_mobile_vision/qr_camera.dart';
+import 'package:renting_app/services/mqtt_service.dart';
 import '../pages/paiement_page.dart';
-
+import 'package:mqtt_client/mqtt_client.dart';
 
 
 
@@ -16,6 +17,60 @@ class ScanQRPCodePage extends StatefulWidget {
 
 class ScanQRPCodePageState extends State<ScanQRPCodePage> {
   String qrCode = '';
+  final String servoTopic = "servo_control_topic";
+  final String irTopic = "ir_sensor_detection";
+  MqttService mqttService = MqttService(); 
+  //String msg =''; 
+
+  @override
+  void initState() {
+    super.initState();
+    mqttService = MqttService();
+    setupMqttClient();
+    
+  }  
+
+  Future<void> setupMqttClient() async {
+    await mqttService.connect();
+    //mqttService.subscribe(servoTopic);
+    mqttService.subscribe(irTopic);
+
+  }
+
+  void _publishMessage(String message) {
+    mqttService.publishMessage(servoTopic, message);
+  }  
+
+  void setupUpdatesListener( ) {
+    
+    mqttService.getMessagesStream()!
+        .listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
+          final recMess = c![0].payload as MqttPublishMessage;
+          final pt =MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+          
+          
+          setState(() {
+            if ((qrCode == widget.name) && (pt == "1")  ){
+              Navigator.pushReplacement(
+              context,
+                MaterialPageRoute(
+                  builder: (context) =>const PaiementPage(),
+            ),
+          );
+          // Publish QR code information to MQTT broker
+          _publishMessage("2nd");
+
+        }
+        
+        });
+        debugPrint('MQTTClient::Message received on topic: <${c[0].topic}> is $pt\n');
+          
+
+        
+    });
+
+    
+  }  
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +78,10 @@ class ScanQRPCodePageState extends State<ScanQRPCodePage> {
       qrCodeCallback: (code) {
         setState(() {
           qrCode = code!;
-          if (code == widget.name )
-      {
-           Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>const PaiementPage(),
-            ),
-          );
-        }});
+          setupUpdatesListener();
+    
+          
+          });
       },
       
       notStartedBuilder: (context) {
@@ -42,4 +92,10 @@ class ScanQRPCodePageState extends State<ScanQRPCodePage> {
       },
     );
   }
+
+    /*@override
+  void dispose() {
+    mqttService.disconnect();
+    super.dispose();
+  }*/
 }

@@ -3,7 +3,7 @@ import '../pages/ebike_model.dart';
 import '../pages/reservation_form_page.dart';
 import '../services/mqtt_service.dart';
 import 'package:mqtt_client/mqtt_client.dart';
-//import 'main_page.dart' ;
+
 
 
 
@@ -70,8 +70,8 @@ class EbikeListPageState extends State<EbikeListPage> {
       child: ListTile(
         leading: Image.asset(
           ebike.photo,
-          width:70,
-          height: 70,
+          width :70,
+          height : 70,
           fit: BoxFit.cover,
         ),
         title: Text(
@@ -80,7 +80,7 @@ class EbikeListPageState extends State<EbikeListPage> {
         ),
         subtitle: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-         
+      
         ),
         trailing: ElevatedButton(
           onPressed: enabled ? () => _handleReservationButtonPress(ebike) : null,
@@ -99,7 +99,7 @@ class EbikeListPageState extends State<EbikeListPage> {
     );
   }
 
- 
+
   Future<void> setupMqttClient() async {
     await mqttService.connect();
     mqttService.subscribe(irTopic);
