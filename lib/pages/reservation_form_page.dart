@@ -35,16 +35,35 @@ class ReservationFormPageState extends State<ReservationFormPage> {
         child: Column(
           children: [
             // Bike photo and details
-            EbikeDetails(widget.ebike),
+            Row(
+              children: [
+                Image.asset(
+                  widget.ebike.photo,
+                  width : 100,
+                  height : 100,
+                  fit: BoxFit.cover,
+                ),
+                const SizedBox(width : 16),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.ebike.name,
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
 
-            const SizedBox(height: 16),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height : 16),
 
             // Instruction text
             const Text(
               'Please choose your preferred time for reservation:',
               style: TextStyle(fontSize: 16),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height : 16),
             ElevatedButton(
               onPressed: () => _showTimePickerDialog(context),
               child: const Text('Select time'),
@@ -104,11 +123,11 @@ class EbikeDetails extends StatelessWidget {
       children: [
         Image.asset(
           ebike.photo,
-          width: 100,
-          height: 100,
+          width : 100,
+          height : 100,
           fit: BoxFit.cover,
         ),
-        const SizedBox(width: 16),
+        const SizedBox(width : 16),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

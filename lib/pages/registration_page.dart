@@ -74,12 +74,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           color: primary,
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height : 16),
                       const Text(
                         'In order to sync your notes to the could, you have to register/sign in to the app.',
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 48),
+                      const SizedBox(height : 48),
                       if (isRegisterMode) ...[
                         NoteFormField(
                           controller: nameController,
@@ -93,7 +93,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             registrationController.fullName = newValue;
                           },
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height : 8),
                       ],
                       NoteFormField(
                         controller: emailController,
@@ -107,7 +107,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           registrationController.email = newValue;
                         },
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height : 8),
                       Selector<RegistrationController, bool>(
                         selector: (_, controller) =>
                             controller.isPasswordHidden,
@@ -132,7 +132,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           },
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height : 12),
                       if (!isRegisterMode) ...[
                         GestureDetector(
                           onTap: () {
@@ -151,10 +151,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 24),
+                        const SizedBox(height : 24),
                       ],
                       SizedBox(
-                        height: 48,
+                        height : 48,
                         child: Selector<RegistrationController, bool>(
                           selector: (_, controller) => controller.isLoading,
                           builder: (_, isLoading, __) => NoteButton(
@@ -170,8 +170,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                   },
                             child: isLoading
                                 ? const SizedBox(
-                                    width: 24,
-                                    height: 24,
+                                    width : 24,
+                                    height : 24,
                                     child:
                                         CircularProgressIndicator(color: white),
                                   )
@@ -181,7 +181,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 32),
+                      const SizedBox(height : 32),
                       Row(
                         children: [
                           const Expanded(child: Divider()),
@@ -195,7 +195,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           const Expanded(child: Divider()),
                         ],
                       ),
-                      const SizedBox(height: 32),
+                      const SizedBox(height : 32),
                       Row(
                         children: [
                           Expanded(
@@ -207,7 +207,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               },
                             ),
                           ),
-                          const SizedBox(width: 16),
+                          const SizedBox(width : 16),
                           Expanded(
                             child: NoteIconButtonOutlined(
                               icon: FontAwesomeIcons.apple,
@@ -216,7 +216,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 32),
+                      const SizedBox(height : 32),
                       Text.rich(
                         TextSpan(
                           text: isRegisterMode

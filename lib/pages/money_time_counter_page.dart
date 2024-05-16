@@ -3,6 +3,7 @@ import 'package:renting_app/pages/scan_qr_code_paiement.dart';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 class MoneyTimeCounterPage extends StatefulWidget {
   final String qrCode;
 
@@ -66,7 +67,8 @@ class MoneyTimeCounterPageState extends State<MoneyTimeCounterPage> {
             ),
           ],
         ),
-      ),
-    );
-  }
+                
+                ),
+                );
+                }
 }

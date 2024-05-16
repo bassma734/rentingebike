@@ -51,7 +51,7 @@ class _RecoverPasswordpageState extends State<RecoverPasswordpage> {
                 'Don\'t worry! Happens to the best of us!',
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height : 24),
               NoteFormField(
                 key: emailKey,
                 controller: emailController,
@@ -60,9 +60,9 @@ class _RecoverPasswordpageState extends State<RecoverPasswordpage> {
                 labelText: 'Email',
                 validator: Validator.emailValidator,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height : 24),
               SizedBox(
-                height: 48,
+                height : 48,
                 child: Selector<RegistrationController, bool>(
                   selector: (_, controller) => controller.isLoading,
                   builder: (_, isLoading, __) => NoteButton(
@@ -80,8 +80,8 @@ class _RecoverPasswordpageState extends State<RecoverPasswordpage> {
                           },
                     child: isLoading
                         ? const SizedBox(
-                            width: 24,
-                            height: 24,
+                            width : 24,
+                            height : 24,
                             child: CircularProgressIndicator(color: white),
                           )
                         : const Text('Send me a recovery link!'),
