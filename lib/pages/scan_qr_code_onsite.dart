@@ -48,7 +48,8 @@ class ScanQRCodePageState extends State<ScanQRCodePage> {
               ),
             );
             // Publish QR code information to MQTT broker
-            _publishMessage("1st");
+            debugPrint ("1st$qrCode");
+            _publishMessage("1st$qrCode");
           }
         });
       },
@@ -61,7 +62,7 @@ class ScanQRCodePageState extends State<ScanQRCodePage> {
     );
   }
 
-    @override
+  @override
   void dispose() {
     mqttService.disconnect();
     super.dispose();

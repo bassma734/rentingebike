@@ -40,8 +40,12 @@ class ScanQRCodeResPageState extends State<ScanQRCodeResPage> {
   Widget build(BuildContext context) {
     return QrCamera(
       qrCodeCallback: (code) {
+        if (code != null) {
+
         setState(() {
-          qrCode = code!;
+          qrCode = code;
+          debugPrint(widget.ebike.name);
+          debugPrint(qrCode);
           if (qrCode == widget.ebike.name ) {
             Navigator.pushReplacement(
               context,
@@ -50,10 +54,12 @@ class ScanQRCodeResPageState extends State<ScanQRCodeResPage> {
               ),
             );
             // Publish QR code information to MQTT broker
-            _publishMessage("1st");
+             String ebike = widget.ebike.name ;
+             debugPrint ("1st$ebike");
+             _publishMessage("1st$ebike");
           }
         });
-      },
+      }},
       notStartedBuilder: (context) {
         return const Text("");
       },
@@ -63,7 +69,7 @@ class ScanQRCodeResPageState extends State<ScanQRCodeResPage> {
     );
   }
 
-    @override
+  @override
   void dispose() {
     mqttService.disconnect();
     super.dispose();
