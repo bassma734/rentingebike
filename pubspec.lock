@@ -93,10 +93,10 @@ packages:
     dependency: transitive
     description:
       name: dart_quill_delta
-      sha256: "598b1636fb946422f79e63f2b03cced67d59dd2d408291a0441b7380d47a10c0"
+      sha256: "97eba76f654b7cc99737dbc720baee63c58d8a52c92fab27650b8f4f5d20b923"
       url: "https://pub.dev"
     source: hosted
-    version: "9.3.11"
+    version: "9.3.12"
   device_info_plus:
     dependency: transitive
     description:
@@ -417,10 +417,10 @@ packages:
     dependency: transitive
     description:
       name: irondash_message_channel
-      sha256: dd581214215dca054bd9873209d690ec3609288c28774cb509dbd86b21180cf8
+      sha256: b4101669776509c76133b8917ab8cfc704d3ad92a8c450b92934dd8884a2f060
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.0"
+    version: "0.7.0"
   leak_tracker:
     dependency: transitive
     description:
@@ -614,18 +614,18 @@ packages:
     dependency: transitive
     description:
       name: super_clipboard
-      sha256: cf9ab12d00856318dcf84d5e16cfd7b53a34ee74ca55cf2c566f0cc9d2a66013
+      sha256: "2b9c6118bf887182096c13646d0ad83e585f026f655e555731ba7743f9d2bee6"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.12"
+    version: "0.8.13"
   super_native_extensions:
     dependency: transitive
     description:
       name: super_native_extensions
-      sha256: "530a2118d032483b192713c68ed7105fe64418f22492165f87ed01f9b01d4965"
+      sha256: "12f4bee60f94ed4a460795c9b4a52679ba9dd292cb0d154c8fe2438189864f4b"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.12"
+    version: "0.8.13"
   term_glyph:
     dependency: transitive
     description:
