@@ -108,6 +108,7 @@ class EbikeListPageState extends State<EbikeListPage> {
         .listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
           final recMess = c![0].payload as MqttPublishMessage;
           final pt =MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+        
           setState(() {
           if (pt== '1') {
             _reservationButtonStates[0] = true;

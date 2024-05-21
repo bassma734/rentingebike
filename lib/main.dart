@@ -9,7 +9,7 @@ import 'firebase_options.dart';
 import 'pages/main_page.dart';
 import 'pages/registration_page.dart';
 import 'services/auth_service.dart';
-//import 'services/mqtt_service.dart';
+
 
 
 Future<void> main() async {
