@@ -1,6 +1,6 @@
 // scan_qr_code_page.dart
 import 'package:flutter/material.dart';
-import 'package:renting_app/pages/pay.dart';
+import '../pages/pay.dart';
 
 class PaiementPage extends StatelessWidget {
   const PaiementPage({super.key});

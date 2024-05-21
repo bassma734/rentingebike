@@ -1,23 +1,20 @@
 import 'package:flutter/material.dart';
 
-class PayPage extends StatefulWidget {
+class PayPage extends StatelessWidget {
   const PayPage({super.key});
-@override
-PayPageState createState() => PayPageState();
-}
-class PayPageState extends State<PayPage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Payment'),
+        title: const Text('Paiement'),
       ),
       body: const Center(
-        child: Text('payment'),
-      ) 
+        child: Text(
+          'Payment Page',
+          style: TextStyle(fontSize: 24),
+        ),
+      ),
     );
-  
-  
-  
   }
 }

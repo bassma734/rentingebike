@@ -1,6 +1,7 @@
+//import 'package:flutter/widgets.dart';
 import 'package:renting_app/pages/ebike_list_page.dart';
 import 'package:flutter/material.dart';
-
+import '../core/constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:renting_app/pages/scan_qr_code_onsite.dart';
 import '../core/dialogs.dart';
@@ -21,7 +22,13 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('E-bike Renting',),
+        title: const Text('E-bike Renting App',),
+        titleTextStyle: const TextStyle(
+                  color: primary,
+                  fontSize: 18,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w500,
+                ),
   
         actions: [
           NoteIconButtonOutlined(
@@ -47,26 +54,26 @@ class _MainPageState extends State<MainPage> {
             const SizedBox(height : 50),
             const Text(
               "Please click on the station button for rental reservation",
-              style: TextStyle(fontSize: 14),
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height :30),
             // Add your station widget here
             // For example:
             CustomButton(
-              label: "Station",
+              label: "Make a reservation",
               onPressed: () => goToEbikeListPage(context),
               ),
-            const SizedBox(height :50),
+            const SizedBox(height :70),
             const Text(
               "or click on the scan QRcode button for the preffered on-site e-bike rental ",
-              style: TextStyle(fontSize: 14),
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height :30),
+            const SizedBox(height :40),
             SizedBox(
-              height : 120,
-              width :250,
+              height : 90,
+              width :230,
               child: ElevatedButton(
                 onPressed: () {
                 Navigator.push(
@@ -74,7 +81,12 @@ class _MainPageState extends State<MainPage> {
                   MaterialPageRoute(builder: (context) => const ScanQRCodePage()),
                   );
                 },
-                child: const Text("Scan QR code" , style: TextStyle(fontSize: 25),),
+                style: ElevatedButton.styleFrom(
+                  side: const BorderSide(width: 0, color: Color.fromARGB(255, 5, 13, 20)), // border color and width
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)), // border radius
+                  backgroundColor: primary,
+                ),
+                child: const Text("Scan QR code" , style: TextStyle(fontSize: 25,fontWeight:FontWeight.w400 , color: black)),
               ),
             ),
           
@@ -107,17 +119,24 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
   return SizedBox(
-    width : 300, // adjust the size as needed
-    height : 100, // adjust the size as needed
-      
+    width : 280, // adjust the size as needed
+    height : 110, // adjust the size as needed
+    
       child: ElevatedButton(
-        onPressed: onPressed,
-        child: Text(
-          label,
-          style: const TextStyle(fontSize: 30 ,fontWeight: FontWeight.w300),
-        ),
-        
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+       side: const BorderSide(width: 0, color: Color.fromARGB(255, 5, 13, 20)), // border color and width
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)), // border radius
+        backgroundColor: primary,
       ),
+      
+      child: Text(
+        label,
+        style: const TextStyle(fontSize: 27, fontWeight: FontWeight.w400, color: black),
+        textAlign: TextAlign.center,
+      ),
+    ),
+  
   );
  }
 

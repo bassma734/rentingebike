@@ -33,7 +33,7 @@ const MyApp({super.key});
         ChangeNotifierProvider(create: (context) => RegistrationController()),
       ],
       child: MaterialApp(
-        title: 'Renting App',
+        //title: 'Renting App',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: primary),
           useMaterial3: true,
@@ -41,12 +41,7 @@ const MyApp({super.key});
           scaffoldBackgroundColor: background,
           appBarTheme: Theme.of(context).appBarTheme.copyWith(
                 backgroundColor: background,
-                titleTextStyle: const TextStyle(
-                  color: primary,
-                  fontSize: 18,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w100,
-                ),
+                
               ),
         ),
         home: StreamBuilder<User?>(
