@@ -82,11 +82,11 @@ class _MainPageState extends State<MainPage> {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  side: const BorderSide(width: 0, color: Color.fromARGB(255, 5, 13, 20)), // border color and width
+                  side: const BorderSide(width : 0, color: Color.fromARGB(255, 16, 18, 19)), // border color and width
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)), // border radius
                   backgroundColor: primary,
                 ),
-                child: const Text("Scan QR code" , style: TextStyle(fontSize: 25,fontWeight:FontWeight.w400 , color: black)),
+                child: const Text("Scan QR code" , style: TextStyle(fontSize: 25,fontWeight:FontWeight.w300 , color: black)),
               ),
             ),
           
@@ -125,19 +125,19 @@ class CustomButton extends StatelessWidget {
       child: ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-       side: const BorderSide(width: 0, color: Color.fromARGB(255, 5, 13, 20)), // border color and width
+       side: const BorderSide(width : 0, color: Color.fromARGB(255, 5, 13, 20)), // border color and width
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)), // border radius
         backgroundColor: primary,
       ),
       
       child: Text(
         label,
-        style: const TextStyle(fontSize: 27, fontWeight: FontWeight.w400, color: black),
+        style: const TextStyle(fontSize: 27, fontWeight: FontWeight.w300, color: black),
         textAlign: TextAlign.center,
       ),
     ),
   
   );
- }
+}
 
 }

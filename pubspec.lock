@@ -93,17 +93,10 @@ packages:
     dependency: transitive
     description:
       name: dart_quill_delta
-<<<<<<< HEAD
       sha256: e2f0be62c733a1f2ba51f70a8b544acd5a19ea726e409dd341e5f4a35582cfe0
       url: "https://pub.dev"
     source: hosted
     version: "9.3.18"
-=======
-      sha256: "6ca843d1f5468182d593510cd497e1b4316ce338a489ea13cce5ed56eb373e35"
-      url: "https://pub.dev"
-    source: hosted
-    version: "9.3.13"
->>>>>>> 17814e0da6ea035ff3c0130690ad007e7615368f
   device_info_plus:
     dependency: transitive
     description:

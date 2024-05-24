@@ -37,7 +37,7 @@ const MyApp({super.key});
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: primary),
           useMaterial3: true,
-          fontFamily: 'Poppins',
+          //fontFamily: 'Poppins',
           scaffoldBackgroundColor: background,
           appBarTheme: Theme.of(context).appBarTheme.copyWith(
                 backgroundColor: background,

@@ -3,5 +3,6 @@
     "debug.javascript.debugByLinkOptions": "on",
     "debug.javascript.terminalOptions": {
         
-    }
+    },
+    "java.compile.nullAnalysis.mode": "automatic"
 }
