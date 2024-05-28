@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:qr_mobile_vision/qr_camera.dart';
 import 'package:renting_app/services/mqtt_service.dart';
-import '../pages/paiement_page.dart';
+import 'end_location.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 
 class ScanQRPCodePage extends StatefulWidget {
   final String name;
+    final double amount;
 
-  const ScanQRPCodePage({super.key, required this.name});
+
+  const ScanQRPCodePage({super.key, required this.name,  required this.amount});
 
   @override
   ScanQRPCodePageState createState() => ScanQRPCodePageState();
@@ -46,7 +48,7 @@ class ScanQRPCodePageState extends State<ScanQRPCodePage> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => const PaiementPage(),
+              builder: (context) =>  EndLocation(amount: widget.amount ),
             ),
           );
           // Publish QR code information to MQTT broker
