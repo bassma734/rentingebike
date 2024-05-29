@@ -1,3 +1,4 @@
+
 // reservation_form_page.dart
 //import 'dart:js_util';
 //import 'package:flutter/services.dart';
@@ -11,6 +12,7 @@ import 'successful_confirmation.dart';
 
 class ReservationFormPage extends StatefulWidget {
   final Ebike ebike;
+  
 
   const ReservationFormPage({super.key, required this.ebike});
 
@@ -42,10 +44,10 @@ class ReservationFormPageState extends State<ReservationFormPage> {
             Column(
               children: [
                 Container(
-                  width: 400,
-                  height: 250,
+                  width : 400,
+                  height : 250,
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black, width:1),
+                    border: Border.all(color: Colors.black, width :1),
                     image: DecorationImage(
                       image: AssetImage(widget.ebike.photo),
                       fit: BoxFit.fill,
@@ -58,7 +60,7 @@ class ReservationFormPageState extends State<ReservationFormPage> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height:28),
+                    const SizedBox(height :28),
 
                     Text(
                       widget.ebike.name,
@@ -82,7 +84,7 @@ class ReservationFormPageState extends State<ReservationFormPage> {
               onPressed: () => _showTimePickerDialog(context),
 
               style: ElevatedButton.styleFrom(
-                  side: const BorderSide(width: 1, color: Color.fromARGB(255, 142, 146, 152)), // border color and width
+                  side: const BorderSide(width : 1, color: Color.fromARGB(255, 142, 146, 152)), // border color and width
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)), // border radius
                   backgroundColor: gray100,
                 ),
@@ -91,17 +93,17 @@ class ReservationFormPageState extends State<ReservationFormPage> {
 
 
             ),
-            const SizedBox(height:25),
+            const SizedBox(height :25),
             Text('Selected time: ${_selectedTime.format(context)}',style: const TextStyle(fontSize: 20 ,fontWeight: FontWeight.w500)),
-            const SizedBox(height:25),
+            const SizedBox(height :25),
 
 
             // Time slot selector
 
             // Confirmation button
             ElevatedButton(
-              onPressed: _isReservationTimeSelected
-                  ? () {
+              onPressed:  _isReservationTimeSelected ? () {
+                
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -111,11 +113,12 @@ class ReservationFormPageState extends State<ReservationFormPage> {
                     }
                   : null,
               style: ElevatedButton.styleFrom(
-                  side: const BorderSide(width: 1, color: Color.fromARGB(255, 8, 8, 8)), // border color and width
+                  side: const BorderSide(width : 1, color: Color.fromARGB(255, 8, 8, 8)), // border color and width
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)), // border radius
                   backgroundColor: gray100,
                 ),    
               child: const Text('Confirm Reservation',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500 )),
+            
             ),
           ],
         ),
@@ -166,7 +169,7 @@ class EbikeDetails extends StatelessWidget {
               ebike.name,
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-           
+          
           ],
         ),
       ],

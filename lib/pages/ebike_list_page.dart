@@ -83,7 +83,7 @@ class EbikeListPageState extends State<EbikeListPage> {
           leading: Image.asset(
             ebike.photo,
             width : 90, // Increased image width
-            height  : 200, // Increased image height
+            height : 200, // Increased image height
             fit: BoxFit.fill,
           ),
           title: Text(
