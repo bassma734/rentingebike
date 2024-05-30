@@ -21,7 +21,8 @@ class ReservationFormPage extends StatefulWidget {
 class ReservationFormPageState extends State<ReservationFormPage> {
   TimeOfDay _selectedTime = TimeOfDay.now();
   bool _isReservationTimeSelected = false;
-
+  static  bool isReserved = false ;
+  static String rname ='';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,9 +101,12 @@ class ReservationFormPageState extends State<ReservationFormPage> {
 
             // Confirmation button
             ElevatedButton(
-              onPressed: _isReservationTimeSelected
-                  ? () {
-                      Navigator.push(
+              onPressed: _isReservationTimeSelected ? () {
+                setState(() {
+                  isReserved = true ;
+                  rname = widget.ebike.name ; 
+                });
+                Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => SuccessfulConfirmationPage(ebike: widget.ebike),

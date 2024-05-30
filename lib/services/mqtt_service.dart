@@ -6,11 +6,11 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 
 class MqttService {
   MqttServerClient client =
-      MqttServerClient.withPort('192.168.224.150', 'mobile_App', 1883);
+      MqttServerClient.withPort('192.168.0.6', 'mobile_App', 1883);
 
   Future<int> connect() async {
     client.logging(on: true);
-    client.keepAlivePeriod = 200;
+    client.keepAlivePeriod = 60;
     client.onConnected = onConnected;
     client.onDisconnected = onDisconnected;
     client.onSubscribed = onSubscribed;
@@ -42,7 +42,7 @@ class MqttService {
   }
 
   void subscribe(String topic) {
-    client.subscribe(topic, MqttQos.atLeastOnce);
+    client.subscribe(topic, MqttQos.atMostOnce);
   }
 
   void onConnected() {

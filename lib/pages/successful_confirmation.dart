@@ -1,17 +1,29 @@
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:renting_app/pages/main_page.dart';
 import 'package:renting_app/pages/scan_qr_code_res.dart';
 //import 'reservation_form_page.dart';
 import '../pages/ebike_model.dart';
 import '../core/constants.dart';
 
 
-class SuccessfulConfirmationPage extends StatelessWidget {
+class SuccessfulConfirmationPage extends StatefulWidget {
   final Ebike ebike ;
 
-  const SuccessfulConfirmationPage({  required this.ebike ,super.key});
+  const SuccessfulConfirmationPage({  required this.ebike ,super.key });
+  
+  @override
+  SuccessfulConfirmationPageState createState() => SuccessfulConfirmationPageState();}
+
+class SuccessfulConfirmationPageState extends State <SuccessfulConfirmationPage>{
+   bool state = true ;
+  
+   static  Ebike ebikemain =Ebike(name:' name', photo :'assets/images/Ebike.jpeg',) ;
+   
+     get ebike => widget.ebike;
 
   @override
   Widget build(BuildContext context) {
+    ebikemain = widget.ebike ;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Successful Confirmation'),
@@ -23,15 +35,15 @@ class SuccessfulConfirmationPage extends StatelessWidget {
           children: [
             Image.asset(
               'assets/images/confirmation_icon.png', // Path to your image asset
-              width: 100,
-              height: 100,
+              width : 100,
+              height : 100,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height : 20),
 
 
-            const Text(
-              'Your reservation has been confirmed successfully.',
-              style: TextStyle(fontSize: 25 ) , textAlign: TextAlign.center,
+            Text(
+              'Your ${ebike.name} reservation has been confirmed successfully.',
+              style: const TextStyle(fontSize: 25 ) , textAlign: TextAlign.center,
             ),
             const SizedBox(height : 50), 
             const Text(
@@ -46,15 +58,18 @@ class SuccessfulConfirmationPage extends StatelessWidget {
     
               child:ElevatedButton(
                 onPressed: () {
+                   setState(() {
+                      state  = false ;
+                   });
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ScanQRCodeResPage(ebike : ebike),
+                      builder: (context) => ScanQRCodeResPage(ebike : widget.ebike),
                   ),
                 );
               },
               style: ElevatedButton.styleFrom(
-                  side: const BorderSide(width: 1, color: Color.fromARGB(255, 5, 13, 20)), // border color and width
+                  side: const BorderSide(width : 1, color: Color.fromARGB(255, 5, 13, 20)), // border color and width
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)), // border radius
                   backgroundColor: gray100,
                 ),
@@ -68,16 +83,21 @@ class SuccessfulConfirmationPage extends StatelessWidget {
               height : 50, // adjust the size as needed
     
               child:ElevatedButton(
-                onPressed: () {} ,
-                 /* Navigator.push(
+                onPressed: () {
+                  setState(() {
+                      state  = true ;
+                   });
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ScanQRCodeResPage(ebike : ebike),
+                      builder: (context) =>  MainPage(isReserved : state ),
                   ),
                 );
-              },*/
+
+                } ,
+               
               style: ElevatedButton.styleFrom(
-                  side: const BorderSide(width: 1, color: Color.fromARGB(255, 180, 185, 191)), // border color and width
+                  side: const BorderSide(width : 1, color: Color.fromARGB(255, 180, 185, 191)), // border color and width
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)), // border radius
                   backgroundColor: gray100,
                 ),
