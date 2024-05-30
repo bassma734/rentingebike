@@ -5,7 +5,9 @@ import '../services/mqtt_service.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 
 class EbikeListPage extends StatefulWidget {
-  const EbikeListPage({super.key});
+  final bool isReserved ;
+  const EbikeListPage({super.key,required this.isReserved});
+
   
   @override
   EbikeListPageState createState() => EbikeListPageState();
@@ -31,13 +33,13 @@ class EbikeListPageState extends State<EbikeListPage> {
   void initState() {
     super.initState();
     _initializeButtonStates();
+    buttonsState() ;
     setupMqttClient();
     setupUpdatesListener();
   }
 
   void _initializeButtonStates() {
-    // Initialize button states based on the number of ebikes
-    _reservationButtonStates.addAll(List<bool>.filled(_ebikesMap.length, true));
+    _reservationButtonStates.addAll(List<bool>.filled(_ebikesMap.length,true));
   }
 
   @override
@@ -103,6 +105,7 @@ class EbikeListPageState extends State<EbikeListPage> {
   }
 
   void _handleReservationButtonPress(Ebike ebike) {
+    
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -137,7 +140,21 @@ class EbikeListPageState extends State<EbikeListPage> {
       }
     });
   }
+ void buttonsState() {
+    if (widget.isReserved == true || ReservationFormPageState.isReserved == true  ){
+          if (ReservationFormPageState.rname=='Ebike1'){
+            setState(() {
+              _reservationButtonStates[0] = false;
+            });
 
+          }else if (ReservationFormPageState.rname=='Ebike2'){
+            setState(() {
+             _reservationButtonStates[1] = false;
+            });
+         }
+    }
+ }
+ 
   @override
   void dispose() {
     mqttService.disconnect();

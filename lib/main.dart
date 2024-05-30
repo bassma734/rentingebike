@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +49,7 @@ const MyApp({super.key});
           stream: AuthService.userStream,
           builder: (context, snapshot) {
             return snapshot.hasData && AuthService.isEmailVerified
-                ? const MainPage()
+                ? const MainPage(isReserved: false,)
                 : const RegistrationPage();
           },
         ),

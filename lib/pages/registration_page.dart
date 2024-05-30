@@ -2,7 +2,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-
 import '../change_notifiers/registration_controller.dart';
 import '../core/constants.dart';
 import '../core/validator.dart';
@@ -10,6 +9,9 @@ import '../widgets/note_button.dart';
 import '../widgets/note_form_field.dart';
 import '../widgets/note_icon_button_outlined.dart';
 import 'recover_password_page.dart';
+ 
+
+
 
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({super.key});
@@ -76,7 +78,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       ),
                       const SizedBox(height : 16),
                       const Text(
-                        'In order to sync your notes to the could, you have to register/sign in to the app.',
+                        'In order to rent an e bike , you have to register/sign in to the app.',
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height : 48),
@@ -166,6 +168,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                       registrationController
                                           .authenticateWithEmailAndPassword(
                                               context: context);
+
                                     }
                                   },
                             child: isLoading
