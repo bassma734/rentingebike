@@ -1,60 +1,28 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-=======
 import 'package:renting_app/pages/main_page.dart';
->>>>>>> c47fa3dff5dee4340f643d35f9d3fe3ece33a5b1
 import 'package:renting_app/pages/scan_qr_code_res.dart';
 //import 'reservation_form_page.dart';
 import '../pages/ebike_model.dart';
 import '../core/constants.dart';
-import 'package:renting_app/services/mqtt_service.dart';
 
 
 class SuccessfulConfirmationPage extends StatefulWidget {
   final Ebike ebike ;
 
-<<<<<<< HEAD
   const SuccessfulConfirmationPage({  required this.ebike ,super.key});
   
-  @override
-  SuccessfulConfirmationPageState createState() => SuccessfulConfirmationPageState();}
-=======
-  const SuccessfulConfirmationPage({  required this.ebike ,super.key });
   
   @override
   SuccessfulConfirmationPageState createState() => SuccessfulConfirmationPageState();}
 
 class SuccessfulConfirmationPageState extends State <SuccessfulConfirmationPage>{
-   bool state = true ;
+  bool state = true ;
   
-   static  Ebike ebikemain =Ebike(name:' name', photo :'assets/images/Ebike.jpeg',) ;
-   
-     get ebike => widget.ebike;
->>>>>>> c47fa3dff5dee4340f643d35f9d3fe3ece33a5b1
+static  Ebike ebikemain =Ebike(name:' name', photo :'assets/images/Ebike.jpeg',) ;
+  get ebike => widget.ebike;
 
-class SuccessfulConfirmationPageState extends State <SuccessfulConfirmationPage>{
-  final String irTopic = "ir_sensor_detection";
-  MqttService mqttService = MqttService();
-  
 
-  @override
-  void initState() {
-    super.initState();
-    mqttService = MqttService();
-    setupMqttClient();
-    
-  }  
-
-  Future<void> setupMqttClient() async {
-    await mqttService.connect();
-  
-    
-
-  }
-
-  /*void _publishMessage(String message) {
-    mqttService.publishMessage(irTopic, message); 
-  }*/
+ 
 
   
   @override
@@ -94,9 +62,9 @@ class SuccessfulConfirmationPageState extends State <SuccessfulConfirmationPage>
     
               child:ElevatedButton(
                 onPressed: () {
-                   setState(() {
+                  setState(() {
                       state  = false ;
-                   });
+                  });
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -119,16 +87,11 @@ class SuccessfulConfirmationPageState extends State <SuccessfulConfirmationPage>
               height : 50, // adjust the size as needed
     
               child:ElevatedButton(
-<<<<<<< HEAD
-                onPressed: () {} ,
-                /* Navigator.push(
-=======
                 onPressed: () {
                   setState(() {
                       state  = true ;
-                   });
+                  });
                   Navigator.push(
->>>>>>> c47fa3dff5dee4340f643d35f9d3fe3ece33a5b1
                     context,
                     MaterialPageRoute(
                       builder: (context) =>  MainPage(isReserved : state ),
@@ -136,7 +99,7 @@ class SuccessfulConfirmationPageState extends State <SuccessfulConfirmationPage>
                 );
 
                 } ,
-               
+              
               style: ElevatedButton.styleFrom(
                   side: const BorderSide(width : 1, color: Color.fromARGB(255, 180, 185, 191)), // border color and width
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)), // border radius

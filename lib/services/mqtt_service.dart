@@ -6,11 +6,9 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 
 class MqttService {
   MqttServerClient client =
-<<<<<<< HEAD
-      MqttServerClient.withPort('192.168.1.27', 'mobile_App', 1883);
-=======
-      MqttServerClient.withPort('192.168.0.6', 'mobile_App', 1883);
->>>>>>> c47fa3dff5dee4340f643d35f9d3fe3ece33a5b1
+
+      MqttServerClient.withPort('192.168.1.74', 'mobile_App', 1883);
+
 
   Future<int> connect() async {
     client.logging(on: true);

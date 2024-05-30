@@ -45,8 +45,8 @@ class ReservationFormPageState extends State<ReservationFormPage> {
             Column(
               children: [
                 Container(
-                  width : 400,
-                  height : 250,
+                  width: 400,
+                  height: 250,
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.black, width :1),
                     image: DecorationImage(
@@ -103,18 +103,12 @@ class ReservationFormPageState extends State<ReservationFormPage> {
 
             // Confirmation button
             ElevatedButton(
-<<<<<<< HEAD
-              onPressed:  _isReservationTimeSelected ? () {
-                
-                      Navigator.push(
-=======
               onPressed: _isReservationTimeSelected ? () {
                 setState(() {
                   isReserved = true ;
                   rname = widget.ebike.name ; 
                 });
                 Navigator.push(
->>>>>>> c47fa3dff5dee4340f643d35f9d3fe3ece33a5b1
                         context,
                         MaterialPageRoute(
                           builder: (context) => SuccessfulConfirmationPage(ebike: widget.ebike),
