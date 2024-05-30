@@ -109,6 +109,7 @@ class EbikeListPageState extends State<EbikeListPage> {
         builder: (context) => ReservationFormPage(ebike: ebike),
       ),
     );
+
   }
 
   Future<void> setupMqttClient() async {
@@ -127,9 +128,9 @@ class EbikeListPageState extends State<EbikeListPage> {
           } else if (pt == '2') {
             _reservationButtonStates[1] = true;
           } else if (pt == '1no') {
-            _reservationButtonStates[0] = false;
+            _reservationButtonStates[0] = true;
           } else if (pt == '2no') {
-            _reservationButtonStates[1] = false;
+            _reservationButtonStates[1] = true;
           }
         });
         debugPrint('MQTTClient::Message received on topic: <${c[0].topic}> is $pt\n');
