@@ -24,26 +24,19 @@ class SuccessfulConfirmationPageState extends State <SuccessfulConfirmationPage>
     super.initState();
     mqttService = MqttService();
     setupMqttClient();
+    
   }  
 
   Future<void> setupMqttClient() async {
     await mqttService.connect();
-    if (widget.ebike.name == "Ebike1") {
-      _publishMessage("1no");
-    }
-    else if (widget.ebike.name == "Ebike2"){
-      _publishMessage("2no");
-    }
+  
     
 
   }
 
-  void _publishMessage(String message) {
-    mqttService.publishMessage(irTopic, message);
-    setState(() {
-    
-  });  
-  }
+  /*void _publishMessage(String message) {
+    mqttService.publishMessage(irTopic, message); 
+  }*/
 
   
   @override
