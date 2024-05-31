@@ -45,8 +45,8 @@ class _MainPageState extends State<MainPage> {
           ),
         ],
       ),
-      body:SingleChildScrollView(
-        child: Column(
+      body:
+         Column(
           children: [
             const SizedBox(height: 50),
             const Text(
@@ -149,8 +149,7 @@ class _MainPageState extends State<MainPage> {
             const SizedBox(height: 20),
           ],
         ),
-      ),
-    );
+      );
   }
 
   void goToEbikeListPage(BuildContext context) {
