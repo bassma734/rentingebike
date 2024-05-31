@@ -45,8 +45,7 @@ class _MainPageState extends State<MainPage> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+      body:SingleChildScrollView(
         child: Column(
           children: [
             const SizedBox(height: 50),

@@ -4,12 +4,18 @@ import 'package:flutter/material.dart';
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
+
   // Add or update user information
-  Future<void> addUser(String uid, String name, String email) {
-    return _db.collection('users').doc(uid).set({
+  Future<void> addUser( String name, String email) {
+    return _db.collection('users').add({
       'name': name,
       'email': email,
+<<<<<<< HEAD
   }).catchError((error) {
+=======
+   // ignore: body_might_complete_normally_catch_error
+   }).catchError((error) {
+>>>>>>> 488fb34a739837cd50a9cd50f1f297b5e1fb56f7
         debugPrint("Error adding user: $error");
       });
     }

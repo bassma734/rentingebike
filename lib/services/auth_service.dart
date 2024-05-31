@@ -1,14 +1,13 @@
-//import 'package:flutter/material.dart';
 import 'package:renting_app/change_notifiers/registration_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-//import 'firestore_service.dart';
+import 'firestore_service.dart';
 
 class AuthService {
   AuthService._();
 
   static final _auth = FirebaseAuth.instance;
-  //static final FirestoreService _firestoreService = FirestoreService();
+  static final FirestoreService _firestoreService = FirestoreService();
 
   static User? get user => _auth.currentUser;
 
@@ -32,15 +31,9 @@ class AuthService {
         credential.user?.updateDisplayName(fullName);
       });
 
-      /*// Add user to Firestore
-      await _firestoreService.addUser(user!.uid, fullName, email);
-      // Verify user is added
-      bool userExists = await _firestoreService.checkUserExists(user!.uid);
-      if (userExists) {
-        debugPrint("User successfully added to Firestore.");
-      } else {
-        debugPrint("Failed to add user to Firestore.");
-      }*/
+      // Add user to Firestore
+      await _firestoreService.addUser( fullName, email);
+    
 
 
     } catch (e) {
