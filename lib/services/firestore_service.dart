@@ -9,7 +9,7 @@ class FirestoreService {
     return _db.collection('users').doc(uid).set({
       'name': name,
       'email': email,
-   }).catchError((error) {
+  }).catchError((error) {
         debugPrint("Error adding user: $error");
       });
     }
