@@ -10,12 +10,8 @@ class FirestoreService {
     return _db.collection('users').add({
       'name': name,
       'email': email,
-<<<<<<< HEAD
-  }).catchError((error) {
-=======
    // ignore: body_might_complete_normally_catch_error
-   }).catchError((error) {
->>>>>>> 488fb34a739837cd50a9cd50f1f297b5e1fb56f7
+    }).catchError((error) {
         debugPrint("Error adding user: $error");
       });
     }
