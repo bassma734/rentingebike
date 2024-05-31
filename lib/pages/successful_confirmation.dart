@@ -9,18 +9,22 @@ import '../core/constants.dart';
 class SuccessfulConfirmationPage extends StatefulWidget {
   final Ebike ebike ;
 
-  const SuccessfulConfirmationPage({  required this.ebike ,super.key });
+  const SuccessfulConfirmationPage({  required this.ebike ,super.key});
+  
   
   @override
   SuccessfulConfirmationPageState createState() => SuccessfulConfirmationPageState();}
 
 class SuccessfulConfirmationPageState extends State <SuccessfulConfirmationPage>{
-   bool state = true ;
+  bool state = true ;
   
-   static  Ebike ebikemain =Ebike(name:' name', photo :'assets/images/Ebike.jpeg',) ;
-   
-     get ebike => widget.ebike;
+static  Ebike ebikemain =Ebike(name:' name', photo :'assets/images/Ebike.jpeg',) ;
+  get ebike => widget.ebike;
 
+
+ 
+
+  
   @override
   Widget build(BuildContext context) {
     ebikemain = widget.ebike ;
@@ -58,9 +62,9 @@ class SuccessfulConfirmationPageState extends State <SuccessfulConfirmationPage>
     
               child:ElevatedButton(
                 onPressed: () {
-                   setState(() {
+                  setState(() {
                       state  = false ;
-                   });
+                  });
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -86,7 +90,7 @@ class SuccessfulConfirmationPageState extends State <SuccessfulConfirmationPage>
                 onPressed: () {
                   setState(() {
                       state  = true ;
-                   });
+                  });
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -95,7 +99,7 @@ class SuccessfulConfirmationPageState extends State <SuccessfulConfirmationPage>
                 );
 
                 } ,
-               
+              
               style: ElevatedButton.styleFrom(
                   side: const BorderSide(width : 1, color: Color.fromARGB(255, 180, 185, 191)), // border color and width
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)), // border radius

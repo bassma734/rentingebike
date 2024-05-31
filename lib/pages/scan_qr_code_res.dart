@@ -54,9 +54,9 @@ class ScanQRCodeResPageState extends State<ScanQRCodeResPage> {
               ),
             );
             // Publish QR code information to MQTT broker
-             String ebike = widget.ebike.name ;
-             debugPrint ("1st$ebike");
-             _publishMessage("1st$ebike");
+            String ebike = widget.ebike.name ;
+            debugPrint ("1st$ebike");
+            _publishMessage("1st$ebike");
           }
         });
       }},

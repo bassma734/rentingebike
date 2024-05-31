@@ -8,15 +8,13 @@ import 'firebase_options.dart';
 import 'pages/main_page.dart';
 import 'pages/registration_page.dart';
 import 'services/auth_service.dart';
-//import 'services/mqtt_service.dart';
-
-
+//import 'package:cloud_firestore/cloud_firestore.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  
+
  runApp( const MyApp());
  
 

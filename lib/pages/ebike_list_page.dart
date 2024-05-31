@@ -7,7 +7,6 @@ import 'package:mqtt_client/mqtt_client.dart';
 class EbikeListPage extends StatefulWidget {
   final bool isReserved ;
   const EbikeListPage({super.key,required this.isReserved});
-
   
   @override
   EbikeListPageState createState() => EbikeListPageState();
@@ -84,8 +83,8 @@ class EbikeListPageState extends State<EbikeListPage> {
           contentPadding: const EdgeInsets.all(14), // Add padding inside the tile
           leading: Image.asset(
             ebike.photo,
-            width: 90, // Increased image width
-            height: 200, // Increased image height
+            width : 90, // Increased image width
+            height : 200, // Increased image height
             fit: BoxFit.fill,
           ),
           title: Text(
@@ -112,6 +111,7 @@ class EbikeListPageState extends State<EbikeListPage> {
         builder: (context) => ReservationFormPage(ebike: ebike),
       ),
     );
+
   }
 
   Future<void> setupMqttClient() async {
@@ -130,9 +130,9 @@ class EbikeListPageState extends State<EbikeListPage> {
           } else if (pt == '2') {
             _reservationButtonStates[1] = true;
           } else if (pt == '1no') {
-            _reservationButtonStates[0] = false;
+            _reservationButtonStates[0] = true;
           } else if (pt == '2no') {
-            _reservationButtonStates[1] = false;
+            _reservationButtonStates[1] = true;
           }
         });
         debugPrint('MQTTClient::Message received on topic: <${c[0].topic}> is $pt\n');
