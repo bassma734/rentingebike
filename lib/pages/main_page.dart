@@ -46,7 +46,11 @@ class _MainPageState extends State<MainPage> {
         ],
       ),
       body:
+<<<<<<< HEAD
           Column(
+=======
+         Column(
+>>>>>>> 974145261879ce854fa6ea709b2ae9f13d8533f9
           children: [
             const SizedBox(height: 50),
             const Text(
