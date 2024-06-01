@@ -4,6 +4,8 @@ import 'package:renting_app/pages/scan_qr_code_res.dart';
 //import 'reservation_form_page.dart';
 import '../pages/ebike_model.dart';
 import '../core/constants.dart';
+import '../core/dialogs.dart';
+
 
 
 class SuccessfulConfirmationPage extends StatefulWidget {
@@ -49,16 +51,16 @@ static  Ebike ebikemain =Ebike(name:' name', photo :'assets/images/Ebike.jpeg',)
               'Your ${ebike.name} reservation has been confirmed successfully.',
               style: const TextStyle(fontSize: 25 ) , textAlign: TextAlign.center,
             ),
-            const SizedBox(height : 50), 
+            const SizedBox(height : 40), 
             const Text(
               'Scan the QR code when you get there.',
-              style: TextStyle(fontSize: 17, color: Color.fromARGB(255, 0, 152, 167),fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 17, color: Color.fromARGB(255, 119, 188, 225),fontWeight: FontWeight.w500),
             ),
             const SizedBox(height : 35),
 
             SizedBox(
               width : 200, // adjust the size as needed
-              height : 80, // adjust the size as needed
+              height : 50, // adjust the size as needed
     
               child:ElevatedButton(
                 onPressed: () {
@@ -73,8 +75,8 @@ static  Ebike ebikemain =Ebike(name:' name', photo :'assets/images/Ebike.jpeg',)
                 );
               },
               style: ElevatedButton.styleFrom(
-                  side: const BorderSide(width : 1, color: Color.fromARGB(255, 5, 13, 20)), // border color and width
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)), // border radius
+                  side: const BorderSide(width : 0, color: Color.fromARGB(255, 5, 13, 20)), // border color and width
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)), // border radius
                   backgroundColor: gray100,
                 ),
               child: const Text('Scan QR Code',style: TextStyle(fontSize: 20,color: black),),
@@ -84,29 +86,64 @@ static  Ebike ebikemain =Ebike(name:' name', photo :'assets/images/Ebike.jpeg',)
 
             SizedBox(
               width : 200, // adjust the size as needed
-              height : 50, // adjust the size as needed
+              height : 40, // adjust the size as needed
     
               child:ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   setState(() {
-                      state  = true ;
+                      state  = false ;
                   });
-                  Navigator.push(
+
+                  final bool cancel = await showConfirmationDialog(
+                    context: context,
+                    title: 'Do you want to cancel your reservation?',
+                  ) ??
+                  false;
+                  if (cancel) {
+                    Navigator.push(
+                    // ignore: use_build_context_synchronously
                     context,
                     MaterialPageRoute(
                       builder: (context) =>  MainPage(isReserved : state ),
+                  ),
+                );}
+
+                } ,
+              
+              style: ElevatedButton.styleFrom(
+                  side: const BorderSide(width : 0, color: Color.fromARGB(255, 6, 6, 6)), // border color and width
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)), // border radius
+                  backgroundColor: gray100,
+                ),
+              child: const Text('Cancel reservation',style: TextStyle(fontSize: 14,color: black),),
+            ),),
+
+const SizedBox(height : 45),
+
+            SizedBox(
+              width : 70, // adjust the size as needed
+              height : 50, 
+            child:ElevatedButton(
+                onPressed: () {
+                  
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>  const MainPage(isReserved : true ),
                   ),
                 );
 
                 } ,
               
               style: ElevatedButton.styleFrom(
-                  side: const BorderSide(width : 1, color: Color.fromARGB(255, 180, 185, 191)), // border color and width
+                  side: const BorderSide(width : 0, color: Color.fromARGB(255, 0, 0, 0)), // border color and width
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)), // border radius
                   backgroundColor: gray100,
                 ),
-              child: const Text('Cancel reservation',style: TextStyle(fontSize: 14,color: black),),
-            ),)
+              child: const Icon(Icons.home, size: 20, color: primary),
+            ),) 
+
+
           ],
         ),
       ),

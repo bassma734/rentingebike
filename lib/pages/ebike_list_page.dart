@@ -144,18 +144,29 @@ class EbikeListPageState extends State<EbikeListPage> {
   }
 
   void buttonsState() {
-    if (ReservationFormPageState.isReserved) {
+      
+    if (ReservationFormPageState.isReserved && widget.isReserved == true) {
       if (ReservationFormPageState.rname == 'Ebike1') {
         _reservationButtonStates[0] = false;
-        _reservationButtonStates[1] = true;
+        //_reservationButtonStates[1] = true;
       } else if (ReservationFormPageState.rname == 'Ebike2') {
         _reservationButtonStates[1] = false;
-        _reservationButtonStates[0] = true;
+        //_reservationButtonStates[0] = true;
       }
-    } else {
-      _initializeButtonStates();
+    } else if (widget.isReserved == false && ReservationFormPageState.isReserved) {
+      if (ReservationFormPageState.rname == 'Ebike1') {
+      
+        
+        _reservationButtonStates[0] = true;
+      } else if (ReservationFormPageState.rname == 'Ebike2') {
+        _reservationButtonStates[1] = true;
+      }
+    }
+    else {
+      //_initializeButtonStates();
     }
   }
+
 
   @override
   void dispose() {
