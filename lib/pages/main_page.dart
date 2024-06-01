@@ -23,13 +23,11 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'E-bike Renting App',
-        ),
+        title: const Text('E-bike Renting App'),
         titleTextStyle: const TextStyle(
-          color: primary,
+          color: Color.fromARGB(217, 101, 191, 236),
           fontSize: 18,
-          fontWeight: FontWeight.w300,
+          fontWeight: FontWeight.w600,
         ),
         actions: [
           NoteIconButtonOutlined(
@@ -45,67 +43,51 @@ class _MainPageState extends State<MainPage> {
           ),
         ],
       ),
-      body:
-<<<<<<< HEAD
-          Column(
-=======
-         Column(
->>>>>>> 974145261879ce854fa6ea709b2ae9f13d8533f9
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(height: 50),
+            const SizedBox(height: 20),
             const Text(
-              "Welcome ",
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400),
+              "Welcome",
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 50),
+            const SizedBox(height: 20),
             const Text(
               "Please click on the station button for rental reservation",
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
             CustomButton(
               label: "Make a reservation",
+              icon: FontAwesomeIcons.calendarCheck,
               onPressed: () => goToEbikeListPage(context),
             ),
-            const SizedBox(height: 70),
+            const SizedBox(height: 20),
             const Text(
-              "or click on the scan QR code button for the preferred on-site e-bike rental ",
+              "Or click on the scan QR code button for the preferred on-site e-bike rental",
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 40),
-            SizedBox(
-              height: 90,
-              width: 230,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ScanQRCodePage()),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  side: const BorderSide(
-                      width: 0, color: Color.fromARGB(255, 16, 18, 19)),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40)),
-                  backgroundColor: primary,
-                ),
-                child: const Text(
-                  "Scan QR code",
-                  style: TextStyle(
-                      fontSize: 25, fontWeight: FontWeight.w100, color: black),
-                ),
-              ),
+            const SizedBox(height: 20),
+            CustomButton(
+              label: "Scan QR code",
+              icon: FontAwesomeIcons.qrcode,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ScanQRCodePage()),
+                );
+              },
             ),
-            const SizedBox(height: 60),
-            SizedBox(
-              height: 40,
-              width: 300,
-              child: ElevatedButton(
+            const SizedBox(height: 20),
+            if (widget.isReserved)
+              CustomButton(
+                label: "You have a reservation",
+                icon: FontAwesomeIcons.check,
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -114,30 +96,16 @@ class _MainPageState extends State<MainPage> {
                             ebike: SuccessfulConfirmationPageState.ebikemain)),
                   );
                 },
-                style: ElevatedButton.styleFrom(
-                  side: const BorderSide(
-                      width: 0, color: Color.fromARGB(255, 5, 13, 20)),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  backgroundColor: const Color.fromARGB(46, 60, 134, 199),
-                ),
-                child: const Text(
-                  "You have a reservation",
-                  style: TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.w200, color: black),
-                ),
               ),
-            ),
             const Spacer(),
             SizedBox(
-              height: 50,
+              height: 40,
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => const MapPage()),
+                    MaterialPageRoute(builder: (context) => const MapPage()),
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -146,14 +114,15 @@ class _MainPageState extends State<MainPage> {
                 child: const Text(
                   "Show Station Location",
                   style: TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white),
+                      fontSize: 18, fontWeight: FontWeight.w400, color: Color.fromARGB(255, 250, 250, 250)),
                 ),
               ),
             ),
             const SizedBox(height: 20),
           ],
         ),
-      );
+      ),
+    );
   }
 
   void goToEbikeListPage(BuildContext context) {
@@ -167,29 +136,34 @@ class _MainPageState extends State<MainPage> {
 }
 
 class CustomButton extends StatelessWidget {
-  const CustomButton({super.key, required this.label, this.onPressed});
+  const CustomButton({
+    super.key,
+    required this.label,
+    required this.icon,
+    this.onPressed,
+  });
+
   final String label;
+  final IconData icon;
   final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 280,
-      height: 110,
-      child: ElevatedButton(
+      width: double.infinity,
+      child: ElevatedButton.icon(
+        icon: Icon(icon, size: 24),
+        label: Text(
+          label,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+        ),
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          side: const BorderSide(
-              width: 0, color: Color.fromARGB(255, 5, 13, 20)),
+          padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(40)),
+            borderRadius: BorderRadius.circular(10),
+          ),
           backgroundColor: primary,
-        ),
-        child: Text(
-          label,
-          style: const TextStyle(
-              fontSize: 27, fontWeight: FontWeight.w300, color: black),
-          textAlign: TextAlign.center,
         ),
       ),
     );

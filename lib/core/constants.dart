@@ -1,7 +1,7 @@
 // App-wide colors
 import 'package:flutter/material.dart';
 
-const Color primary = Color.fromARGB(251, 28, 171, 184);
+const Color primary = Color.fromARGB(197, 151, 201, 228);
 const Color gray900 = Color(0xFF3E3E3E);
 const Color gray700 = Color(0xFF626262);
 const Color gray500 = Color(0xFF8E8E8E);

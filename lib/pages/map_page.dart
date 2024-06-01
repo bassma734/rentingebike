@@ -23,7 +23,7 @@ class _MapPageState extends State<MapPage> {
           position: _stationLocation,
           infoWindow: const InfoWindow(
             title: 'Station Location',
-            snippet: 'Your station is here',
+            snippet: 'the station is here',
           ),
         ),
       );
