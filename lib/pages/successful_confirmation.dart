@@ -54,7 +54,7 @@ static  Ebike ebikemain =Ebike(name:' name', photo :'assets/images/Ebike.jpeg',)
             const SizedBox(height : 40), 
             const Text(
               'Scan the QR code when you get there.',
-              style: TextStyle(fontSize: 17, color: Color.fromARGB(255, 119, 188, 225),fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 15, color: Color.fromARGB(255, 106, 168, 201),fontWeight: FontWeight.w500),
             ),
             const SizedBox(height : 35),
 
