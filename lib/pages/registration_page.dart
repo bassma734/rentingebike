@@ -9,9 +9,6 @@ import '../widgets/note_button.dart';
 import '../widgets/note_form_field.dart';
 import '../widgets/note_icon_button_outlined.dart';
 import 'recover_password_page.dart';
- 
-
-
 
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({super.key});
@@ -22,23 +19,18 @@ class RegistrationPage extends StatefulWidget {
 
 class _RegistrationPageState extends State<RegistrationPage> {
   late final RegistrationController registrationController;
-
   late final TextEditingController nameController;
   late final TextEditingController emailController;
   late final TextEditingController passwordController;
-
   late final GlobalKey<FormState> formKey;
 
   @override
   void initState() {
     super.initState();
-
     registrationController = context.read();
-
     nameController = TextEditingController();
     emailController = TextEditingController();
     passwordController = TextEditingController();
-
     formKey = GlobalKey();
   }
 
@@ -53,54 +45,86 @@ class _RegistrationPageState extends State<RegistrationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Center(
-            child: SingleChildScrollView(
-              child: Selector<RegistrationController, bool>(
-                selector: (_, controller) => controller.isRegisterMode,
-                builder: (_, isRegisterMode, __) => Form(
+      appBar: AppBar(
+        elevation: 0,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [primary, Color.fromARGB(96, 3, 168, 244)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        title: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.electric_bike, color: Colors.white, size: 28),
+            SizedBox(width: 10),
+            Text(
+              'E-bike Renting App',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [primary, Color.fromARGB(13, 3, 168, 244)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Center(
+              child: SingleChildScrollView(
+                child: Form(
                   key: formKey,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Text(
-                        isRegisterMode ? 'Register' : 'Sign In',
+                      const Text(
+                        'Register',
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 48,
                           fontFamily: 'Fredoka',
                           fontWeight: FontWeight.w600,
-                          color: primary,
+                          color: Colors.white,
                         ),
                       ),
-                      const SizedBox(height : 16),
+                      const SizedBox(height: 16),
                       const Text(
-                        'In order to rent an e bike , you have to register/sign in to the app.',
+                        'In order to rent an e-bike, you have to register/sign in to the app.',
                         textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white70),
                       ),
-                      const SizedBox(height : 48),
-                      if (isRegisterMode) ...[
-                        NoteFormField(
-                          controller: nameController,
-                          labelText: 'Full name',
-                          fillColor: white,
-                          filled: true,
-                          textCapitalization: TextCapitalization.sentences,
-                          textInputAction: TextInputAction.next,
-                          validator: Validator.nameValidator,
-                          onChanged: (newValue) {
-                            registrationController.fullName = newValue;
-                          },
-                        ),
-                        const SizedBox(height : 8),
-                      ],
+                      const SizedBox(height: 48),
+                      NoteFormField(
+                        controller: nameController,
+                        labelText: 'Full name',
+                        fillColor: Colors.white,
+                        filled: true,
+                        textCapitalization: TextCapitalization.sentences,
+                        textInputAction: TextInputAction.next,
+                        validator: Validator.nameValidator,
+                        onChanged: (newValue) {
+                          registrationController.fullName = newValue;
+                        },
+                      ),
+                      const SizedBox(height: 8),
                       NoteFormField(
                         controller: emailController,
                         labelText: 'Email address',
-                        fillColor: white,
+                        fillColor: Colors.white,
                         filled: true,
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.next,
@@ -109,54 +133,40 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           registrationController.email = newValue;
                         },
                       ),
-                      const SizedBox(height : 8),
-                      Selector<RegistrationController, bool>(
-                        selector: (_, controller) =>
-                            controller.isPasswordHidden,
-                        builder: (_, isPasswordHidden, __) => NoteFormField(
-                          controller: passwordController,
-                          labelText: 'Password',
-                          fillColor: white,
-                          filled: true,
-                          obscureText: isPasswordHidden,
-                          suffixIcon: GestureDetector(
-                            onTap: () {
-                              registrationController.isPasswordHidden =
-                                  !isPasswordHidden;
-                            },
-                            child: Icon(isPasswordHidden
-                                ? FontAwesomeIcons.eye
-                                : FontAwesomeIcons.eyeSlash),
+                      const SizedBox(height: 8),
+                      NoteFormField(
+                        controller: passwordController,
+                        labelText: 'Password',
+                        fillColor: Colors.white,
+                        filled: true,
+                        obscureText: true,
+                        validator: Validator.passwordValidator,
+                        onChanged: (newValue) {
+                          registrationController.password = newValue;
+                        },
+                      ),
+                      const SizedBox(height: 12),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const RecoverPasswordpage(),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          'Forgot password?',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
                           ),
-                          validator: Validator.passwordValidator,
-                          onChanged: (newValue) {
-                            registrationController.password = newValue;
-                          },
                         ),
                       ),
-                      const SizedBox(height : 12),
-                      if (!isRegisterMode) ...[
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) =>  const RecoverPasswordpage(),
-                              ),
-                            );
-                          },
-                          child: const Text(
-                            'Forgot password?',
-                            style: TextStyle(
-                              color: primary,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height : 24),
-                      ],
+                      const SizedBox(height: 24),
                       SizedBox(
-                        height : 48,
+                        height: 48,
                         child: Selector<RegistrationController, bool>(
                           selector: (_, controller) => controller.isLoading,
                           builder: (_, isLoading, __) => NoteButton(
@@ -168,37 +178,34 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                       registrationController
                                           .authenticateWithEmailAndPassword(
                                               context: context);
-
                                     }
                                   },
                             child: isLoading
                                 ? const SizedBox(
-                                    width : 24,
-                                    height : 24,
-                                    child:
-                                        CircularProgressIndicator(color: white),
+                                    width: 24,
+                                    height: 24,
+                                    child: CircularProgressIndicator(
+                                        color: Colors.white),
                                   )
-                                : Text(isRegisterMode
-                                    ? 'Create my account'
-                                    : 'Log me in'),
+                                : const Text('Create my account'),
                           ),
                         ),
                       ),
-                      const SizedBox(height : 32),
-                      Row(
+                      const SizedBox(height: 32),
+                      const Row(
                         children: [
-                          const Expanded(child: Divider()),
+                          Expanded(child: Divider(color: Colors.white)),
                           Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: Text(isRegisterMode
-                                ? 'Or register with'
-                                : 'Or sign in with'),
+                            padding: EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Text(
+                              'Or register with',
+                              style: TextStyle(color: Colors.white70),
+                            ),
                           ),
-                          const Expanded(child: Divider()),
+                          Expanded(child: Divider(color: Colors.white)),
                         ],
                       ),
-                      const SizedBox(height : 32),
+                      const SizedBox(height: 32),
                       Row(
                         children: [
                           Expanded(
@@ -210,7 +217,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               },
                             ),
                           ),
-                          const SizedBox(width : 16),
+                          const SizedBox(width: 16),
                           Expanded(
                             child: NoteIconButtonOutlined(
                               icon: FontAwesomeIcons.apple,
@@ -219,24 +226,21 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           ),
                         ],
                       ),
-                      const SizedBox(height : 32),
+                      const SizedBox(height: 32),
                       Text.rich(
                         TextSpan(
-                          text: isRegisterMode
-                              ? 'Already have an account? '
-                              : 'Don\'t have an account? ',
-                          style: const TextStyle(color: gray700),
+                          text: 'Already have an account? ',
+                          style: const TextStyle(color: Colors.white70),
                           children: [
                             TextSpan(
-                              text: isRegisterMode ? 'Sign in' : 'Register',
+                              text: 'Sign in',
                               style: const TextStyle(
-                                color: primary,
+                                color: Colors.white,
                                 fontWeight: FontWeight.bold,
                               ),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  registrationController.isRegisterMode =
-                                      !isRegisterMode;
+                                  // Navigate to sign-in page
                                 },
                             ),
                           ],

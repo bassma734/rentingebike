@@ -22,17 +22,37 @@ class ReservationFormPageState extends State<ReservationFormPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Reservation Form - ${widget.ebike.name}',
-          style: const TextStyle(fontSize: 14),
+        elevation: 0,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [primary, Color.fromARGB(80, 3, 168, 244)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        title:  Row(
+          //mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(width: 10),
+            Text(
+              'Reservation Form - ${widget.ebike.name}     ',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            
+          ],
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
-        ),
-      ),
+        ),),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -77,7 +97,7 @@ class ReservationFormPageState extends State<ReservationFormPage> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 backgroundColor: gray100,
               ),
-              child: const Text('Select time', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500)),
+              child: const Text('Select time', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w400 , color: primary)),
             ),
             const SizedBox(height: 25),
             Text('Selected time: ${_selectedTime.format(context)}', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
@@ -103,7 +123,7 @@ class ReservationFormPageState extends State<ReservationFormPage> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 backgroundColor: gray100,
               ),
-              child: const Text('Confirm Reservation', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+              child: const Text('Confirm Reservation', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500 ,color: primary)),
             ),
           ],
         ),

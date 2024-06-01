@@ -4,6 +4,7 @@ import '../pages/reservation_form_page.dart';
 import '../services/mqtt_service.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 //import '../pages/successful_confirmation.dart';
+import '../core/constants.dart';
 
 class EbikeListPage extends StatefulWidget {
   final bool isReserved;
@@ -46,8 +47,31 @@ class EbikeListPageState extends State<EbikeListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('E-bike List'),
-      ),
+        elevation: 0,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [primary, Color.fromARGB(80, 3, 168, 244)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        title: const Row(
+          //mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            //Icon(Icons.electric_bike, color: Colors.white, size: 28),
+            SizedBox(width: 10),
+            Text(
+              'Ebike List               ',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ],
+        ),),
       body: _buildEbikeList(),
     );
   }
@@ -93,11 +117,12 @@ class EbikeListPageState extends State<EbikeListPage> {
             style: const TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 20,
+
             ),
           ),
           trailing: ElevatedButton(
             onPressed: enabled ? () => _handleReservationButtonPress(ebike) : null,
-            child: const Text('Reserve', style: TextStyle(fontSize: 18)),
+            child: const Text('Reserve', style: TextStyle(fontSize: 18, color:primary )),
           ),
         ),
       ),
