@@ -14,10 +14,12 @@ class EndLocation extends StatefulWidget {
 
 class EndLocationState extends State<EndLocation> {
   final _paymentService = PaymentService();
+  
   void _startPayment() async {
+
     try {
       final paymentUrl = await _paymentService.createPayment(
-        widget.amount  , 'bassma', 'rh', 'bessa@gmail.com', '+21622334455',
+       widget.amount , 'bassma', 'rh', 'bessa@gmail.com', '+21622334455',
       );
 
       if (paymentUrl != null) {
