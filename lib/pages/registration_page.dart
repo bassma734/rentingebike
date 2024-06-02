@@ -27,7 +27,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   @override
   void initState() {
     super.initState();
-    registrationController = context.read();
+    registrationController = context.read<RegistrationController>();
     nameController = TextEditingController();
     emailController = TextEditingController();
     passwordController = TextEditingController();
@@ -108,18 +108,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         style: TextStyle(color: Colors.white70),
                       ),
                       const SizedBox(height: 48),
-                      NoteFormField(
-                        controller: nameController,
-                        labelText: 'Full name',
-                        fillColor: Colors.white,
-                        filled: true,
-                        textCapitalization: TextCapitalization.sentences,
-                        textInputAction: TextInputAction.next,
-                        validator: Validator.nameValidator,
-                        onChanged: (newValue) {
-                          registrationController.fullName = newValue;
-                        },
-                      ),
+                      if (registrationController.isRegisterMode)
+                        NoteFormField(
+                          controller: nameController,
+                          labelText: 'Full name',
+                          fillColor: Colors.white,
+                          filled: true,
+                          textCapitalization: TextCapitalization.sentences,
+                          textInputAction: TextInputAction.next,
+                          validator: Validator.nameValidator,
+                          onChanged: (newValue) {
+                            registrationController.fullName = newValue;
+                          },
+                        ),
                       const SizedBox(height: 8),
                       NoteFormField(
                         controller: emailController,
@@ -173,21 +174,21 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             onPressed: isLoading
                                 ? null
                                 : () {
-                                    if (formKey.currentState?.validate() ??
-                                        false) {
-                                      registrationController
-                                          .authenticateWithEmailAndPassword(
-                                              context: context);
+                                    if (formKey.currentState?.validate() ?? false) {
+                                      registrationController.authenticateWithEmailAndPassword(context: context);
                                     }
                                   },
                             child: isLoading
                                 ? const SizedBox(
                                     width: 24,
                                     height: 24,
-                                    child: CircularProgressIndicator(
-                                        color: Colors.white),
+                                    child: CircularProgressIndicator(color: Colors.white),
                                   )
-                                : const Text('Create my account'),
+                                : Text(
+                                    registrationController.isRegisterMode
+                                        ? 'Create my account'
+                                        : 'Sign in',
+                                  ),
                           ),
                         ),
                       ),
@@ -212,8 +213,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             child: NoteIconButtonOutlined(
                               icon: FontAwesomeIcons.google,
                               onPressed: () {
-                                registrationController.authenticateWithGoogle(
-                                    context: context);
+                                registrationController.authenticateWithGoogle(context: context);
                               },
                             ),
                           ),
@@ -229,18 +229,24 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       const SizedBox(height: 32),
                       Text.rich(
                         TextSpan(
-                          text: 'Already have an account? ',
+                          text: registrationController.isRegisterMode
+                              ? 'Already have an account? '
+                              : 'Don\'t have an account? ',
                           style: const TextStyle(color: Colors.white70),
                           children: [
                             TextSpan(
-                              text: 'Sign in',
+                              text: registrationController.isRegisterMode
+                                  ? 'Sign in'
+                                  : 'Register',
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                               ),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  // Navigate to sign-in page
+                                  setState(() {
+                                    registrationController.isRegisterMode = !registrationController.isRegisterMode;
+                                  });
                                 },
                             ),
                           ],

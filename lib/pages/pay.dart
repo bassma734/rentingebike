@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-//import'web_view_stack.dart';
+import 'package:renting_app/core/constants.dart';
+import 'package:renting_app/pages/success_page.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-
-
-
 
 class PaymentPage extends StatefulWidget {
   final String paymentUrl;
@@ -30,9 +28,7 @@ class PaymentPageState extends State<PaymentPage> {
               loadingPercentage = progress.toDouble();
             });
           },
-          onPageStarted: (String url) {
-           
-          },
+          onPageStarted: (String url) {},
           onPageFinished: (String url) {
             setState(() {
               loadingPercentage = null;
@@ -44,7 +40,6 @@ class PaymentPageState extends State<PaymentPage> {
                 ),
               );
             }
-
           },
           onWebResourceError: (WebResourceError error) {},
           onNavigationRequest: (NavigationRequest request) {
@@ -61,39 +56,41 @@ class PaymentPageState extends State<PaymentPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Paymee Payment'),
-      ),
-      body: 
-      Stack(
-      children: [
-        WebViewWidget(
-          controller: _controller,
-        ),
-        if (loadingPercentage != null && loadingPercentage! < 100)
-          LinearProgressIndicator(
-            value: loadingPercentage! / 100.0,
+        elevation: 0,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [primary, Color.fromARGB(80, 3, 168, 244)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
           ),
-      ],
-    )
-     
-    );
-  }
-}
-
-class SuccessPage extends StatelessWidget {
-  const SuccessPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Payment Successful'),
+        ),
+        title: const Text(
+          'Paymee Payment',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
       ),
-      body: const Center(
-        child: Text('Your payment has been processed successfully.'),
+      body: Stack(
+        children: [
+          WebViewWidget(
+            controller: _controller,
+          ),
+          if (loadingPercentage != null && loadingPercentage! < 100)
+            Center(
+              child: CircularProgressIndicator(
+                value: loadingPercentage! / 100.0,
+                valueColor: const AlwaysStoppedAnimation<Color>(primary),
+              ),
+            ),
+        ],
       ),
     );
   }

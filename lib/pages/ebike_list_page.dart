@@ -3,7 +3,6 @@ import '../pages/ebike_model.dart';
 import '../pages/reservation_form_page.dart';
 import '../services/mqtt_service.dart';
 import 'package:mqtt_client/mqtt_client.dart';
-//import '../pages/successful_confirmation.dart';
 import '../core/constants.dart';
 
 class EbikeListPage extends StatefulWidget {
@@ -57,22 +56,26 @@ class EbikeListPageState extends State<EbikeListPage> {
             ),
           ),
         ),
-        title: const Row(
-          //mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            //Icon(Icons.electric_bike, color: Colors.white, size: 28),
-            SizedBox(width: 10),
-            Text(
-              'Ebike List               ',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ],
-        ),),
-      body: _buildEbikeList(),
+        title: const Text(
+          'Ebike List',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
+      ),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [primary, Color.fromARGB(15, 79, 185, 234)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: _buildEbikeList(),
+      ),
     );
   }
 
@@ -117,12 +120,18 @@ class EbikeListPageState extends State<EbikeListPage> {
             style: const TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 20,
-
             ),
           ),
           trailing: ElevatedButton(
             onPressed: enabled ? () => _handleReservationButtonPress(ebike) : null,
-            child: const Text('Reserve', style: TextStyle(fontSize: 18, color:primary )),
+            // ignore: sort_child_properties_last
+            child: const Text('Reserve', style: TextStyle(fontSize: 18, color: primary)),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: white, // Set the background color
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30), 
+              ),
+            ),
           ),
         ),
       ),
@@ -169,29 +178,20 @@ class EbikeListPageState extends State<EbikeListPage> {
   }
 
   void buttonsState() {
-      
     if (ReservationFormPageState.isReserved && widget.isReserved == true) {
       if (ReservationFormPageState.rname == 'Ebike1') {
         _reservationButtonStates[0] = false;
-        //_reservationButtonStates[1] = true;
       } else if (ReservationFormPageState.rname == 'Ebike2') {
         _reservationButtonStates[1] = false;
-        //_reservationButtonStates[0] = true;
       }
     } else if (widget.isReserved == false && ReservationFormPageState.isReserved) {
       if (ReservationFormPageState.rname == 'Ebike1') {
-      
-        
         _reservationButtonStates[0] = true;
       } else if (ReservationFormPageState.rname == 'Ebike2') {
         _reservationButtonStates[1] = true;
       }
     }
-    else {
-      //_initializeButtonStates();
-    }
   }
-
 
   @override
   void dispose() {
