@@ -7,7 +7,11 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 class MqttService {
   MqttServerClient client =
 
+<<<<<<< HEAD
       MqttServerClient.withPort('192.168.0.7', 'mobile_App', 1883);
+=======
+  MqttServerClient.withPort('192.168.1.53', 'mobile_App', 1883);
+>>>>>>> 06231fae07383023c12d1fc3ecf70141f152782a
 
 
   Future<int> connect() async {
@@ -19,7 +23,7 @@ class MqttService {
     client.pongCallback = pong;
 
     final connMessage =
-        MqttConnectMessage().startClean().withWillQos(MqttQos.atLeastOnce);
+    MqttConnectMessage().startClean().withWillQos(MqttQos.atLeastOnce);
     client.connectionMessage = connMessage;
 
     try {

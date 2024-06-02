@@ -1,7 +1,9 @@
 import 'dart:async';
-import 'package:renting_app/pages/scan_qr_code_paiement.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:percent_indicator/percent_indicator.dart';
+import 'scan_qr_code_paiement.dart';
+import '../core/constants.dart';
 
 class MoneyTimeCounterPage extends StatefulWidget {
   final String qrCode;
@@ -12,20 +14,29 @@ class MoneyTimeCounterPage extends StatefulWidget {
   MoneyTimeCounterPageState createState() => MoneyTimeCounterPageState();
 }
 
-class MoneyTimeCounterPageState extends State<MoneyTimeCounterPage> {
+class MoneyTimeCounterPageState extends State<MoneyTimeCounterPage>
+    with SingleTickerProviderStateMixin {
   double moneyCounter = 0;
   String _moneyCounterFormatted = '0.00';
   Timer? _timer;
+  late AnimationController _animationController;
+  late Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+    _animation = Tween<double>(begin: 0, end: 1).animate(_animationController);
     _startTimer();
   }
 
   @override
   void dispose() {
     _timer?.cancel();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -33,9 +44,11 @@ class MoneyTimeCounterPageState extends State<MoneyTimeCounterPage> {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         moneyCounter += 0.0034;
-        _moneyCounterFormatted =
-            NumberFormat.currency(locale: 'ar_TN', symbol: 'DT')
-                .format(moneyCounter);
+        _moneyCounterFormatted = NumberFormat.currency(
+          locale: 'ar_TN',
+          symbol: 'DT',
+        ).format(moneyCounter);
+        _animationController.forward(from: 0);
       });
     });
   }
@@ -45,28 +58,172 @@ class MoneyTimeCounterPageState extends State<MoneyTimeCounterPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ScanQRPCodePage(name: widget.qrCode,amount:  moneyCounter),
+        builder: (context) => ScanQRPCodePage(
+          name: widget.qrCode,
+          amount: moneyCounter,
+        ),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    int totalSeconds = _timer?.tick ?? 0;
+    int minutes = totalSeconds ~/ 60;
+    int seconds = totalSeconds % 60;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Money and Time Counter'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Scanned QR Code: ${widget.qrCode}'),
-            Text('Money: $_moneyCounterFormatted'),
-            Text('Time: ${_timer?.tick ?? 0} seconds'),
-            ElevatedButton(
-              onPressed: _navigateToScanPage,
-              child: const Text('Scan QR Code'),
+        elevation: 0,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [primary, Color.fromARGB(80, 3, 168, 244)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
+          ),
+        ),
+        title: const Text(
+          'Money Time Counter',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
+      ),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [primary, Color.fromARGB(15, 79, 185, 234)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildCustomCard(
+                    title: 'Scanned QR Code',
+                    content: Text(
+                      widget.qrCode,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        color: Colors.black54,
+                      ),
+                    ),
+                    icon: Icons.qr_code,
+                    color: Colors.purple,
+                  ),
+                  const SizedBox(height: 20),
+                  _buildCustomCard(
+                    title: 'Money',
+                    content: AnimatedBuilder(
+                      animation: _animation,
+                      builder: (context, child) {
+                        return Text(
+                          _moneyCounterFormatted,
+                          style: const TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blueGrey,
+                          ),
+                        );
+                      },
+                    ),
+                    icon: Icons.monetization_on,
+                    color: Colors.green,
+                  ),
+                  const SizedBox(height: 20),
+                  _buildCustomCard(
+                    title: 'Time',
+                    content: CircularPercentIndicator(
+                      radius: 60.0,
+                      lineWidth: 10.0,
+                      percent: (minutes % 60) / 60,
+                      center: Text(
+                        '$minutes:${seconds.toString().padLeft(2, '0')} m',
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blueGrey,
+                        ),
+                      ),
+                      progressColor: primary,
+                    ),
+                    icon: Icons.timer,
+                    color: Colors.blue,
+                  ),
+                  const SizedBox(height: 30),
+                  ElevatedButton.icon(
+                    onPressed: _navigateToScanPage,
+                    icon: const Icon(Icons.qr_code_scanner),
+                    label: const Text('Scan QR Code'),
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white, backgroundColor: primary,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 15,
+                      ),
+                      textStyle: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      elevation: 10,
+                      shadowColor: Colors.black26,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCustomCard({
+    required String title,
+    required Widget content,
+    required IconData icon,
+    required Color color,
+  }) {
+    return Card(
+      elevation: 10,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                CircleAvatar(
+                  backgroundColor: color,
+                  child: Icon(icon, color: Colors.white),
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: color,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            content,
           ],
         ),
       ),
