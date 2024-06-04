@@ -37,7 +37,7 @@ class ReservationFormPageState extends State<ReservationFormPage> {
             const SizedBox(width: 10),
             Expanded(
               child: Text(
-                'Reservation Form - ${widget.ebike.name}',
+                ' ${widget.ebike.name}',
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18,
@@ -63,64 +63,86 @@ class ReservationFormPageState extends State<ReservationFormPage> {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  width: double.infinity,
-                  height: 250,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black, width: 1),
-                    borderRadius: BorderRadius.circular(20),
-                    image: DecorationImage(
-                      image: AssetImage(widget.ebike.photo),
-                      fit: BoxFit.cover,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 90),
+          child: SingleChildScrollView(
+            child: Column(
+              //crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Center(
+                  child: Container(
+                    width: double.infinity,
+                    height: 250,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          spreadRadius: 0,
+                          blurRadius: 0,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                      image: DecorationImage(
+                        image: AssetImage(widget.ebike.photo),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 25),
-              Center(
-                child: Text(
-                  widget.ebike.name,
-                  style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w400),
-                ),
-              ),
-              const SizedBox(height: 16),
-              const Center(
-                child: Text(
-                  'Please choose your preferred time for reservation:',
-                  style: TextStyle(fontSize: 16),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              const SizedBox(height: 25),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () => _showTimePickerDialog(context),
-                  style: ElevatedButton.styleFrom(
-                    side: const BorderSide(width: 1, color: Color.fromARGB(255, 142, 146, 152)),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                    backgroundColor: gray100,
-                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                    elevation: 10,
-                    shadowColor: Colors.black26,
+                const SizedBox(height: 25),
+                /*Center(
+                  child: Text(
+                    widget.ebike.name,
+                    style: const TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
-                  child: const Text('Select Time', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w400, color: primary)),
+                ),*/
+                /*const SizedBox(height: 16),*/
+                const Center(
+                  child: Text(
+                    'Please choose your preferred time for reservation:',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white70,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 25),
-              Center(
-                child: Text(
-                  'Selected time: ${_selectedTime.format(context)}',
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                const SizedBox(height: 32),
+                Center(
+                  child: ElevatedButton.icon(
+                    onPressed: () => _showTimePickerDialog(context),
+                    icon: const Icon(Icons.access_time),
+                    label: const Text(
+                      'Select Time',
+                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.w400),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                      backgroundColor: primary,
+                      foregroundColor: Colors.white,
+                      elevation: 10,
+                      shadowColor: Colors.black26,
+                    ),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 25),
-              Center(
-                child: ElevatedButton(
+                const SizedBox(height: 32),
+                Center(
+                  child: Text(
+                    'Selected time: ${_selectedTime.format(context)}',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 25),
+                ElevatedButton.icon(
                   onPressed: _isReservationTimeSelected
                       ? () {
                           setState(() {
@@ -136,18 +158,24 @@ class ReservationFormPageState extends State<ReservationFormPage> {
                           );
                         }
                       : null,
+                  icon: const Icon(Icons.check_circle),
+                  label: const Text(
+                    'Confirm Reservation',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                  ),
                   style: ElevatedButton.styleFrom(
-                    side: const BorderSide(width: 1, color: Color.fromARGB(255, 8, 8, 8)),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                    backgroundColor: _isReservationTimeSelected ? primary : Colors.grey,
                     padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                    elevation: 10,
+                    backgroundColor: _isReservationTimeSelected ? primary : Colors.grey,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    elevation: 20,
                     shadowColor: Colors.black26,
                   ),
-                  child: const Text('Confirm Reservation', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.white)),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -158,6 +186,26 @@ class ReservationFormPageState extends State<ReservationFormPage> {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: _selectedTime,
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: primary, // header background color
+              onPrimary: Colors.white, // header text color
+              onSurface: Colors.black, // body text color
+              onSurfaceVariant: primary,
+              primaryContainer: primary,
+              surfaceVariant: gray100,         
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: primary, // button text color
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
 
     if (picked != null && picked != _selectedTime) {
@@ -167,4 +215,5 @@ class ReservationFormPageState extends State<ReservationFormPage> {
       });
     }
   }
+  
 }

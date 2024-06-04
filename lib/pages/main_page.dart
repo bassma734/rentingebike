@@ -7,7 +7,6 @@ import 'package:renting_app/pages/successful_confirmation.dart';
 import '../core/constants.dart';
 import '../core/dialogs.dart';
 import '../services/auth_service.dart';
-//import '../widgets/note_icon_button_outlined.dart';
 
 class MainPage extends StatefulWidget {
   final bool isReserved;
@@ -61,86 +60,96 @@ class _MainPageState extends State<MainPage> {
           const SizedBox(width: 10),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Text(
-              "Welcome ",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: primary, // Adjusted color to primary
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              "Please click on the station button for rental reservation",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-                color: Colors.black54,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 30),
-            _buildFeatureCard(
-              icon: FontAwesomeIcons.bicycle,
-              title: "Make a Reservation",
-              subtitle: "Reserve your e-bike at a nearby station",
-              onTap: () => goToEbikeListPage(context),
-            ),
-            const SizedBox(height: 20),
-          
-            _buildFeatureCard(
-              icon: FontAwesomeIcons.qrcode,
-              title: "Scan QR Code",
-              subtitle: "Scan the QR code for on-site rental",
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const ScanQRCodePage()),
-                );
-              },
-            ),
-            const SizedBox(height: 20),
-
-            // Conditionally rendering the "Your Reservation" button
-            if (widget.isReserved)
-              _buildFeatureCard(
-                icon: FontAwesomeIcons.clipboardCheck,
-                title: "Your Reservation",
-                subtitle: "View your current reservation status",
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SuccessfulConfirmationPage(
-                            ebike: SuccessfulConfirmationPageState.ebikemain)),
-                  );
-                },
-              ),
-            if (widget.isReserved)
-              const SizedBox(height: 20),
-
-            _buildFeatureCard(
-              icon: FontAwesomeIcons.locationDot,
-              title: "Show Station Location",
-              subtitle: "View the location of nearby stations",
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const MapPage()),
-                );
-              },
-              isPrimary: true,
-            ),
-            const SizedBox(height: 20),
-          ],
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [primary, Color.fromARGB(12, 137, 178, 197)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
         ),
+        
+          
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 115),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text(
+                  "Welcome",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 30),
+                const Text(
+                  "Please click on the station button for rental reservation",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white70,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 30),
+                _buildFeatureCard(
+                  icon: FontAwesomeIcons.bicycle,
+                  title: "Make a Reservation",
+                  subtitle: "Reserve your e-bike at a nearby station",
+                  onTap: () => goToEbikeListPage(context),
+                ),
+                const SizedBox(height: 20),
+                _buildFeatureCard(
+                  icon: FontAwesomeIcons.qrcode,
+                  title: "Scan QR Code",
+                  subtitle: "Scan the QR code for on-site rental",
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ScanQRCodePage(),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 20),
+                if (widget.isReserved)
+                  _buildFeatureCard(
+                    icon: FontAwesomeIcons.clipboardCheck,
+                    title: "Your Reservation",
+                    subtitle: "View your current reservation status",
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SuccessfulConfirmationPage(
+                              ebike: SuccessfulConfirmationPageState.ebikemain),
+                        ),
+                      );
+                    },
+                  ),
+                if (widget.isReserved)
+                  const SizedBox(height: 20),
+                _buildFeatureCard(
+                  icon: FontAwesomeIcons.locationDot,
+                  title: "Show Station Location",
+                  subtitle: "View the location of nearby stations",
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const MapPage()),
+                    );
+                  },
+                  isPrimary: true,
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
+          ),
+        
       ),
     );
   }
@@ -172,7 +181,7 @@ class _MainPageState extends State<MainPage> {
           decoration: BoxDecoration(
             gradient: isPrimary
                 ? const LinearGradient(
-                    colors: [primary, Color.fromARGB(112, 3, 168, 244)],
+                    colors: [primary, Color.fromARGB(97, 3, 117, 170)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   )
@@ -239,4 +248,5 @@ class _MainPageState extends State<MainPage> {
       ),
     );
   }
+  
 }

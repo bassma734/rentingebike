@@ -72,7 +72,7 @@ class MoneyTimeCounterPageState extends State<MoneyTimeCounterPage>
     int minutes = totalSeconds ~/ 60;
     int seconds = totalSeconds % 60;
     return Scaffold(
-      appBar: AppBar(
+      /*appBar: AppBar(
         elevation: 0,
         flexibleSpace: Container(
           decoration: const BoxDecoration(
@@ -92,7 +92,7 @@ class MoneyTimeCounterPageState extends State<MoneyTimeCounterPage>
           ),
         ),
         centerTitle: true,
-      ),
+      ),*/
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
