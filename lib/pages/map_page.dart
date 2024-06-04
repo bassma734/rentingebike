@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:renting_app/core/constants.dart';
+//import 'package:renting_app/core/constants.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -34,7 +34,7 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      /*appBar: AppBar(
         elevation: 0,
         flexibleSpace: Container(
           decoration: const BoxDecoration(
@@ -57,7 +57,7 @@ class _MapPageState extends State<MapPage> {
               ),
             ),
           ],
-        ),),
+        ),),*/
       body: GoogleMap(
         onMapCreated: _onMapCreated,
         initialCameraPosition: CameraPosition(

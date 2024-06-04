@@ -176,12 +176,13 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
                         ) ??
                         false;
                     if (cancel && mounted) {
-                      Navigator.push(
+                      Navigator.pushAndRemoveUntil(
                         // ignore: use_build_context_synchronously
                         context,
                         MaterialPageRoute(
                           builder: (context) => MainPage(isReserved: state),
                         ),
+                        (Route<dynamic> route) => false,
                       );
                     }
                   },
@@ -207,11 +208,13 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
                 const SizedBox(height: 30),
                 ElevatedButton.icon(
                   onPressed: () {
-                    Navigator.push(
+                    Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
                         builder: (context) => const MainPage(isReserved: true),
                       ),
+                      (Route<dynamic> route) => false,
+                      
                     );
                   },
                   icon: const Icon(Icons.home),
@@ -240,4 +243,5 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
       ),
     );
   }
+ 
 }

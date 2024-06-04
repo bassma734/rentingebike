@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:renting_app/core/constants.dart';
+import 'package:renting_app/pages/main_page.dart';
 
 class SuccessPage extends StatelessWidget {
   const SuccessPage({super.key});
@@ -7,7 +8,7 @@ class SuccessPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      /*appBar: AppBar(
         elevation: 0,
         flexibleSpace: Container(
           decoration: const BoxDecoration(
@@ -27,7 +28,7 @@ class SuccessPage extends StatelessWidget {
           ),
         ),
         centerTitle: true,
-      ),
+      ),*/
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -76,8 +77,14 @@ class SuccessPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 30),
                 ElevatedButton.icon(
-                  onPressed: () {
-                    Navigator.popUntil(context, (route) => route.isFirst);
+                onPressed: () {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MainPage(isReserved: false,),
+                      ),
+                      (Route<dynamic> route) => false,
+                    );
                   },
                   icon: const Icon(Icons.home),
                   label: const Text('Home'),
