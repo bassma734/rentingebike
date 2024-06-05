@@ -9,8 +9,8 @@ import '../core/dialogs.dart';
 import '../services/auth_service.dart';
 
 class MainPage extends StatefulWidget {
-  final bool isReserved;
-  const MainPage({super.key, required this.isReserved});
+  //final bool isReserved;
+  const MainPage({super.key, /*required this.isReserved*/});
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -37,7 +37,7 @@ class _MainPageState extends State<MainPage> {
             Icon(Icons.electric_bike, color: Colors.white, size: 28),
             SizedBox(width: 10),
             Text(
-              'E-bike Renting App',
+              'RentCycle',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
@@ -70,8 +70,8 @@ class _MainPageState extends State<MainPage> {
         ),
         
           
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 115),
+          //child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -116,7 +116,7 @@ class _MainPageState extends State<MainPage> {
                   },
                 ),
                 const SizedBox(height: 20),
-                if (widget.isReserved)
+                //if (widget.isReserved)
                   _buildFeatureCard(
                     icon: FontAwesomeIcons.clipboardCheck,
                     title: "Your Reservation",
@@ -131,7 +131,7 @@ class _MainPageState extends State<MainPage> {
                       );
                     },
                   ),
-                if (widget.isReserved)
+                //if (widget.isReserved)
                   const SizedBox(height: 20),
                 _buildFeatureCard(
                   icon: FontAwesomeIcons.locationDot,
@@ -145,20 +145,20 @@ class _MainPageState extends State<MainPage> {
                   },
                   isPrimary: true,
                 ),
-                const SizedBox(height: 20),
+                //const SizedBox(height: 20),
               ],
             ),
           ),
         
-      ),
-    );
+      );
+    //);
   }
 
   void goToEbikeListPage(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => EbikeListPage(isReserved: widget.isReserved),
+        builder: (_) => const EbikeListPage(/*isReserved: widget.isReserved*/),
       ),
     );
   }

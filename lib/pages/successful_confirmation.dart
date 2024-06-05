@@ -23,7 +23,7 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
   Widget build(BuildContext context) {
     ebikemain = widget.ebike;
     return Scaffold(
-      appBar: AppBar(
+      /*appBar: AppBar(
         elevation: 0,
         flexibleSpace: Container(
           decoration: const BoxDecoration(
@@ -43,7 +43,7 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
           ),
         ),
         centerTitle: true,
-      ),
+      ),*/
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -94,9 +94,9 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
                 const SizedBox(height: 30),
                 ElevatedButton.icon(
                   onPressed: () {
-                    setState(() {
+                    /*setState(() {
                       state = false;
-                    });
+                    });*/
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -126,9 +126,9 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
                 const SizedBox(height: 30),
                 ElevatedButton.icon(
                   onPressed: () async {
-                    setState(() {
+                    /*setState(() {
                       state = false;
-                    });
+                    });*/
 
                     final bool cancel = await showConfirmationDialog(
                           context: context,
@@ -140,7 +140,7 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
                         // ignore: use_build_context_synchronously
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MainPage(isReserved: state),
+                          builder: (context) =>const MainPage(/*isReserved: state*/),
                         ),
                         (Route<dynamic> route) => false,
                       );
@@ -171,7 +171,7 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const MainPage(isReserved: true),
+                        builder: (context) => const MainPage(/*isReserved: true*/),
                       ),
                       (Route<dynamic> route) => false,
                       

@@ -23,6 +23,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   late final TextEditingController emailController;
   late final TextEditingController passwordController;
   late final GlobalKey<FormState> formKey;
+  String pageTitle = 'Register';  // Add a title state variable
 
   @override
   void initState() {
@@ -40,6 +41,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
+  }
+
+  void updateTitle() {
+    setState(() {
+      pageTitle = registrationController.isRegisterMode ? 'Register' : 'Sign in';  // Update title based on mode
+    });
   }
 
   @override
@@ -62,7 +69,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
             Icon(Icons.electric_bike, color: Colors.white, size: 28),
             SizedBox(width: 10),
             Text(
-              'E-bike Renting App',
+              'RentCycle',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
@@ -91,10 +98,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const Text(
-                        'Register',
+                      Text(
+                        pageTitle,  // Use the state variable for the title
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 48,
                           fontFamily: 'Fredoka',
                           fontWeight: FontWeight.w600,
@@ -246,6 +253,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                 ..onTap = () {
                                   setState(() {
                                     registrationController.isRegisterMode = !registrationController.isRegisterMode;
+                                    updateTitle();  // Update the title when mode changes
                                   });
                                 },
                             ),
