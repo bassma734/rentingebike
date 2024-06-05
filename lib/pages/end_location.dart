@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:renting_app/core/constants.dart';
 import '../services/payment_service.dart';
 import '../pages/pay.dart';
+import '../pages/money_time_counter_page.dart';
 
 class EndLocation extends StatefulWidget {
   final double amount;
@@ -20,6 +21,7 @@ class EndLocationState extends State<EndLocation> with SingleTickerProviderState
   @override
   void initState() {
     super.initState();
+    MoneyTimeCounterPageState.timer?.cancel();
     _controller = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
