@@ -14,9 +14,6 @@ class EndLocation extends StatefulWidget {
 
 class EndLocationState extends State<EndLocation> with SingleTickerProviderStateMixin {
   final _paymentService = PaymentService();
-<<<<<<< HEAD
-  
-=======
   late AnimationController _controller;
   late Animation<Offset> _animation;
 
@@ -42,16 +39,13 @@ class EndLocationState extends State<EndLocation> with SingleTickerProviderState
     super.dispose();
   }
 
->>>>>>> 06231fae07383023c12d1fc3ecf70141f152782a
   void _startPayment() async {
 
     try {
       final paymentUrl = await _paymentService.createPayment(
-<<<<<<< HEAD
-       widget.amount , 'bassma', 'rh', 'bessa@gmail.com', '+21622334455',
-=======
+
       widget.amount , 'Bassma', 'Zeineb', 'bessa@gmail.com', '+21622334455',
->>>>>>> 06231fae07383023c12d1fc3ecf70141f152782a
+
       );
 
       if (paymentUrl != null ) {

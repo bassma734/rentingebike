@@ -54,7 +54,7 @@ class MoneyTimeCounterPageState extends State<MoneyTimeCounterPage>
   }
 
   void _navigateToScanPage() {
-    _timer?.cancel(); // Stop the timer
+    //_timer?.cancel(); // Stop the timer
     Navigator.push(
       context,
       MaterialPageRoute(

@@ -63,8 +63,7 @@ class ReservationFormPageState extends State<ReservationFormPage> {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 90),
-          child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 80),
             child: Column(
               //crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -174,11 +173,12 @@ class ReservationFormPageState extends State<ReservationFormPage> {
                     shadowColor: Colors.black26,
                   ),
                 ),
+                //const SizedBox(height: 50),
+
               ],
             ),
           ),
         ),
-      ),
     );
   }
 

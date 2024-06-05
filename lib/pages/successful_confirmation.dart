@@ -44,45 +44,6 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
         ),
         centerTitle: true,
       ),
-<<<<<<< HEAD
-      body: Padding(
-        padding: const EdgeInsets.all(50),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/images/confirmation_icon.png', // Path to your image asset
-              width : 100,
-              height : 100,
-            ),
-            const SizedBox(height : 20),
-
-
-            Text(
-              'Your ${ebike.name} reservation has been confirmed successfully.',
-              style: const TextStyle(fontSize: 25 ) , textAlign: TextAlign.center,
-            ),
-            const SizedBox(height : 40), 
-            const Text(
-              'Scan the QR code when you get there.',
-              style: TextStyle(fontSize: 15, color: Color.fromARGB(255, 106, 168, 201),fontWeight: FontWeight.w500),
-            ),
-            const SizedBox(height : 35),
-
-            SizedBox(
-              width : 200, // adjust the size as needed
-              height : 50, // adjust the size as needed
-    
-              child:ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                      state  = false ;
-                  });
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ScanQRCodeResPage(ebike : widget.ebike),
-=======
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -128,7 +89,6 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
                         ),
                       ],
                     ),
->>>>>>> 06231fae07383023c12d1fc3ecf70141f152782a
                   ),
                 ),
                 const SizedBox(height: 30),

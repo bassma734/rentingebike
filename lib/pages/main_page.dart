@@ -46,6 +46,7 @@ class _MainPageState extends State<MainPage> {
             ),
           ],
         ),
+      
         actions: [
           IconButton(
             icon: const Icon(Icons.logout, color: Colors.white),
@@ -70,8 +71,7 @@ class _MainPageState extends State<MainPage> {
         ),
         
           
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 115),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 75),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -145,14 +145,12 @@ class _MainPageState extends State<MainPage> {
                   },
                   isPrimary: true,
                 ),
-                const SizedBox(height: 20),
+                //const SizedBox(height: 80),
               ],
             ),
           ),
-        
-      ),
-    );
-  }
+
+      );  }
 
   void goToEbikeListPage(BuildContext context) {
     Navigator.push(
@@ -243,10 +241,15 @@ class _MainPageState extends State<MainPage> {
                   ),
                 ),
             ],
+            
           ),
+
         ),
+
       ),
+
     );
+
   }
   
 }
