@@ -97,7 +97,7 @@ class EbikeListPageState extends State<EbikeListPage> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [primary, Color.fromARGB(15, 79, 185, 234)],
+            colors: [primary, Color.fromARGB(244, 79, 185, 234)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),

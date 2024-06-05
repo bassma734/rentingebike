@@ -16,6 +16,7 @@ class SuccessfulConfirmationPage extends StatefulWidget {
   SuccessfulConfirmationPageState createState() => SuccessfulConfirmationPageState();
 }
 
+
 class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> {
 
   static Ebike ebikemain = Ebike(name: 'ebike', photo: 'assets/images/Ebike.jpeg');
