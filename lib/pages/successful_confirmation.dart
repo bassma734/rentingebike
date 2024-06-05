@@ -8,7 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class SuccessfulConfirmationPage extends StatefulWidget {
-  final Ebike ebike;
+  final  Ebike ebike;
 
   const SuccessfulConfirmationPage({required this.ebike, super.key});
 
@@ -17,13 +17,18 @@ class SuccessfulConfirmationPage extends StatefulWidget {
 }
 
 class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> {
-  bool state = true;
 
-  static Ebike ebikemain = Ebike(name: 'name', photo: 'assets/images/Ebike.jpeg');
+  static Ebike ebikemain = Ebike(name: 'ebike', photo: 'assets/images/Ebike.jpeg');
+  //static bool isReserved = false;
 
   @override
   Widget build(BuildContext context) {
     ebikemain = widget.ebike;
+    /*setState(() {
+       isReserved = true;
+    });*/
+   
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -54,7 +59,7 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
                           height: 100,
                         ),
                         const SizedBox(height: 20),
-                        Text(
+                           Text(
                           'Your ${widget.ebike.name} reservation has been confirmed successfully.',
                           style: const TextStyle(fontSize: 20),
                           textAlign: TextAlign.center,
@@ -104,6 +109,11 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
                 const SizedBox(height: 30),
                 ElevatedButton.icon(
                   onPressed: () async {
+                    /*setState(() {
+                       isReserved = false;
+                    });*/
+                               
+
                     final bool cancel = await showConfirmationDialog(
                           context: context,
                           title: 'Do you want to cancel your reservation?',

@@ -19,7 +19,6 @@ class EbikeListPageState extends State<EbikeListPage> {
   final String irTopic = "ir_sensor_detection";
   final _reservationButtonStates = <bool>[];
   String? userId;
-  static bool isReserved = false;
 
   final _ebikesMap = {
     'Ebike1': Ebike(
@@ -50,32 +49,7 @@ class EbikeListPageState extends State<EbikeListPage> {
     if (user != null) {
       setState(() {
         userId = user.uid;
-      });
-  FirebaseFirestore.instance.collection('users').snapshots().listen((snapshot) {
-  for (var doc in snapshot.docs) {
-    if (doc.data().containsKey('reservation') && doc['reservation'] != null) {
-      setState(() {
-        int index = _ebikesMap.keys.toList().indexOf(doc['reservation']);
-        if (index != -1) {
-          _reservationButtonStates[index] = false;
-          isReserved = true;
-        }
-      });
-    } else {
-      setState(() {
-        for (int i = 0; i < _reservationButtonStates.length; i++) {
-          _reservationButtonStates[i] = true;
-        }
-        isReserved = false;
-      });
-    }
-  }
-});
-}
-  
-    
-
-    // Listen for changes in the reservation status
+      });// Listen for changes in the reservation status
     FirebaseFirestore.instance.collection('users').snapshots().listen((snapshot) {
       for (var doc in snapshot.docs) {
         if (doc.data().containsKey('reservation') && doc['reservation'] != null) {
@@ -83,7 +57,6 @@ class EbikeListPageState extends State<EbikeListPage> {
             int index = _ebikesMap.keys.toList().indexOf(doc['reservation']);
             if (index != -1) {
               _reservationButtonStates[index] = false;
-              isReserved = true;
             }
           });
         } else {
@@ -91,12 +64,11 @@ class EbikeListPageState extends State<EbikeListPage> {
             for (int i = 0; i < _reservationButtonStates.length; i++) {
               _reservationButtonStates[i] = true;
             }
-            isReserved = false;
           });
         }
       }
     });
-  }
+    }}
 
   @override
   Widget build(BuildContext context) {

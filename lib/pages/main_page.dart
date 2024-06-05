@@ -7,6 +7,8 @@ import 'package:renting_app/pages/successful_confirmation.dart';
 import '../core/constants.dart';
 import '../core/dialogs.dart';
 import '../services/auth_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -16,6 +18,26 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  bool hasReservation = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkReservationStatus();
+  }
+
+  Future<void> _checkReservationStatus() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      DocumentSnapshot<Map<String, dynamic>> userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      if (userDoc.exists) {
+        setState(() {
+          hasReservation = userDoc.data()?['reservation'] != null;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +67,6 @@ class _MainPageState extends State<MainPage> {
             ),
           ],
         ),
-      
         actions: [
           IconButton(
             icon: const Icon(Icons.logout, color: Colors.white),
@@ -68,97 +89,90 @@ class _MainPageState extends State<MainPage> {
             end: Alignment.bottomRight,
           ),
         ),
-        
-          
-          //child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Text(
-                  "Welcome",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 30),
-                const Text(
-                  "Please click on the station button for rental reservation",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white70,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 30),
-                _buildFeatureCard(
-                  icon: FontAwesomeIcons.bicycle,
-                  title: "Make a Reservation",
-                  subtitle: "Reserve your e-bike at a nearby station",
-                  onTap: () => goToEbikeListPage(context),
-                ),
-                const SizedBox(height: 20),
-                _buildFeatureCard(
-                  icon: FontAwesomeIcons.qrcode,
-                  title: "Scan QR Code",
-                  subtitle: "Scan the QR code for on-site rental",
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ScanQRCodePage(),
-                      ),
-                    );
-                  },
-                ),
-                if (EbikeListPageState.isReserved= true) 
-
-                const SizedBox(height: 20),
-                  _buildFeatureCard(
-                    icon: FontAwesomeIcons.clipboardCheck,
-                    title: "Your Reservation",
-                    subtitle: "View your current reservation status",
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SuccessfulConfirmationPage(
-                              ebike: SuccessfulConfirmationPageState.ebikemain),
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                _buildFeatureCard(
-                  icon: FontAwesomeIcons.locationDot,
-                  title: "Show Station Location",
-                  subtitle: "View the location of nearby stations",
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const MapPage()),
-                    );
-                  },
-                  isPrimary: true,
-                ),
-                //const SizedBox(height: 20),
-              ],
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Text(
+              "Welcome",
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+              textAlign: TextAlign.center,
             ),
-          ),
-        
-      );
-    //);
+            const SizedBox(height: 30),
+            const Text(
+              "Please click on the station button for rental reservation",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                color: Colors.white70,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 30),
+            _buildFeatureCard(
+              icon: FontAwesomeIcons.bicycle,
+              title: "Make a Reservation",
+              subtitle: "Reserve your e-bike at a nearby station",
+              onTap: () => goToEbikeListPage(context),
+            ),
+            const SizedBox(height: 20),
+            _buildFeatureCard(
+              icon: FontAwesomeIcons.qrcode,
+              title: "Scan QR Code",
+              subtitle: "Scan the QR code for on-site rental",
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ScanQRCodePage(),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 20),
+            if (hasReservation)
+              _buildFeatureCard(
+                icon: FontAwesomeIcons.clipboardCheck,
+                title: "Your Reservation",
+                subtitle: "View your current reservation status",
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SuccessfulConfirmationPage(
+                          ebike: SuccessfulConfirmationPageState.ebikemain),
+                    ),
+                  );
+                },
+              ),
+            const SizedBox(height: 20),
+            _buildFeatureCard(
+              icon: FontAwesomeIcons.locationDot,
+              title: "Show Station Location",
+              subtitle: "View the location of nearby stations",
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MapPage()),
+                );
+              },
+              isPrimary: true,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   void goToEbikeListPage(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => const EbikeListPage(/*isReserved: widget.isReserved*/),
+        builder: (_) => const EbikeListPage(),
       ),
     );
   }
@@ -243,15 +257,9 @@ class _MainPageState extends State<MainPage> {
                   ),
                 ),
             ],
-            
           ),
-
         ),
-
       ),
-
     );
-
   }
-  
 }
