@@ -3,11 +3,12 @@ import '../pages/ebike_model.dart';
 import '../pages/reservation_form_page.dart';
 import '../services/mqtt_service.dart';
 import 'package:mqtt_client/mqtt_client.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../core/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class EbikeListPage extends StatefulWidget {
-  final bool isReserved;
-  const EbikeListPage({super.key, required this.isReserved});
+  const EbikeListPage({super.key});
 
   @override
   EbikeListPageState createState() => EbikeListPageState();
@@ -17,6 +18,8 @@ class EbikeListPageState extends State<EbikeListPage> {
   MqttService mqttService = MqttService();
   final String irTopic = "ir_sensor_detection";
   final _reservationButtonStates = <bool>[];
+  String? userId;
+  static bool isReserved = false;
 
   final _ebikesMap = {
     'Ebike1': Ebike(
@@ -33,13 +36,66 @@ class EbikeListPageState extends State<EbikeListPage> {
   void initState() {
     super.initState();
     _initializeButtonStates();
-    buttonsState();
     setupMqttClient();
     setupUpdatesListener();
+    fetchUserIdAndReservation();
   }
 
   void _initializeButtonStates() {
     _reservationButtonStates.addAll(List<bool>.filled(_ebikesMap.length, true));
+  }
+
+  Future<void> fetchUserIdAndReservation() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        userId = user.uid;
+      });
+  FirebaseFirestore.instance.collection('users').snapshots().listen((snapshot) {
+  for (var doc in snapshot.docs) {
+    if (doc.data().containsKey('reservation') && doc['reservation'] != null) {
+      setState(() {
+        int index = _ebikesMap.keys.toList().indexOf(doc['reservation']);
+        if (index != -1) {
+          _reservationButtonStates[index] = false;
+          isReserved = true;
+        }
+      });
+    } else {
+      setState(() {
+        for (int i = 0; i < _reservationButtonStates.length; i++) {
+          _reservationButtonStates[i] = true;
+        }
+        isReserved = false;
+      });
+    }
+  }
+});
+}
+  
+    
+
+    // Listen for changes in the reservation status
+    FirebaseFirestore.instance.collection('users').snapshots().listen((snapshot) {
+      for (var doc in snapshot.docs) {
+        if (doc.data().containsKey('reservation') && doc['reservation'] != null) {
+          setState(() {
+            int index = _ebikesMap.keys.toList().indexOf(doc['reservation']);
+            if (index != -1) {
+              _reservationButtonStates[index] = false;
+              isReserved = true;
+            }
+          });
+        } else {
+          setState(() {
+            for (int i = 0; i < _reservationButtonStates.length; i++) {
+              _reservationButtonStates[i] = true;
+            }
+            isReserved = false;
+          });
+        }
+      }
+    });
   }
 
   @override
@@ -83,77 +139,51 @@ class EbikeListPageState extends State<EbikeListPage> {
     return ListView.builder(
       itemCount: _ebikesMap.length,
       itemBuilder: (context, index) {
-        final ebike = _ebikesMap.values.elementAt(index);
-        return _buildEbikeListTile(ebike, _reservationButtonStates[index]);
+        String ebikeName = _ebikesMap.keys.elementAt(index);
+        Ebike ebike = _ebikesMap[ebikeName]!;
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: Card(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            elevation: 8,
+            child: ListTile(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              leading: Image.asset(ebike.photo, fit: BoxFit.cover, width: 70),
+              title: Text(
+                ebike.name,
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              ),
+              trailing: ElevatedButton(
+                onPressed: _reservationButtonStates[index]
+                    ? () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ReservationFormPage(ebike: ebike),
+                          ),
+                        );
+                      }
+                    : null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: _reservationButtonStates[index] ? primary : Colors.grey,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                ),
+                child: const Text(
+                  'Reserve',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                ),
+              ),
+            ),
+          ),
+        );
       },
     );
   }
 
-  Widget _buildEbikeListTile(Ebike ebike, bool enabled) {
-    return GestureDetector(
-      onTap: enabled ? () => _handleReservationButtonPress(ebike) : null,
-      child: Container(
-        padding: const EdgeInsets.all(18),
-        margin: const EdgeInsets.symmetric(vertical: 8.0),
-        decoration: BoxDecoration(
-          color: const Color.fromARGB(248, 242, 251, 253),
-          borderRadius: BorderRadius.circular(13),
-          boxShadow: [
-            BoxShadow(
-              color: const Color.fromARGB(255, 214, 211, 211).withOpacity(0.5),
-              spreadRadius: 2,
-              blurRadius: 5,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: ListTile(
-          contentPadding: const EdgeInsets.all(14),
-          leading: Image.asset(
-            ebike.photo,
-            width: 90,
-            height: 200,
-            fit: BoxFit.fill,
-          ),
-          title: Text(
-            ebike.name,
-            style: const TextStyle(
-              fontWeight: FontWeight.w400,
-              fontSize: 20,
-            ),
-          ),
-          trailing: ElevatedButton(
-            onPressed: enabled ? () => _handleReservationButtonPress(ebike) : null,
-            // ignore: sort_child_properties_last
-            child: const Text('Reserve', style: TextStyle(fontSize: 18, color: primary)),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: white, // Set the background color
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30), 
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _handleReservationButtonPress(Ebike ebike) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ReservationFormPage(ebike: ebike),
-      ),
-    ).then((_) {
-      setState(() {
-        buttonsState();
-      });
-    });
-  }
-
-  Future<void> setupMqttClient() async {
+  void setupMqttClient() async {
     await mqttService.connect();
-    mqttService.subscribe(irTopic);
   }
 
   void setupUpdatesListener() {
@@ -175,27 +205,5 @@ class EbikeListPageState extends State<EbikeListPage> {
         debugPrint('MQTTClient::Message received on topic: <${c[0].topic}> is $pt\n');
       }
     });
-  }
-
-  void buttonsState() {
-    if (ReservationFormPageState.isReserved && widget.isReserved == true) {
-      if (ReservationFormPageState.rname == 'Ebike1') {
-        _reservationButtonStates[0] = false;
-      } else if (ReservationFormPageState.rname == 'Ebike2') {
-        _reservationButtonStates[1] = false;
-      }
-    } else if (widget.isReserved == false && ReservationFormPageState.isReserved) {
-      if (ReservationFormPageState.rname == 'Ebike1') {
-        _reservationButtonStates[0] = true;
-      } else if (ReservationFormPageState.rname == 'Ebike2') {
-        _reservationButtonStates[1] = true;
-      }
-    }
-  }
-
-  @override
-  void dispose() {
-    mqttService.disconnect();
-    super.dispose();
   }
 }

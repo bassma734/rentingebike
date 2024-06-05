@@ -21,25 +21,26 @@ class AuthService {
     required String password,
   }) async {
     try {
-      await _auth
-        .createUserWithEmailAndPassword(
+      UserCredential credential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
-      )
-          .then((credential) {
-        credential.user?.sendEmailVerification();
-        credential.user?.updateDisplayName(fullName);
-      });
+      );
 
-      // Add user to Firestore
-      await _firestoreService.addUser( fullName, email);
-    
+      User? user = credential.user;
+      if (user != null) {
+        await user.sendEmailVerification();
+        await user.updateDisplayName(fullName);
 
-
+        // Add user to Firestore
+        await _firestoreService.addUser(user.uid, fullName, email);
+      }
     } catch (e) {
       rethrow;
     }
   }
+
+ 
+
 
   static Future<void> login({
     required String email,
@@ -64,8 +65,7 @@ class AuthService {
     }
 
     // Obtain the auth details from the request
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
+    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
     // Create a new credential
     final credential = GoogleAuthProvider.credential(
@@ -73,10 +73,22 @@ class AuthService {
       idToken: googleAuth.idToken,
     );
 
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
-  }
+    // Once signed in, get the UserCredential
+    UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
 
+    User? user = userCredential.user;
+    if (user != null) {
+      // Check if the user exists in Firestore
+      bool userExists = await _firestoreService.checkUserExists(user.uid);
+      
+      if (!userExists) {
+        // Add new user to Firestore
+        await _firestoreService.addUser(user.uid, user.displayName ?? 'Unknown', user.email ?? 'No email');
+      }
+    }
+
+    return userCredential;
+  }
   static Future<void> resetPassword({required String email}) =>
       _auth.sendPasswordResetEmail(email: email);
 

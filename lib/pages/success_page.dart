@@ -81,7 +81,7 @@ class SuccessPage extends StatelessWidget {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const MainPage(isReserved: false,),
+                        builder: (context) => const MainPage(/*isReserved: false,*/),
                       ),
                       (Route<dynamic> route) => false,
                     );

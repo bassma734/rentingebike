@@ -47,7 +47,7 @@ const MyApp({super.key});
           stream: AuthService.userStream,
           builder: (context, snapshot) {
             return snapshot.hasData && AuthService.isEmailVerified
-                ? const MainPage(isReserved: false,)
+                ? const MainPage(/*isReserved: false,*/)
                 : const RegistrationPage();
           },
         ),

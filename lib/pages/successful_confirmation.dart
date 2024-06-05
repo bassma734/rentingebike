@@ -4,6 +4,8 @@ import 'package:renting_app/pages/scan_qr_code_res.dart';
 import '../pages/ebike_model.dart';
 import '../core/constants.dart';
 import '../core/dialogs.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SuccessfulConfirmationPage extends StatefulWidget {
   final Ebike ebike;
@@ -23,27 +25,6 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
   Widget build(BuildContext context) {
     ebikemain = widget.ebike;
     return Scaffold(
-      /*appBar: AppBar(
-        elevation: 0,
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [primary, Color.fromARGB(80, 3, 168, 244)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-        ),
-        title: const Text(
-          'Successful Confirmation',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-      ),*/
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -68,7 +49,7 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
                     child: Column(
                       children: [
                         Image.asset(
-                          'assets/images/check_icon.png', // Path to your image asset
+                          'assets/images/check_icon.png',
                           width: 100,
                           height: 100,
                         ),
@@ -94,9 +75,6 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
                 const SizedBox(height: 30),
                 ElevatedButton.icon(
                   onPressed: () {
-                    /*setState(() {
-                      state = false;
-                    });*/
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -126,24 +104,23 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
                 const SizedBox(height: 30),
                 ElevatedButton.icon(
                   onPressed: () async {
-                    /*setState(() {
-                      state = false;
-                    });*/
-
                     final bool cancel = await showConfirmationDialog(
                           context: context,
                           title: 'Do you want to cancel your reservation?',
                         ) ??
                         false;
-                    if (cancel && mounted) {
-                      Navigator.pushAndRemoveUntil(
-                        // ignore: use_build_context_synchronously
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>const MainPage(/*isReserved: state*/),
-                        ),
-                        (Route<dynamic> route) => false,
-                      );
+                    if (cancel) {
+                      await cancelReservation();
+                      if (mounted) {
+                        Navigator.pushAndRemoveUntil(
+                          // ignore: use_build_context_synchronously
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MainPage(),
+                          ),
+                          (Route<dynamic> route) => false,
+                        );
+                      }
                     }
                   },
                   icon: const Icon(Icons.cancel),
@@ -171,10 +148,9 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const MainPage(/*isReserved: true*/),
+                        builder: (context) => const MainPage(),
                       ),
                       (Route<dynamic> route) => false,
-                      
                     );
                   },
                   icon: const Icon(Icons.home),
@@ -203,5 +179,14 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
       ),
     );
   }
- 
+
+  Future<void> cancelReservation() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+        'reservation': null,
+        'reservation_time': null,
+      });
+    }
+  }
 }
