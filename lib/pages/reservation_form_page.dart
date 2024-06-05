@@ -63,7 +63,12 @@ class ReservationFormPageState extends State<ReservationFormPage> {
           ),
         ),
         child: Padding(
+<<<<<<< HEAD
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 80),
+=======
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 60),
+          //child: SingleChildScrollView(
+>>>>>>> e75efee65d1650a7e7ebdd929d43dd8acbca1a41
             child: Column(
               //crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -173,13 +178,22 @@ class ReservationFormPageState extends State<ReservationFormPage> {
                     shadowColor: Colors.black26,
                   ),
                 ),
+<<<<<<< HEAD
                 //const SizedBox(height: 50),
 
+=======
+                const SizedBox(height: 25),
+>>>>>>> e75efee65d1650a7e7ebdd929d43dd8acbca1a41
               ],
             ),
           ),
         ),
+<<<<<<< HEAD
     );
+=======
+      );
+    //);
+>>>>>>> e75efee65d1650a7e7ebdd929d43dd8acbca1a41
   }
 
   Future<void> _showTimePickerDialog(BuildContext context) async {

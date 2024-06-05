@@ -18,7 +18,7 @@ class MoneyTimeCounterPageState extends State<MoneyTimeCounterPage>
     with SingleTickerProviderStateMixin {
   double moneyCounter = 0;
   String _moneyCounterFormatted = '0.00';
-  Timer? _timer;
+  static Timer? timer;
   late AnimationController _animationController;
   late Animation<double> _animation;
 
@@ -35,13 +35,13 @@ class MoneyTimeCounterPageState extends State<MoneyTimeCounterPage>
 
   @override
   void dispose() {
-    _timer?.cancel();
+    timer?.cancel();
     _animationController.dispose();
     super.dispose();
   }
 
   void _startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         moneyCounter += 0.0034;
         _moneyCounterFormatted = NumberFormat.currency(
@@ -54,7 +54,11 @@ class MoneyTimeCounterPageState extends State<MoneyTimeCounterPage>
   }
 
   void _navigateToScanPage() {
+<<<<<<< HEAD
     //_timer?.cancel(); // Stop the timer
+=======
+   // _timer?.cancel(); // Stop the timer
+>>>>>>> e75efee65d1650a7e7ebdd929d43dd8acbca1a41
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -68,7 +72,7 @@ class MoneyTimeCounterPageState extends State<MoneyTimeCounterPage>
 
   @override
   Widget build(BuildContext context) {
-    int totalSeconds = _timer?.tick ?? 0;
+    int totalSeconds = timer?.tick ?? 0;
     int minutes = totalSeconds ~/ 60;
     int seconds = totalSeconds % 60;
     return Scaffold(
