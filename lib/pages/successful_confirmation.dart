@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:renting_app/pages/main_page.dart';
 import 'package:renting_app/pages/scan_qr_code_res.dart';
+import 'package:renting_app/services/mqtt_service.dart';
 import '../pages/ebike_model.dart';
 import '../core/constants.dart';
 import '../core/dialogs.dart';
@@ -20,7 +21,24 @@ class SuccessfulConfirmationPage extends StatefulWidget {
 class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> {
 
   static Ebike ebikemain = Ebike(name: 'ebike', photo: 'assets/images/Ebike.jpeg');
- 
+  final String reservationTopic = "reservation";
+  MqttService mqttService = MqttService();
+
+
+  @override
+  void initState() {
+    super.initState();
+    mqttService = MqttService();
+    setupMqttClient();
+  }
+  Future<void> setupMqttClient() async {
+    await mqttService.connect();
+    mqttService.subscribe(reservationTopic);
+
+  }
+  void _publishMessage(String message) {
+    mqttService.publishMessage(reservationTopic, message);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,6 +136,7 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
                         false;
                     if (cancel) {
                       await cancelReservation();
+                      _publishMessage("cancelled");
                       if (mounted) {
                         Navigator.pushAndRemoveUntil(
                           // ignore: use_build_context_synchronously
