@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:renting_app/services/mqtt_service.dart';
 import '../core/constants.dart';
 import '../pages/ebike_model.dart';
 import 'successful_confirmation.dart';
@@ -18,12 +19,26 @@ class ReservationFormPageState extends State<ReservationFormPage> {
   TimeOfDay _selectedTime = TimeOfDay.now();
   bool _isReservationTimeSelected = false;
   String? userId;
+  final String reservationTopic = "reservation";
+  MqttService mqttService = MqttService();
+
 
   @override
   void initState() {
     super.initState();
+    mqttService = MqttService();
+    setupMqttClient();
     _fetchUserId();
   }
+  Future<void> setupMqttClient() async {
+    await mqttService.connect();
+    mqttService.subscribe(reservationTopic);
+
+  }
+  void _publishMessage(String message) {
+    mqttService.publishMessage(reservationTopic, message);
+  }
+
 
   Future<void> _fetchUserId() async {
     User? user = FirebaseAuth.instance.currentUser;
@@ -156,6 +171,7 @@ class ReservationFormPageState extends State<ReservationFormPage> {
                           'reservation': widget.ebike.name,
                           'reservation_time': _selectedTime.format(context),
                         });
+                        _publishMessage("confirmed");
 
                         Navigator.pushAndRemoveUntil(
                           // ignore: use_build_context_synchronously
