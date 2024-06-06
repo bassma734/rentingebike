@@ -203,10 +203,6 @@ class MoneyTimeCounterPageState extends State<MoneyTimeCounterPage>
       ),
     );
   }
-  @override
-  void dispose() {
-    //timer?.cancel();
-   // _animationController.dispose();
-    super.dispose();
-  }
+  
+  
 }

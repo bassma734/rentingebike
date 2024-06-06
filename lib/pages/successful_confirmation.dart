@@ -78,8 +78,6 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
                 const SizedBox(height: 30),
                 ElevatedButton.icon(
                   onPressed: () {
-                    
-
                     Navigator.push(
                       // ignore: use_build_context_synchronously
                       context,
