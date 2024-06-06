@@ -156,6 +156,8 @@ class EbikeListPageState extends State<EbikeListPage> {
 
   void setupMqttClient() async {
     await mqttService.connect();
+    mqttService.subscribe(irTopic);
+
   }
 
   void setupUpdatesListener() {
@@ -169,9 +171,9 @@ class EbikeListPageState extends State<EbikeListPage> {
           } else if (pt == '2') {
             _reservationButtonStates[1] = true;
           } else if (pt == '1no') {
-            _reservationButtonStates[0] = true;
+            _reservationButtonStates[0] = false;
           } else if (pt == '2no') {
-            _reservationButtonStates[1] = true;
+            _reservationButtonStates[1] = false;
           }
         });
         debugPrint('MQTTClient::Message received on topic: <${c[0].topic}> is $pt\n');

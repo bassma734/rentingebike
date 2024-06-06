@@ -33,12 +33,7 @@ class MoneyTimeCounterPageState extends State<MoneyTimeCounterPage>
     _startTimer();
   }
 
-  @override
-  void dispose() {
-    timer?.cancel();
-    _animationController.dispose();
-    super.dispose();
-  }
+ 
 
   void _startTimer() {
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -228,5 +223,11 @@ class MoneyTimeCounterPageState extends State<MoneyTimeCounterPage>
         ),
       ),
     );
+  }
+   @override
+  void dispose() {
+    //timer?.cancel();
+   // _animationController.dispose();
+    super.dispose();
   }
 }
