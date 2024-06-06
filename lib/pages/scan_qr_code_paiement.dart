@@ -17,7 +17,7 @@ class ScanQRPCodePage extends StatefulWidget {
 
 class ScanQRPCodePageState extends State<ScanQRPCodePage> {
   String qrCode = '';
-  final String servoTopic = "servo_control_topic";
+  final String cadenasTopic = "cadenas_topic";
   final String irTopic = "ir_sensor_detection";
   late MqttService mqttService;
 
@@ -34,7 +34,7 @@ class ScanQRPCodePageState extends State<ScanQRPCodePage> {
   }
 
   void _publishMessage(String message) {
-    mqttService.publishMessage(servoTopic, message);
+    mqttService.publishMessage(cadenasTopic, message);
   }
 
   void setupUpdatesListener() {
