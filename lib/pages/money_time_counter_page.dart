@@ -67,27 +67,6 @@ class MoneyTimeCounterPageState extends State<MoneyTimeCounterPage>
     int minutes = totalSeconds ~/ 60;
     int seconds = totalSeconds % 60;
     return Scaffold(
-      /*appBar: AppBar(
-        elevation: 0,
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [primary, Color.fromARGB(80, 3, 168, 244)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-        ),
-        title: const Text(
-          'Money Time Counter',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-      ),*/
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -224,7 +203,7 @@ class MoneyTimeCounterPageState extends State<MoneyTimeCounterPage>
       ),
     );
   }
-   @override
+  @override
   void dispose() {
     //timer?.cancel();
    // _animationController.dispose();

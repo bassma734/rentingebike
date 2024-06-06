@@ -1,34 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:renting_app/core/constants.dart';
 import 'package:renting_app/pages/main_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SuccessPage extends StatelessWidget {
   const SuccessPage({super.key});
 
+  Future<void> _clearReservation() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+        'reservation': null,
+        'reservation_time': null,
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /*appBar: AppBar(
-        elevation: 0,
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [primary, Color.fromARGB(80, 3, 168, 244)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-        ),
-        title: const Text(
-          'Payment Successful',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-      ),*/
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -77,11 +68,13 @@ class SuccessPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 30),
                 ElevatedButton.icon(
-                onPressed: () {
+                  onPressed: () async {
+                    await _clearReservation();
                     Navigator.pushAndRemoveUntil(
+                      
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const MainPage(/*isReserved: false,*/),
+                        builder: (context) => const MainPage(),
                       ),
                       (Route<dynamic> route) => false,
                     );
