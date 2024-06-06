@@ -14,7 +14,7 @@ class ScanQRCodeResPage extends StatefulWidget {
 
 class ScanQRCodeResPageState extends State<ScanQRCodeResPage> {
   String qrCode = '';
-  final String servoTopic = "servo_control_topic";
+  final String cadenasTopic = "cadenas_topic";
   MqttService mqttService = MqttService();
 
   @override
@@ -28,12 +28,12 @@ class ScanQRCodeResPageState extends State<ScanQRCodeResPage> {
 
   Future<void> setupMqttClient() async {
     await mqttService.connect();
-    mqttService.subscribe(servoTopic);
+    mqttService.subscribe(cadenasTopic);
 
   }
 
   void _publishMessage(String message) {
-    mqttService.publishMessage(servoTopic, message);
+    mqttService.publishMessage(cadenasTopic, message);
   }
 
   @override
