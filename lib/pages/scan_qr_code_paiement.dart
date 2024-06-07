@@ -4,18 +4,18 @@ import 'package:renting_app/services/mqtt_service.dart';
 import 'end_location.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 
-class ScanQRPCodePage extends StatefulWidget {
+class ScanQRCodePage extends StatefulWidget {
   final String name;
-    final double amount;
+  final double amount;
 
 
-  const ScanQRPCodePage({super.key, required this.name,  required this.amount});
+  const ScanQRCodePage({super.key, required this.name,  required this.amount});
 
   @override
   ScanQRPCodePageState createState() => ScanQRPCodePageState();
 }
 
-class ScanQRPCodePageState extends State<ScanQRPCodePage> {
+class ScanQRPCodePageState extends State<ScanQRCodePage> {
   String qrCode = '';
   final String cadenasTopic = "cadenas_topic";
   final String irTopic = "ir_sensor_detection";
@@ -81,9 +81,16 @@ class ScanQRPCodePageState extends State<ScanQRPCodePage> {
     );
   }
 
-  /*@override
+  @override
   void dispose() {
     mqttService.disconnect();
     super.dispose();
-  }*/
+  }
 }
+
+
+
+
+
+
+

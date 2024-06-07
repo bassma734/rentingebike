@@ -76,6 +76,7 @@ class SuccessPage extends StatelessWidget {
                 const SizedBox(height: 30),
                 ElevatedButton.icon(
                   onPressed: () async {
+<<<<<<< HEAD
                     try {
                       await _clearReservation();
                       // ignore: use_build_context_synchronously
@@ -91,6 +92,18 @@ class SuccessPage extends StatelessWidget {
                       // Print the error to the console
                       debugPrint("Error navigating to home: $e");
                     }
+=======
+                    await _clearReservation();
+                    Navigator.pushAndRemoveUntil(
+                      
+                      // ignore: use_build_context_synchronously
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MainPage(),
+                      ),
+                      (Route<dynamic> route) => false,
+                    );
+>>>>>>> 02eec489523f6092ede1bfcbd6ed660ba932354c
                   },
                   icon: const Icon(Icons.home),
                   label: const Text('Home'),

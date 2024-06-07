@@ -53,7 +53,7 @@ class MoneyTimeCounterPageState extends State<MoneyTimeCounterPage>
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ScanQRPCodePage(
+        builder: (context) => ScanQRCodePage(
           name: widget.qrCode,
           amount: moneyCounter,
         ),
@@ -203,6 +203,14 @@ class MoneyTimeCounterPageState extends State<MoneyTimeCounterPage>
       ),
     );
   }
+<<<<<<< HEAD
   
   
+=======
+  @override
+  void dispose() {
+    //timer?.cancel();
+    super.dispose();
+  }
+>>>>>>> 02eec489523f6092ede1bfcbd6ed660ba932354c
 }
