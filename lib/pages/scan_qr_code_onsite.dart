@@ -41,6 +41,7 @@ class ScanQRCodePageState extends State<ScanQRCodePage> {
         setState(() {
           qrCode = code!;
           if (qrCode.startsWith('Ebike')) {
+            
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(

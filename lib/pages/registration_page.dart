@@ -1,13 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import '../change_notifiers/registration_controller.dart';
 import '../core/constants.dart';
 import '../core/validator.dart';
 import '../widgets/note_button.dart';
 import '../widgets/note_form_field.dart';
-import '../widgets/note_icon_button_outlined.dart';
 import 'recover_password_page.dart';
 
 class RegistrationPage extends StatefulWidget {
@@ -23,7 +21,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   late final TextEditingController emailController;
   late final TextEditingController passwordController;
   late final GlobalKey<FormState> formKey;
-  String pageTitle = 'Register';  // Add a title state variable
+  String pageTitle = 'Register'; // Add a title state variable
 
   @override
   void initState() {
@@ -45,7 +43,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   void updateTitle() {
     setState(() {
-      pageTitle = registrationController.isRegisterMode ? 'Register' : 'Sign in';  // Update title based on mode
+      pageTitle = registrationController.isRegisterMode ? 'Register' : 'Sign in'; // Update title based on mode
     });
   }
 
@@ -99,7 +97,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
-                        pageTitle,  // Use the state variable for the title
+                        pageTitle, // Use the state variable for the title
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontSize: 48,
@@ -217,18 +215,33 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       Row(
                         children: [
                           Expanded(
-                            child: NoteIconButtonOutlined(
-                              icon: FontAwesomeIcons.google,
+                            child: ElevatedButton(
                               onPressed: () {
                                 registrationController.authenticateWithGoogle(context: context);
                               },
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: NoteIconButtonOutlined(
-                              icon: FontAwesomeIcons.apple,
-                              onPressed: () {},
+                              style: ElevatedButton.styleFrom(
+                                foregroundColor: Colors.black, backgroundColor: Colors.white, // Button text color
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                textStyle: const TextStyle(fontSize: 16),
+                                elevation: 5, // Add shadow for better appearance
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/google_logo.png',
+                                    height: 24, // Adjust the height as needed
+                                  ),
+                                  const SizedBox(width: 12),
+                                  const Text(
+                                    'Sign in with Google',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],
@@ -253,7 +266,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                 ..onTap = () {
                                   setState(() {
                                     registrationController.isRegisterMode = !registrationController.isRegisterMode;
-                                    updateTitle();  // Update the title when mode changes
+                                    updateTitle(); // Update the title when mode changes
                                   });
                                 },
                             ),

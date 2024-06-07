@@ -49,26 +49,29 @@ class EbikeListPageState extends State<EbikeListPage> {
     if (user != null) {
       setState(() {
         userId = user.uid;
-      });// Listen for changes in the reservation status
+      });
+    }
+    // Listen for changes in the reservation status
     FirebaseFirestore.instance.collection('users').snapshots().listen((snapshot) {
+      setState(() {
+        for (int i = 0; i < _reservationButtonStates.length; i++) {
+          _reservationButtonStates[i] = true; // Reset button states to true initially
+        }
+      });
+
       for (var doc in snapshot.docs) {
         if (doc.data().containsKey('reservation') && doc['reservation'] != null) {
-          setState(() {
-            int index = _ebikesMap.keys.toList().indexOf(doc['reservation']);
-            if (index != -1) {
-              _reservationButtonStates[index] = false;
-            }
-          });
-        } else {
-          setState(() {
-            for (int i = 0; i < _reservationButtonStates.length; i++) {
-              _reservationButtonStates[i] = true;
-            }
-          });
+          String reservedEbike = doc['reservation'];
+          int index = _ebikesMap.keys.toList().indexOf(reservedEbike);
+          if (index != -1) {
+            setState(() {
+              _reservationButtonStates[index] = false; // Disable the button for the reserved eBike
+            });
+          }
         }
       }
     });
-    }}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +160,6 @@ class EbikeListPageState extends State<EbikeListPage> {
   void setupMqttClient() async {
     await mqttService.connect();
     mqttService.subscribe(irTopic);
-
   }
 
   void setupUpdatesListener() {

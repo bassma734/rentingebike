@@ -8,12 +8,19 @@ class SuccessPage extends StatelessWidget {
   const SuccessPage({super.key});
 
   Future<void> _clearReservation() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
-        'reservation': null,
-        'reservation_time': null,
-      });
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+          'reservation': null,
+          'reservation_time': null,
+        });
+      }
+    } catch (e) {
+      // Print the error to the console
+      debugPrint("Error clearing reservation: $e");
+      // You can also rethrow the exception or handle it accordingly
+      rethrow;
     }
   }
 
@@ -69,16 +76,21 @@ class SuccessPage extends StatelessWidget {
                 const SizedBox(height: 30),
                 ElevatedButton.icon(
                   onPressed: () async {
-                    await _clearReservation();
-                    Navigator.pushAndRemoveUntil(
-                      
+                    try {
+                      await _clearReservation();
                       // ignore: use_build_context_synchronously
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const MainPage(),
-                      ),
-                      (Route<dynamic> route) => false,
-                    );
+                      Navigator.pushAndRemoveUntil(
+                        // ignore: use_build_context_synchronously
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MainPage(),
+                        ),
+                        (Route<dynamic> route) => false,
+                      );
+                    } catch (e) {
+                      // Print the error to the console
+                      debugPrint("Error navigating to home: $e");
+                    }
                   },
                   icon: const Icon(Icons.home),
                   label: const Text('Home'),

@@ -88,6 +88,7 @@ flutter:
   assets:
     - assets/images/Ebike.jpeg
     - assets/images/check_icon.png
+    - assets/google_logo.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
