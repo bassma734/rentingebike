@@ -96,23 +96,6 @@ class ScanQRCodePageState extends State<ScanQRCodePage> {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
-    return QrCamera(
-      qrCodeCallback: (code) {
-        setState(() {
-          qrCode = code!;
-          if (qrCode.startsWith('Ebike')) {
-            
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MoneyTimeCounterPage(qrCode: code),
-              ),
-            );
-            // Publish QR code information to MQTT broker
-            debugPrint ("1st$qrCode");
-            _publishMessage("1st$qrCode");
-=======
     return Scaffold(
       appBar: AppBar(
         title: const Text('Scan QR Code'),
@@ -128,7 +111,6 @@ class ScanQRCodePageState extends State<ScanQRCodePage> {
                 setupUpdatesListener();
               }
             });
->>>>>>> 02eec489523f6092ede1bfcbd6ed660ba932354c
           }
         },
         notStartedBuilder: (context) {
