@@ -16,11 +16,14 @@ class MoneyTimeCounterPage extends StatefulWidget {
 
 class MoneyTimeCounterPageState extends State<MoneyTimeCounterPage>
     with SingleTickerProviderStateMixin {
+
   double moneyCounter = 0;
   String _moneyCounterFormatted = '0.00';
   static Timer? timer;
   late AnimationController _animationController;
   late Animation<double> _animation;
+  static late DateTime startTime;
+  static DateTime? endTime;
 
   @override
   void initState() {
@@ -30,26 +33,31 @@ class MoneyTimeCounterPageState extends State<MoneyTimeCounterPage>
       vsync: this,
     );
     _animation = Tween<double>(begin: 0, end: 1).animate(_animationController);
+    startTime = DateTime.now();  // Capture the start time
+    debugPrint('Start Time: $startTime');  // Display start time in debug mode
     _startTimer();
   }
 
- 
-
   void _startTimer() {
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        moneyCounter += 0.0034;
-        _moneyCounterFormatted = NumberFormat.currency(
-          locale: 'ar_TN',
-          symbol: 'DT',
-        ).format(moneyCounter);
-        _animationController.forward(from: 0);
-      });
+      if (mounted) {
+        setState(() {
+          moneyCounter += 0.0034;
+          _moneyCounterFormatted = NumberFormat.currency(
+            locale: 'ar_TN',
+            symbol: 'DT',
+          ).format(moneyCounter);
+          _animationController.forward(from: 0);
+        });
+      }
     });
   }
 
   void _navigateToScanPage() {
-   // _timer?.cancel(); // Stop the timer
+    endTime = DateTime.now();  // Capture the end time
+    debugPrint('End Time: $endTime');  // Display end time in debug mode
+    debugPrint('Duration: ${endTime!.difference(startTime)}');  // Display duration in debug mode
+
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -203,9 +211,11 @@ class MoneyTimeCounterPageState extends State<MoneyTimeCounterPage>
       ),
     );
   }
+
   @override
   void dispose() {
     //timer?.cancel();
+    _animationController.dispose();  // Dispose the animation controller
     super.dispose();
   }
 }

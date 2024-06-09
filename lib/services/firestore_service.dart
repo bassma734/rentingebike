@@ -12,6 +12,11 @@ class FirestoreService {
       'email': email,
       'reservation': null,
       'reservation_time': null,
+      'reservation_status' :null,
+      'rental':null,
+      'rental_time_date' :null,
+
+
     }).catchError((error) {
       debugPrint("Error adding user: $error");
     });
@@ -28,33 +33,5 @@ class FirestoreService {
     return _db.collection('users').doc(uid).get();
   }
 
-  // Add rental history
-  Future<void> addRental(String uid, Map<String, dynamic> rentalData) {
-    return _db.collection('users').doc(uid).collection('rentals').add(rentalData);
-  }
 
-  // Add reservation history
-  Future<void> addReservation(String uid, Map<String, dynamic> reservationData) {
-    return _db.collection('users').doc(uid).collection('reservations').add(reservationData);
-  }
-
-  // Add payment history
-  Future<void> addPayment(String uid, Map<String, dynamic> paymentData) {
-    return _db.collection('users').doc(uid).collection('payments').add(paymentData);
-  }
-
-  // Get user's rental history
-  Stream<QuerySnapshot> getUserRentals(String uid) {
-    return _db.collection('users').doc(uid).collection('rentals').snapshots();
-  }
-
-  // Get user's reservation history
-  Stream<QuerySnapshot> getUserReservations(String uid) {
-    return _db.collection('users').doc(uid).collection('reservations').snapshots();
-  }
-
-  // Get user's payment history
-  Stream<QuerySnapshot> getUserPayments(String uid) {
-    return _db.collection('users').doc(uid).collection('payments').snapshots();
-  }
 }
