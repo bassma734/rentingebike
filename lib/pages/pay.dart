@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:renting_app/core/constants.dart';
-import 'package:renting_app/pages/success_page.dart';
+//import 'package:renting_app/pages/success_page.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class PaymentPage extends StatefulWidget {
   final String paymentUrl;
+  final Widget nextPage; // Add this parameter
 
-  const PaymentPage({super.key, required this.paymentUrl});
+  const PaymentPage({super.key, required this.paymentUrl, required this.nextPage});
 
   @override
   PaymentPageState createState() => PaymentPageState();
@@ -36,7 +37,7 @@ class PaymentPageState extends State<PaymentPage> {
             if (url.contains('https://www.return_url.tn')) {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
-                  builder: (context) => const SuccessPage(),
+                  builder: (context) => widget.nextPage,
                 ),
               );
             }

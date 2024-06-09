@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:renting_app/pages/pay.dart';
+import 'package:renting_app/pages/successful_confirmation.dart';
 import 'package:renting_app/services/mqtt_service.dart';
 import '../core/constants.dart';
 import '../pages/ebike_model.dart';
-import 'successful_confirmation.dart';
+import '../services/payment_service.dart';
 
 class ReservationFormPage extends StatefulWidget {
   final Ebike ebike;
@@ -21,7 +23,7 @@ class ReservationFormPageState extends State<ReservationFormPage> {
   String? userId;
   final String reservationTopic = "reservation";
   MqttService mqttService = MqttService();
-
+  final PaymentService _paymentService = PaymentService();
 
   @override
   void initState() {
@@ -30,15 +32,15 @@ class ReservationFormPageState extends State<ReservationFormPage> {
     setupMqttClient();
     _fetchUserId();
   }
+
   Future<void> setupMqttClient() async {
     await mqttService.connect();
     mqttService.subscribe(reservationTopic);
-
   }
+
   void _publishMessage(String message) {
     mqttService.publishMessage(reservationTopic, message);
   }
-
 
   Future<void> _fetchUserId() async {
     User? user = FirebaseAuth.instance.currentUser;
@@ -162,27 +164,7 @@ class ReservationFormPageState extends State<ReservationFormPage> {
               const SizedBox(height: 25),
               ElevatedButton.icon(
                 onPressed: _isReservationTimeSelected && userId != null
-                    ? () async {
-                        // Save reservation to Firestore
-                        await FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(userId)
-                            .update({
-                          'reservation': widget.ebike.name,
-                          'reservation_time': _selectedTime.format(context),
-                        });
-                        _publishMessage("confirmed");
-
-                        Navigator.pushAndRemoveUntil(
-                          // ignore: use_build_context_synchronously
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                SuccessfulConfirmationPage(ebike: widget.ebike),
-                          ),
-                          (Route<dynamic> route) => false,
-                        );
-                      }
+                    ? () => _showConfirmationDialog(context)
                     : null,
                 icon: const Icon(Icons.check_circle),
                 label: const Text(
@@ -240,5 +222,69 @@ class ReservationFormPageState extends State<ReservationFormPage> {
         _isReservationTimeSelected = true;
       });
     }
+  }
+
+  Future<void> _showConfirmationDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: const Text('Confirm Reservation'),
+          content: const Text('A 5 DT payment is required to confirm your reservation. Tap OK to continue.'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(dialogContext).pop(); // Dismiss the dialog
+              },
+            ),
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () async {
+                debugPrint("OK pressed");
+                Navigator.of(dialogContext).pop(); // Dismiss the dialog
+
+                // Save reservation to Firestore
+                await FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(userId)
+                    .update({
+                  'reservation': widget.ebike.name,
+                  'reservation_time': _selectedTime.format(context),
+                });
+                _publishMessage("confirmed");
+
+                debugPrint("Navigating to PaymentPage");
+                try {
+                  final paymentUrl = await _paymentService.createPayment(
+                    5.0, // Assuming the payment amount is 5 DT
+                    'Bassma', 
+                    'Zeineb', 
+                    'bessa@gmail.com', 
+                    '+21622334455',
+                  );
+
+                  if (paymentUrl != null) {
+                    Navigator.push(
+                      // ignore: use_build_context_synchronously
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PaymentPage(
+                          paymentUrl: paymentUrl,
+                          nextPage: SuccessfulConfirmationPage(ebike: widget.ebike),
+                        ),
+                      ),
+                    );
+                  }
+                } catch (e) {
+                  debugPrint('Payment creation failed: $e');
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

@@ -77,6 +77,12 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
                           style: const TextStyle(fontSize: 20),
                           textAlign: TextAlign.center,
                         ),
+                        const SizedBox(height: 10),
+                        const Text(
+                          'Enjoy your ride, and if your total exceeds 5 DT you will receive a 2.5 DT refund.',
+                          style: TextStyle(fontSize: 10),
+                          textAlign: TextAlign.center,
+                        ),            
                         const SizedBox(height: 20),
                         const Text(
                           'Scan the QR code when you get there.',
@@ -132,6 +138,7 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
                       _publishMessage("cancelled");
                       if (mounted) {
                         Navigator.pushAndRemoveUntil(
+                          // ignore: use_build_context_synchronously
                           context,
                           MaterialPageRoute(
                             builder: (context) => const MainPage(),

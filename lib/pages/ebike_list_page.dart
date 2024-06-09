@@ -109,7 +109,7 @@ class EbikeListPageState extends State<EbikeListPage> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [primary, Color.fromARGB(244, 79, 185, 234)],
+            colors: [primary, Color.fromARGB(15, 79, 185, 234)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -129,7 +129,7 @@ class EbikeListPageState extends State<EbikeListPage> {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             elevation: 8,
             child: ListTile(
               contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -152,7 +152,7 @@ class EbikeListPageState extends State<EbikeListPage> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: _reservationButtonStates[index] ? primary : Colors.grey,
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                 ),
                 child: const Text(
                   'Reserve',

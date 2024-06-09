@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:renting_app/core/constants.dart';
+import 'package:renting_app/pages/success_page.dart';
 import '../services/payment_service.dart';
 import '../pages/pay.dart';
-//import '../pages/money_time_counter_page.dart';
+//import 'dart:async';
 
 class EndLocation extends StatefulWidget {
   final double amount;
@@ -17,10 +18,12 @@ class EndLocationState extends State<EndLocation> with SingleTickerProviderState
   final _paymentService = PaymentService();
   late AnimationController _controller;
   late Animation<Offset> _animation;
+  late double _amount;
 
   @override
   void initState() {
     super.initState();
+    _amount = widget.amount > 1 ? widget.amount - 0.5 : widget.amount;
     _controller = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
@@ -41,19 +44,22 @@ class EndLocationState extends State<EndLocation> with SingleTickerProviderState
   }
 
   void _startPayment() async {
-
     try {
       final paymentUrl = await _paymentService.createPayment(
-
-      widget.amount , 'Bassma', 'Zeineb', 'bessa@gmail.com', '+21622334455',
-
+        _amount, 'Bassma', 'Zeineb', 'bessa@gmail.com', '+21622334455',
       );
 
-      if (paymentUrl != null ) {
+      if (paymentUrl != null) {
+        // ignore: use_build_context_synchronously
         Navigator.push(
           // ignore: use_build_context_synchronously
           context,
-          MaterialPageRoute(builder: (context) => PaymentPage(paymentUrl: paymentUrl)),
+          MaterialPageRoute(
+            builder: (context) => PaymentPage(
+              paymentUrl: paymentUrl,
+              nextPage: const SuccessPage(),
+            ),
+          ),
         );
       }
     } catch (e) {
