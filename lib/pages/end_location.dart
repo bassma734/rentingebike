@@ -21,7 +21,6 @@ class EndLocationState extends State<EndLocation> with SingleTickerProviderState
   @override
   void initState() {
     super.initState();
-    //MoneyTimeCounterPageState.timer?.cancel();
     _controller = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,

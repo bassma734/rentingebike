@@ -20,6 +20,7 @@ class ScanQRPCodePageState extends State<ScanQRCodePage> {
   final String cadenasTopic = "cadenas_topic";
   final String irTopic = "ir_sensor_detection";
   late MqttService mqttService;
+  static late String code ;
 
   @override
   void initState() {
@@ -45,6 +46,8 @@ class ScanQRPCodePageState extends State<ScanQRCodePage> {
 
       setState(() {
         if ((qrCode == widget.name) && (pt == "1" || pt == "2")) {
+          code =qrCode ;
+
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(

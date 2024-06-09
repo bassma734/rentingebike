@@ -9,21 +9,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class SuccessfulConfirmationPage extends StatefulWidget {
-  final  Ebike ebike;
+  final Ebike ebike;
 
-  const SuccessfulConfirmationPage({ required this.ebike, super.key});
+  const SuccessfulConfirmationPage({required this.ebike, super.key});
 
   @override
   SuccessfulConfirmationPageState createState() => SuccessfulConfirmationPageState();
 }
 
-
 class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> {
-
   static Ebike ebikemain = Ebike(name: 'ebike', photo: 'assets/images/Ebike.jpeg');
   final String reservationTopic = "reservation";
-  MqttService mqttService = MqttService();
-
+  late MqttService mqttService;
 
   @override
   void initState() {
@@ -31,11 +28,12 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
     mqttService = MqttService();
     setupMqttClient();
   }
+
   Future<void> setupMqttClient() async {
     await mqttService.connect();
     mqttService.subscribe(reservationTopic);
-
   }
+
   void _publishMessage(String message) {
     mqttService.publishMessage(reservationTopic, message);
   }
@@ -43,7 +41,6 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
   @override
   Widget build(BuildContext context) {
     ebikemain = widget.ebike;
-
 
     return Scaffold(
       body: Container(
@@ -75,7 +72,7 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
                           height: 100,
                         ),
                         const SizedBox(height: 20),
-                          Text(
+                        Text(
                           'Your ${widget.ebike.name} reservation has been confirmed successfully.',
                           style: const TextStyle(fontSize: 20),
                           textAlign: TextAlign.center,
@@ -97,7 +94,6 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
                 ElevatedButton.icon(
                   onPressed: () {
                     Navigator.push(
-                      // ignore: use_build_context_synchronously
                       context,
                       MaterialPageRoute(
                         builder: (context) => ScanQRCodeResPage(ebike: widget.ebike),
@@ -126,7 +122,6 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
                 const SizedBox(height: 30),
                 ElevatedButton.icon(
                   onPressed: () async {
-
                     final bool cancel = await showConfirmationDialog(
                           context: context,
                           title: 'Do you want to cancel your reservation?',
@@ -137,7 +132,6 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
                       _publishMessage("cancelled");
                       if (mounted) {
                         Navigator.pushAndRemoveUntil(
-                          // ignore: use_build_context_synchronously
                           context,
                           MaterialPageRoute(
                             builder: (context) => const MainPage(),

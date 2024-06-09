@@ -17,41 +17,50 @@ class EbikeListPage extends StatefulWidget {
 class EbikeListPageState extends State<EbikeListPage> {
   MqttService mqttService = MqttService();
   final String irTopic = "ir_sensor_detection";
-  final _reservationButtonStates = <bool>[];
+  final List<bool> _reservationButtonStates = [];
   String? userId;
-
-  final _ebikesMap = {
-    'Ebike1': Ebike(
-      name: 'Ebike1',
-      photo: 'assets/images/Ebike.jpeg',
-    ),
-    'Ebike2': Ebike(
-      name: 'Ebike2',
-      photo: 'assets/images/Ebike.jpeg',
-    ),
-  };
+  final Map<String, Ebike> _ebikesMap = {};
 
   @override
   void initState() {
     super.initState();
-    _initializeButtonStates();
     setupMqttClient();
     setupUpdatesListener();
-    fetchUserIdAndReservation();
+    fetchUserIdAndData();
   }
 
-  void _initializeButtonStates() {
-    _reservationButtonStates.addAll(List<bool>.filled(_ebikesMap.length, true));
-  }
-
-  Future<void> fetchUserIdAndReservation() async {
+  Future<void> fetchUserIdAndData() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       setState(() {
         userId = user.uid;
       });
     }
-    // Listen for changes in the reservation status
+    // Fetch eBikes and reservation states from Firestore
+    await fetchEbikes();
+    await fetchReservationStates();
+  }
+
+  Future<void> fetchEbikes() async {
+    QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('ebikes').get();
+    setState(() {
+      for (var doc in snapshot.docs) {
+        String id = doc['id'];
+        _ebikesMap[id] = Ebike(
+          name: id,
+          photo: 'assets/images/Ebike.jpeg', // Or update this based on the data from Firestore
+        );
+      }
+      _initializeButtonStates();
+    });
+  }
+
+  void _initializeButtonStates() {
+    _reservationButtonStates.clear();
+    _reservationButtonStates.addAll(List<bool>.filled(_ebikesMap.length, true));
+  }
+
+  Future<void> fetchReservationStates() async {
     FirebaseFirestore.instance.collection('users').snapshots().listen((snapshot) {
       setState(() {
         for (int i = 0; i < _reservationButtonStates.length; i++) {

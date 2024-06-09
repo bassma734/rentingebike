@@ -3,6 +3,8 @@ import 'package:renting_app/core/constants.dart';
 import 'package:renting_app/pages/main_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'money_time_counter_page.dart';
+import 'scan_qr_code_paiement.dart';
 
 class SuccessPage extends StatelessWidget {
   const SuccessPage({super.key});
@@ -11,16 +13,64 @@ class SuccessPage extends StatelessWidget {
     try {
       User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
+        String ebikeID = ScanQRPCodePageState.code;
+
+        // Update user reservation
         await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
           'reservation': null,
           'reservation_time': null,
         });
+
+        // Add rental record
+        await FirebaseFirestore.instance.collection('rentals').doc(user.uid).set({
+          'ebikeID': ebikeID,
+          'stime': MoneyTimeCounterPageState.startTime,
+          'etime': MoneyTimeCounterPageState.endTime,
+        });
+
+        // Increment the rent count for the e-bike
+        await _incrementRentCount(ebikeID);
       }
     } catch (e) {
-      // Print the error to the console
       debugPrint("Error clearing reservation: $e");
-      // You can also rethrow the exception or handle it accordingly
       rethrow;
+    }
+  }
+
+  Future<void> _incrementRentCount(String ebikeID) async {
+    try {
+      DocumentReference ebikeRef = FirebaseFirestore.instance.collection('ebikes').doc(ebikeID);
+      FirebaseFirestore.instance.runTransaction((transaction) async {
+        DocumentSnapshot ebikeSnapshot = await transaction.get(ebikeRef);
+
+        if (!ebikeSnapshot.exists) {
+          throw Exception("E-Bike does not exist!");
+        }
+
+        var data = ebikeSnapshot.data() as Map<String, dynamic>?;
+        int newRentCount = (data?['rent_count'] ?? 0) + 1;
+        transaction.update(ebikeRef, {'rent_count': newRentCount});
+      });
+    } catch (e) {
+      debugPrint("Error incrementing rent count: $e");
+      rethrow;
+    }
+  }
+
+  void _navigateHome(BuildContext context) async {
+    try {
+      await _clearReservation();
+      if (context.mounted) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const MainPage(),
+          ),
+          (Route<dynamic> route) => false,
+        );
+      }
+    } catch (e) {
+      debugPrint("Error navigating to home: $e");
     }
   }
 
@@ -75,27 +125,12 @@ class SuccessPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 30),
                 ElevatedButton.icon(
-                  onPressed: () async {
-                    try {
-                      await _clearReservation();
-                      // ignore: use_build_context_synchronously
-                      Navigator.pushAndRemoveUntil(
-                        // ignore: use_build_context_synchronously
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const MainPage(),
-                        ),
-                        (Route<dynamic> route) => false,
-                      );
-                    } catch (e) {
-                      // Print the error to the console
-                      debugPrint("Error navigating to home: $e");
-                    }
-                  },
+                  onPressed: () => _navigateHome(context),
                   icon: const Icon(Icons.home),
                   label: const Text('Home'),
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: primary, backgroundColor: gray100,
+                    foregroundColor: primary,
+                    backgroundColor: gray100,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 20,
                       vertical: 15,
