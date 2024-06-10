@@ -231,7 +231,9 @@ class ReservationFormPageState extends State<ReservationFormPage> {
       builder: (BuildContext dialogContext) {
         return AlertDialog(
           title: const Text('Confirm Reservation'),
-          content: const Text('A 5 DT payment is required to confirm your reservation. Tap OK to continue.'),
+          content: const Text('A 5 DT payment is required to confirm your reservation. Tap OK to continue.\n\n'
+                              'Please note: You have a 15-minute grace period after your selected reservation time.'
+                              'If you do not scan the QR code within this time, your reservation will be automatically canceled.'),
           actions: <Widget>[
             TextButton(
               child: const Text('Cancel'),
@@ -245,6 +247,10 @@ class ReservationFormPageState extends State<ReservationFormPage> {
                 debugPrint("OK pressed");
                 Navigator.of(dialogContext).pop(); // Dismiss the dialog
 
+                // Calculate expiration time
+                final DateTime now = DateTime.now();
+                final DateTime expirationTime = now.add(const Duration(minutes: 1));
+
                 // Save reservation to Firestore
                 await FirebaseFirestore.instance
                     .collection('users')
@@ -252,6 +258,7 @@ class ReservationFormPageState extends State<ReservationFormPage> {
                     .update({
                   'reservation': widget.ebike.name,
                   'reservation_time': _selectedTime.format(context),
+                  'expiration_time': expirationTime,
                 });
                 _publishMessage("confirmed");
 

@@ -21,8 +21,8 @@ class SuccessPage extends StatelessWidget {
           'reservation_time': null,
         });
 
-        // Add rental record
-        await FirebaseFirestore.instance.collection('rentals').doc(user.uid).set({
+        // Add rental record to user's document
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).collection('rentals').add({
           'ebikeID': ebikeID,
           'stime': MoneyTimeCounterPageState.startTime,
           'etime': MoneyTimeCounterPageState.endTime,
@@ -36,6 +36,7 @@ class SuccessPage extends StatelessWidget {
       rethrow;
     }
   }
+
 
   Future<void> _incrementRentCount(String ebikeID) async {
     try {

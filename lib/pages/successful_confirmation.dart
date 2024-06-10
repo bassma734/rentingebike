@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:renting_app/core/dialogs.dart';
 import 'package:renting_app/pages/main_page.dart';
 import 'package:renting_app/pages/scan_qr_code_res.dart';
 import 'package:renting_app/services/mqtt_service.dart';
-import '../pages/ebike_model.dart';
 import '../core/constants.dart';
-import '../core/dialogs.dart';
+import 'ebike_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -21,12 +21,15 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
   static Ebike ebikemain = Ebike(name: 'ebike', photo: 'assets/images/Ebike.jpeg');
   final String reservationTopic = "reservation";
   late MqttService mqttService;
+  late String userId;
+  late DateTime expirationTime;
 
   @override
   void initState() {
     super.initState();
     mqttService = MqttService();
     setupMqttClient();
+    _fetchUserIdAndExpirationTime();
   }
 
   Future<void> setupMqttClient() async {
@@ -36,6 +39,56 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
 
   void _publishMessage(String message) {
     mqttService.publishMessage(reservationTopic, message);
+  }
+
+  Future<void> _fetchUserIdAndExpirationTime() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      userId = user.uid;
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
+      if (userDoc.exists) {
+        setState(() {
+          expirationTime = (userDoc['expiration_time'] as Timestamp).toDate();
+        });
+        _scheduleReservationCancellation();
+      }
+    }
+  }
+
+  void _scheduleReservationCancellation() {
+    final DateTime now = DateTime.now();
+    final Duration durationUntilExpiration = expirationTime.difference(now);
+
+    if (durationUntilExpiration.isNegative) {
+      // Reservation has already expired
+      _cancelReservation();
+    } else {
+      // Schedule the cancellation
+      Future.delayed(durationUntilExpiration, () {
+        _cancelReservation();
+      });
+    }
+  }
+
+  Future<void> _cancelReservation() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+        'reservation': null,
+        'reservation_time': null,
+        'expiration_time': null,
+      });
+      _publishMessage("cancelled");
+      if (mounted) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const MainPage(),
+          ),
+          (Route<dynamic> route) => false,
+        );
+      }
+    }
   }
 
   @override
@@ -82,8 +135,13 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
                           'Enjoy your ride, and if your total exceeds 5 DT you will receive a 2.5 DT refund.',
                           style: TextStyle(fontSize: 10),
                           textAlign: TextAlign.center,
-                        ),            
-                        const SizedBox(height: 20),
+                        ),
+                        const Text(
+                          'Please arrive on time. If you are late, you have a 15-minute grace period. After that, your reservation will be canceled.',
+                          style: TextStyle(fontSize: 10, color: Colors.red),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 10),
                         const Text(
                           'Scan the QR code when you get there.',
                           style: TextStyle(
@@ -211,6 +269,7 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
       await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
         'reservation': null,
         'reservation_time': null,
+        'expiration_time': null,
       });
     }
   }

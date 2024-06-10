@@ -54,6 +54,8 @@ dependencies:
   cloud_firestore: ^5.0.0
   google_maps_flutter: ^2.2.0
   percent_indicator: ^4.2.3
+  timezone: ^0.9.3
+  flutter_local_notifications: ^17.1.2
 
 
 
@@ -89,6 +91,7 @@ flutter:
     - assets/images/Ebike.jpeg
     - assets/images/check_icon.png
     - assets/google_logo.png
+    - assets/icons/app_icon.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
