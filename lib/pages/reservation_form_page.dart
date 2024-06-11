@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:renting_app/pages/pay.dart';
 import 'package:renting_app/pages/successful_confirmation.dart';
@@ -18,11 +17,11 @@ class ReservationFormPage extends StatefulWidget {
 }
 
 class ReservationFormPageState extends State<ReservationFormPage> {
-  TimeOfDay _selectedTime = TimeOfDay.now();
+  static TimeOfDay selectedTime = TimeOfDay.now();
   bool _isReservationTimeSelected = false;
-  String? userId;
+  late String userId;
   final String reservationTopic = "reservation";
-  MqttService mqttService = MqttService();
+  late MqttService mqttService;
   final PaymentService _paymentService = PaymentService();
 
   @override
@@ -36,10 +35,6 @@ class ReservationFormPageState extends State<ReservationFormPage> {
   Future<void> setupMqttClient() async {
     await mqttService.connect();
     mqttService.subscribe(reservationTopic);
-  }
-
-  void _publishMessage(String message) {
-    mqttService.publishMessage(reservationTopic, message);
   }
 
   Future<void> _fetchUserId() async {
@@ -153,7 +148,7 @@ class ReservationFormPageState extends State<ReservationFormPage> {
               const SizedBox(height: 32),
               Center(
                 child: Text(
-                  'Selected time: ${_selectedTime.format(context)}',
+                  'Selected time: ${selectedTime.format(context)}',
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
@@ -163,7 +158,7 @@ class ReservationFormPageState extends State<ReservationFormPage> {
               ),
               const SizedBox(height: 25),
               ElevatedButton.icon(
-                onPressed: _isReservationTimeSelected && userId != null
+                onPressed: _isReservationTimeSelected  
                     ? () => _showConfirmationDialog(context)
                     : null,
                 icon: const Icon(Icons.check_circle),
@@ -190,39 +185,74 @@ class ReservationFormPageState extends State<ReservationFormPage> {
     );
   }
 
-  Future<void> _showTimePickerDialog(BuildContext context) async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: _selectedTime,
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: ThemeData.light().copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: primary,
-              onPrimary: Colors.white,
-              onSurface: Colors.black,
-              onSurfaceVariant: primary,
-              primaryContainer: primary,
-              surfaceVariant: gray100,
-            ),
-            textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(
-                foregroundColor: primary,
-              ),
+Future<void> _showTimePickerDialog(BuildContext context) async {
+  final TimeOfDay? picked = await showTimePicker(
+    context: context,
+    initialTime: selectedTime,
+    builder: (BuildContext context, Widget? child) {
+      return Theme(
+        data: ThemeData.light().copyWith(
+          colorScheme: const ColorScheme.light(
+            primary: primary,
+            onPrimary: Colors.white,
+            onSurface: Colors.black,
+            onSurfaceVariant: primary,
+            primaryContainer: primary,
+            surfaceVariant: gray100,
+          ),
+          textButtonTheme: TextButtonThemeData(
+            style: TextButton.styleFrom(
+              foregroundColor: primary,
             ),
           ),
-          child: child!,
-        );
-      },
+        ),
+        child: child!,
+      );
+    },
+  );
+
+  if (picked != null && picked != selectedTime) {
+    final now = TimeOfDay.now();
+    final nowDateTime = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+      now.hour,
+      now.minute,
     );
 
-    if (picked != null && picked != _selectedTime) {
-      setState(() {
-        _selectedTime = picked;
-        _isReservationTimeSelected = true;
-      });
+    var selectedDateTime = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+      picked.hour,
+      picked.minute,
+    );
+
+    // Adjust for selected time after midnight
+    if (selectedDateTime.isBefore(nowDateTime)) {
+      selectedDateTime = selectedDateTime.add(const Duration(days: 1));
     }
+
+    final differenceInMinutes = selectedDateTime.difference(nowDateTime).inMinutes;
+
+    if (differenceInMinutes < 15 || differenceInMinutes > 120) {
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please select a time between 15 minutes and 2 hours from now.'),
+          duration: Duration(seconds: 3),
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      selectedTime = picked;
+      _isReservationTimeSelected = true;
+    });
   }
+}
 
   Future<void> _showConfirmationDialog(BuildContext context) async {
     return showDialog<void>(
@@ -244,25 +274,8 @@ class ReservationFormPageState extends State<ReservationFormPage> {
             TextButton(
               child: const Text('OK'),
               onPressed: () async {
-                debugPrint("OK pressed");
                 Navigator.of(dialogContext).pop(); // Dismiss the dialog
 
-                // Calculate expiration time
-                final DateTime now = DateTime.now();
-                final DateTime expirationTime = now.add(const Duration(minutes: 1));
-
-                // Save reservation to Firestore
-                await FirebaseFirestore.instance
-                    .collection('users')
-                    .doc(userId)
-                    .update({
-                  'reservation': widget.ebike.name,
-                  'reservation_time': _selectedTime.format(context),
-                  'expiration_time': expirationTime,
-                });
-                _publishMessage("confirmed");
-
-                debugPrint("Navigating to PaymentPage");
                 try {
                   final paymentUrl = await _paymentService.createPayment(
                     5.0, // Assuming the payment amount is 5 DT
@@ -271,7 +284,10 @@ class ReservationFormPageState extends State<ReservationFormPage> {
                     'bessa@gmail.com', 
                     '+21622334455',
                   );
-
+                // Calculate expiration time
+                final DateTime now = DateTime.now();
+                final DateTime selectedDateTime = DateTime(now.year, now.month, now.day, selectedTime.hour, selectedTime.minute);
+                final DateTime expirationTime = selectedDateTime.add(const Duration(minutes: 2));
                   if (paymentUrl != null) {
                     Navigator.push(
                       // ignore: use_build_context_synchronously
@@ -279,7 +295,11 @@ class ReservationFormPageState extends State<ReservationFormPage> {
                       MaterialPageRoute(
                         builder: (context) => PaymentPage(
                           paymentUrl: paymentUrl,
-                          nextPage: SuccessfulConfirmationPage(ebike: widget.ebike),
+                          nextPage: SuccessfulConfirmationPage(
+                            ebike: widget.ebike,
+                            selectedTime: selectedTime.format(context),
+                            expirationTime: expirationTime,
+                          ),
                         ),
                       ),
                     );

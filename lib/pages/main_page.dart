@@ -1,3 +1,4 @@
+//mainpage 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:renting_app/pages/ebike_list_page.dart';
@@ -19,6 +20,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   bool hasReservation = false;
+  Map<String, dynamic>? reservationData;
 
   @override
   void initState() {
@@ -33,6 +35,7 @@ class _MainPageState extends State<MainPage> {
       if (userDoc.exists) {
         setState(() {
           hasReservation = userDoc.data()?['reservation'] != null;
+          reservationData = userDoc.data()?['reservation'];
         });
       }
     }
@@ -134,7 +137,7 @@ class _MainPageState extends State<MainPage> {
               },
             ),
             const SizedBox(height: 20),
-            if (hasReservation)
+            if (hasReservation && reservationData != null)
               _buildFeatureCard(
                 icon: FontAwesomeIcons.clipboardCheck,
                 title: "Your Reservation",
@@ -144,7 +147,10 @@ class _MainPageState extends State<MainPage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => SuccessfulConfirmationPage(
-                          ebike: SuccessfulConfirmationPageState.ebikemain),
+                        ebike: reservationData!['ebikeName'],
+                        selectedTime: reservationData!['reservationTime'],
+                        expirationTime: (reservationData!['expirationTime'] as Timestamp).toDate(),
+                      ),
                     ),
                   );
                 },
