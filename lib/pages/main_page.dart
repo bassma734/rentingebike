@@ -10,6 +10,7 @@ import '../core/dialogs.dart';
 import '../services/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../pages/ebike_model.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -21,6 +22,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   bool hasReservation = false;
   Map<String, dynamic>? reservationData;
+  late Ebike ebikemain ;
 
   @override
   void initState() {
@@ -35,7 +37,6 @@ class _MainPageState extends State<MainPage> {
       if (userDoc.exists) {
         setState(() {
           hasReservation = userDoc.data()?['reservation'] != null;
-          reservationData = userDoc.data()?['reservation'];
         });
       }
     }
@@ -137,23 +138,29 @@ class _MainPageState extends State<MainPage> {
               },
             ),
             const SizedBox(height: 20),
-            if (hasReservation && reservationData != null)
+            if (hasReservation )
               _buildFeatureCard(
                 icon: FontAwesomeIcons.clipboardCheck,
                 title: "Your Reservation",
                 subtitle: "View your current reservation status",
-                onTap: () {
+                
+                onTap: ()async {
+                  User? user = FirebaseAuth.instance.currentUser;
+                  if(user != null) {
+                   DocumentSnapshot<Map<String, dynamic>> userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+                 ebikemain = Ebike(name: userDoc.data()?['reservation'], photo: 'assets/images/Ebike.jpeg');
                   Navigator.push(
+                    // ignore: use_build_context_synchronously
                     context,
                     MaterialPageRoute(
                       builder: (context) => SuccessfulConfirmationPage(
-                        ebike: reservationData!['ebikeName'],
-                        selectedTime: reservationData!['reservationTime'],
-                        expirationTime: (reservationData!['expirationTime'] as Timestamp).toDate(),
+                        ebike: ebikemain  ,
+                        selectedTime: userDoc.data()?['reservation_time'],
+                        expirationTime: (userDoc.data()?['expiration_time'] as Timestamp).toDate(),
                       ),
                     ),
                   );
-                },
+                }},
               ),
             const SizedBox(height: 20),
             _buildFeatureCard(
