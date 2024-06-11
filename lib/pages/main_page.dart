@@ -81,8 +81,9 @@ class _MainPageState extends State<MainPage> {
               ) ?? false;
               if (shouldLogout) {
                 await AuthService.logout();
-                // ignore: use_build_context_synchronously
-                Navigator.of(context).pushReplacement(
+                Navigator.push(
+                  // ignore: use_build_context_synchronously
+                  context,
                   MaterialPageRoute(
                     builder: (context) => const RegistrationPage(), // Replace with your login page
                   ),
