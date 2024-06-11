@@ -7,6 +7,9 @@
         <meta-data
         android:name="com.google.android.geo.API_KEY"
         android:value="AIzaSyBHQ45bPq2V5kpeyKRIQqvHGiCufuuNHy4"/>
+         <meta-data
+            android:name="com.google.firebase.analytics.API_KEY"
+            android:value="AIzaSyBnUIlmeECU2n7GPvZpGKagN5b_F9HM-f4"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

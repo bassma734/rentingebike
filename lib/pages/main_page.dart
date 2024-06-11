@@ -1,8 +1,8 @@
-//mainpage 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:renting_app/pages/ebike_list_page.dart';
 import 'package:renting_app/pages/map_page.dart';
+import 'package:renting_app/pages/registration_page.dart';
 import 'package:renting_app/pages/scan_qr_code_onsite.dart';
 import 'package:renting_app/pages/successful_confirmation.dart';
 import '../core/constants.dart';
@@ -79,7 +79,15 @@ class _MainPageState extends State<MainPage> {
                 context: context,
                 title: 'Do you want to sign out of the app?',
               ) ?? false;
-              if (shouldLogout) AuthService.logout();
+              if (shouldLogout) {
+                await AuthService.logout();
+                // ignore: use_build_context_synchronously
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => const RegistrationPage(), // Replace with your login page
+                  ),
+                );
+              }
             },
           ),
           const SizedBox(width: 10),
