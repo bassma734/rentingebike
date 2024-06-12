@@ -19,6 +19,7 @@ class SuccessPage extends StatelessWidget {
         await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
           'reservation': null,
           'reservation_time': null,
+          'status' : null ,
         });
 
         // Add rental record to user's document
