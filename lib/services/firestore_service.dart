@@ -12,9 +12,7 @@ class FirestoreService {
       'email': email,
       'reservation': null,
       'reservation_time': null,
-      'reservation_status' :null,
-      'rental':null,
-      'rental_time_date' :null,
+      'status' :null,
 
 
     }).catchError((error) {

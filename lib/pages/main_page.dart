@@ -22,7 +22,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   bool hasReservation = false;
   Map<String, dynamic>? reservationData;
-  late Ebike ebikemain ;
+  late Ebike ebikemain;
 
   @override
   void initState() {
@@ -81,13 +81,15 @@ class _MainPageState extends State<MainPage> {
               ) ?? false;
               if (shouldLogout) {
                 await AuthService.logout();
-                Navigator.push(
-                  // ignore: use_build_context_synchronously
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const RegistrationPage(), // Replace with your login page
-                  ),
-                );
+                if (mounted) {
+                  Navigator.pushReplacement(
+                    // ignore: use_build_context_synchronously
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const RegistrationPage(),
+                    ),
+                  );
+                }
               }
             },
           ),
@@ -147,29 +149,31 @@ class _MainPageState extends State<MainPage> {
               },
             ),
             const SizedBox(height: 20),
-            if (hasReservation )
+            if (hasReservation)
               _buildFeatureCard(
                 icon: FontAwesomeIcons.clipboardCheck,
                 title: "Your Reservation",
                 subtitle: "View your current reservation status",
-                
-                onTap: ()async {
+                onTap: () async {
                   User? user = FirebaseAuth.instance.currentUser;
-                  if(user != null) {
-                   DocumentSnapshot<Map<String, dynamic>> userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
-                 ebikemain = Ebike(name: userDoc.data()?['reservation'], photo: 'assets/images/Ebike.jpeg');
-                  Navigator.push(
-                    // ignore: use_build_context_synchronously
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SuccessfulConfirmationPage(
-                        ebike: ebikemain  ,
-                        selectedTime: userDoc.data()?['reservation_time'],
-                        expirationTime: (userDoc.data()?['expiration_time'] as Timestamp).toDate(),
-                      ),
-                    ),
-                  );
-                }},
+                  if (user != null) {
+                    DocumentSnapshot<Map<String, dynamic>> userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+                    ebikemain = Ebike(name: userDoc.data()?['reservation'], photo: 'assets/images/Ebike.jpeg');
+                    if (mounted) {
+                      Navigator.push(
+                        // ignore: use_build_context_synchronously
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SuccessfulConfirmationPage(
+                            ebike: ebikemain,
+                            selectedTime: userDoc.data()?['reservation_time'],
+                            expirationTime: (userDoc.data()?['expiration_time'] as Timestamp).toDate(),
+                          ),
+                        ),
+                      );
+                    }
+                  }
+                },
               ),
             const SizedBox(height: 20),
             _buildFeatureCard(
@@ -233,10 +237,8 @@ class _MainPageState extends State<MainPage> {
             children: [
               CircleAvatar(
                 radius: 10,
-                backgroundColor:
-                    isPrimary ? Colors.white24 : primary.withOpacity(0.2),
-                child: FaIcon(icon,
-                    size: 20, color: isPrimary ? Colors.white : primary),
+                backgroundColor: isPrimary ? Colors.white24 : primary.withOpacity(0.2),
+                child: FaIcon(icon, size: 20, color: isPrimary ? Colors.white : primary),
               ),
               const SizedBox(width: 15),
               Expanded(

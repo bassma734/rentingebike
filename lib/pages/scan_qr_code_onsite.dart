@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:qr_mobile_vision/qr_camera.dart';
-//import 'package:qr_mobile_vision/qr_mobile_vision.dart';
 import 'package:renting_app/services/mqtt_service.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'money_time_counter_page.dart';
 import 'dart:async';
+import '../pages/main_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ScanQRCodePage extends StatefulWidget {
   const ScanQRCodePage({super.key});
@@ -25,16 +26,33 @@ class ScanQRCodePageState extends State<ScanQRCodePage> {
   int invalidScanCount = 0; // Count of invalid scans
   int invalidScanSeriesCount = 0; // Number of times the invalid scan limit has been reached
   DateTime? blockEndTime; // Time when the user block ends
-
-  final String userId = "user_id"; // Example user ID, replace with actual user ID
+  String? userId;
 
   @override
   void initState() {
     super.initState();
     mqttService = MqttService();
-    setupMqttClient();
-    fetchReservations(); // Fetch reservation status when the page initializes
-    checkBlockStatus(); // Check if the user is currently blocked
+    fetchUserId().then((_) {
+      checkBlockStatus(); // Check if the user is currently blocked after fetching user ID
+    });
+
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    checkBlockStatus(); // Check block status every time the page is built
+  }
+
+  Future<void> fetchUserId() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        userId = user.uid;
+      });
+      setupMqttClient();
+      fetchReservations(); // Fetch reservation status when the page initializes
+    }
   }
 
   @override
@@ -116,16 +134,17 @@ class ScanQRCodePageState extends State<ScanQRCodePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Warning'),
-          content: const Text('You have made 5 invalid scans. Please scan a valid eBike QR code.'),
+          title: const Text('Warning', style: TextStyle(fontSize: 22, color: Color.fromARGB(255, 197, 53, 42)), textAlign: TextAlign.center,),
+          content: const Text('You have made 5 invalid scans. Please scan a valid eBike QR code.', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
           actions: <Widget>[
             TextButton(
-              child: const Text('OK'),
+              child: const Text('OK', style: TextStyle(color: Color.fromARGB(255, 197, 53, 42)),),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
           ],
+          backgroundColor: const Color.fromARGB(255, 229, 199, 197),
         );
       },
     );
@@ -136,13 +155,20 @@ class ScanQRCodePageState extends State<ScanQRCodePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Blocked'),
-          content: const Text('You have been blocked for 30 days and 5 minutes due to repeated invalid scans.'),
+          title: const Text('Blocked', style: TextStyle(color: Color.fromARGB(255, 197, 53, 42), fontSize: 25)),
+          content: const Text('You have been blocked for 30 days due to repeated invalid scans.'),
           actions: <Widget>[
             TextButton(
-              child: const Text('OK'),
+              child: const Text('OK', style: TextStyle(color: Color.fromARGB(255, 197, 53, 42))),
               onPressed: () {
                 Navigator.of(context).pop();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MainPage(),
+                  ),
+                );
+
                 // Navigate back to the main page
                 Navigator.of(context).pop();
               },
@@ -154,23 +180,35 @@ class ScanQRCodePageState extends State<ScanQRCodePage> {
   }
 
   void _blockUser() async {
-    const blockDuration =  Duration(/*days: 30,*/ minutes: 5);
-    blockEndTime = DateTime.now().add(blockDuration);
-    await FirebaseFirestore.instance.collection('blocked_users').doc(userId).set({
-      'blockEndTime': blockEndTime!.toIso8601String(),
-    });
-    _showBlockDialog();
+    const blockDuration = Duration(minutes:5); // Adjust duration as needed
+    if (userId != null) {
+      blockEndTime = DateTime.now().add(blockDuration);
+      await FirebaseFirestore.instance.collection('users').doc(userId).update({
+        'blockEndTime': blockEndTime!.toIso8601String(),
+      });
+      await FirebaseFirestore.instance.collection('users').doc(userId).update({
+        'blockStatus': 'blocked'
+      });
+      _showBlockDialog();
+    }
   }
 
   void checkBlockStatus() async {
-    final doc = await FirebaseFirestore.instance.collection('blocked_users').doc(userId).get();
-    if (doc.exists) {
-      final blockEndTimeString = doc['blockEndTime'];
-      if (blockEndTimeString != null) {
-        final blockEnd = DateTime.parse(blockEndTimeString);
-        if (DateTime.now().isBefore(blockEnd)) {
-          blockEndTime = blockEnd;
-          _showBlockDialog();
+    if (userId != null) {
+      final doc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
+      if (doc.exists) {
+        final blockEndTimeString = doc.data()?['blockEndTime']; // Use null-aware operator
+        if (blockEndTimeString != null) {
+          final blockEnd = DateTime.parse(blockEndTimeString);
+          if (DateTime.now().isBefore(blockEnd)) {
+            blockEndTime = blockEnd;
+            _showBlockDialog();
+          }
+        } else {
+          // Initialize block status if 'blockEndTime' field is not present
+          await FirebaseFirestore.instance.collection('users').doc(userId).update({
+            'blockStatus': 'unblocked'
+           }); // Use SetOptions to avoid overwriting the entire document
         }
       }
     }
@@ -247,31 +285,32 @@ class ScanQRCodePageState extends State<ScanQRCodePage> {
         title: const Text('Scan QR Code'),
       ),
       body: Stack(
-  children: [
-    QrCamera(
-      onError: (context, error) => Center(
-        child: Text("Error: $error"),
-      ),
-      qrCodeCallback: _handleQRCode,
-      notStartedBuilder: (context) => const Center(child: CircularProgressIndicator()),
-      offscreenBuilder: (context) => const Center(child: CircularProgressIndicator()),
-    ),
-    if (isScanning)
-      const Positioned.fill(
-        child: Align(
-          alignment: Alignment.bottomCenter,
-          child: Text(
-            "Scanning...",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+        children: [
+          QrCamera(
+            onError: (context, error) => Center(
+              child: Text(
+                error.toString(),
+                style: const TextStyle(color: Colors.red),
+              ),
+            ),
+            qrCodeCallback: (code) {
+              _handleQRCode(code); // Pass code to handleQRCode function
+            },
+          ),
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (qrCode.isNotEmpty)
+                  Text(
+                    'QR Code: $qrCode',
+                    style: const TextStyle(fontSize: 20),
+                  ),
+              ],
             ),
           ),
-        ),
+        ],
       ),
-  ],
-),
     );
   }
 }

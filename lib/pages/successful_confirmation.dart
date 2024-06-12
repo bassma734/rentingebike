@@ -52,9 +52,7 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
       userId = user.uid;
       DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
       if (userDoc.exists) {
-        setState(() {
-          // Assuming expiration time comes from the widget
-        });
+       
         _confirmReservation();
         _scheduleReservationCancellation();
       }
@@ -81,11 +79,7 @@ class SuccessfulConfirmationPageState extends State<SuccessfulConfirmationPage> 
 
     if (durationUntilExpiration.isNegative) {
       _cancelReservation();
-    } else {
-      Future.delayed(durationUntilExpiration, () {
-        _cancelReservation();
-      });
-    }
+    } 
   }
 
   Future<void> _cancelReservation() async {
