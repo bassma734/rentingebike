@@ -5,9 +5,42 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'money_time_counter_page.dart';
 import 'scan_qr_code_paiement.dart';
+import 'package:renting_app/services/mqtt_service.dart';
 
-class SuccessPage extends StatelessWidget {
+
+class SuccessPage extends StatefulWidget {
+  
+
+
   const SuccessPage({super.key});
+
+  @override
+  SuccessPageState createState() => SuccessPageState();
+}
+
+
+
+class SuccessPageState extends State<ScanQRCodePage> {
+  late MqttService mqttService;
+  final String cadenasTopic = "cadenas_topic";
+  String rentedebike = ScanQRPCodePageState.code ;
+
+@override
+  void initState() {
+    super.initState();
+    mqttService = MqttService();
+    setupMqttClient();
+  }
+
+Future<void> setupMqttClient() async {
+    await mqttService.connect();
+    mqttService.subscribe(cadenasTopic);
+  }
+
+  void _publishMessage(String message) {
+    mqttService.publishMessage(cadenasTopic, message);
+  }
+
 
   Future<void> _clearReservation() async {
     try {
@@ -61,6 +94,8 @@ class SuccessPage extends StatelessWidget {
 
   void _navigateHome(BuildContext context) async {
     try {
+      _publishMessage("2nd$rentedebike");
+
       await _clearReservation();
       if (context.mounted) {
         Navigator.pushAndRemoveUntil(

@@ -34,9 +34,7 @@ class ScanQRPCodePageState extends State<ScanQRCodePage> {
     mqttService.subscribe(irTopic);
   }
 
-  void _publishMessage(String message) {
-    mqttService.publishMessage(cadenasTopic, message);
-  }
+ 
 
   void setupUpdatesListener() {
     mqttService.getMessagesStream()!
@@ -57,7 +55,6 @@ class ScanQRPCodePageState extends State<ScanQRCodePage> {
           // Publish QR code information to MQTT broker
           String ebike = widget.name ;
           debugPrint ("2nd$ebike");
-          _publishMessage("2nd$ebike");
         }
       });
       debugPrint('MQTTClient::Message received on topic: <${c[0].topic}> is $pt\n');
