@@ -225,7 +225,7 @@ class MainPageState extends State<MainPage> {
             icon: Icon(Icons.person),
             label: 'User Info',
           ),
-           BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
@@ -233,7 +233,7 @@ class MainPageState extends State<MainPage> {
             icon: Icon(Icons.history),
             label: 'Rental History',
           ),
-         
+        
         ],
         currentIndex: selectedIndex,
         selectedItemColor:primary,

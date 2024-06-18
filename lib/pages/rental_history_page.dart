@@ -62,7 +62,7 @@ class RentalHistoryPageState extends State<RentalHistoryPage> {
             ),
           ),
         ),
-        title: const Text('Rental History'),
+        title: const Text('Rental History',style: TextStyle(color: white)),
       ),
       body: Container(
         decoration: const BoxDecoration(
