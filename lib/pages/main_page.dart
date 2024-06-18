@@ -1,10 +1,14 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:renting_app/pages/ebike_list_page.dart';
-import 'package:renting_app/pages/map_page.dart';
-import 'package:renting_app/pages/registration_page.dart';
-import 'package:renting_app/pages/scan_qr_code_onsite.dart';
-import 'package:renting_app/pages/successful_confirmation.dart';
+import '../pages/ebike_list_page.dart';
+import '../pages/map_page.dart';
+import '../pages/registration_page.dart';
+import '../pages/scan_qr_code_onsite.dart';
+import '../pages/successful_confirmation.dart';
+import '../pages/rental_history_page.dart';
+import '../pages/user_information_page.dart';
 import '../core/constants.dart';
 import '../core/dialogs.dart';
 import '../services/auth_service.dart';
@@ -16,13 +20,14 @@ class MainPage extends StatefulWidget {
   const MainPage({super.key});
 
   @override
-  State<MainPage> createState() => _MainPageState();
+  State<MainPage> createState() => MainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class MainPageState extends State<MainPage> {
   bool hasReservation = false;
   Map<String, dynamic>? reservationData;
   late Ebike ebikemain;
+  static  int selectedIndex = 1;
 
   @override
   void initState() {
@@ -39,6 +44,31 @@ class _MainPageState extends State<MainPage> {
           hasReservation = userDoc.data()?['reservation'] != null;
         });
       }
+    }
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
+    switch (index) {
+      case 0:
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) =>   const UserInfoPage()),
+          (Route<dynamic> route) => false,
+        );
+        break;
+        case 1: MainPage ;
+        
+        break;
+      case 2:
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const RentalHistoryPage()),
+          (Route<dynamic> route) => false,
+        );
+        break;
     }
   }
 
@@ -83,7 +113,6 @@ class _MainPageState extends State<MainPage> {
                 await AuthService.logout();
                 if (mounted) {
                   Navigator.pushReplacement(
-                    // ignore: use_build_context_synchronously
                     context,
                     MaterialPageRoute(
                       builder: (context) => const RegistrationPage(),
@@ -161,7 +190,6 @@ class _MainPageState extends State<MainPage> {
                     ebikemain = Ebike(name: userDoc.data()?['reservation'], photo: 'assets/images/Ebike.jpeg');
                     if (mounted) {
                       Navigator.push(
-                        // ignore: use_build_context_synchronously
                         context,
                         MaterialPageRoute(
                           builder: (context) => SuccessfulConfirmationPage(
@@ -190,6 +218,26 @@ class _MainPageState extends State<MainPage> {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'User Info',
+          ),
+           BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.history),
+            label: 'Rental History',
+          ),
+         
+        ],
+        currentIndex: selectedIndex,
+        selectedItemColor:primary,
+        onTap: _onItemTapped,
       ),
     );
   }

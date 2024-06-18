@@ -23,6 +23,7 @@ class ScanQRCodePageState extends State<ScanQRCodePage> {
   Set<String> reservedEbikes = {}; // Set to store reserved eBikes
   bool isScanning = true; // Flag to control scanning
   Timer? scanTimer; // Timer to reset scanning
+  Timer? blockStatusTimer; // Timer to periodically check block status
   int invalidScanCount = 0; // Count of invalid scans
   int invalidScanSeriesCount = 0; // Number of times the invalid scan limit has been reached
   DateTime? blockEndTime; // Time when the user block ends
@@ -34,14 +35,22 @@ class ScanQRCodePageState extends State<ScanQRCodePage> {
     mqttService = MqttService();
     fetchUserId().then((_) {
       checkBlockStatus(); // Check if the user is currently blocked after fetching user ID
+      startBlockStatusTimer(); // Start the timer to periodically check block status
     });
-
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     checkBlockStatus(); // Check block status every time the page is built
+  }
+
+  @override
+  void dispose() {
+    mqttService.disconnect();
+    scanTimer?.cancel(); // Cancel the scan timer when disposing
+    blockStatusTimer?.cancel(); // Cancel the block status timer when disposing
+    super.dispose();
   }
 
   Future<void> fetchUserId() async {
@@ -53,13 +62,6 @@ class ScanQRCodePageState extends State<ScanQRCodePage> {
       setupMqttClient();
       fetchReservations(); // Fetch reservation status when the page initializes
     }
-  }
-
-  @override
-  void dispose() {
-    mqttService.disconnect();
-    scanTimer?.cancel(); // Cancel the timer when disposing
-    super.dispose();
   }
 
   Future<void> fetchReservations() async {
@@ -180,7 +182,7 @@ class ScanQRCodePageState extends State<ScanQRCodePage> {
   }
 
   void _blockUser() async {
-    const blockDuration = Duration(minutes:5); // Adjust duration as needed
+    const blockDuration = Duration(minutes:2); // Adjust duration as needed
     if (userId != null) {
       blockEndTime = DateTime.now().add(blockDuration);
       await FirebaseFirestore.instance.collection('users').doc(userId).update({
@@ -203,15 +205,22 @@ class ScanQRCodePageState extends State<ScanQRCodePage> {
           if (DateTime.now().isBefore(blockEnd)) {
             blockEndTime = blockEnd;
             _showBlockDialog();
+          } else {
+            // Update block status if block period has ended
+            await FirebaseFirestore.instance.collection('users').doc(userId).update({
+              'blockStatus': 'unblocked',
+              'blockEndTime': FieldValue.delete() // Optionally remove the blockEndTime field
+            });
           }
-        } else {
-          // Initialize block status if 'blockEndTime' field is not present
-          await FirebaseFirestore.instance.collection('users').doc(userId).update({
-            'blockStatus': 'unblocked'
-           }); // Use SetOptions to avoid overwriting the entire document
         }
       }
     }
+  }
+
+  void startBlockStatusTimer() {
+    blockStatusTimer = Timer.periodic(const Duration(minutes: 1), (timer) {
+      checkBlockStatus();
+    });
   }
 
   void _handleQRCode(String? code) { // Accept nullable String

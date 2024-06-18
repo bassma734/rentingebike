@@ -69,14 +69,7 @@ class PaymentPageState extends State<PaymentPage> {
             ),
           ),
         ),
-        title: const Text(
-          'Paymee Payment',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        
         centerTitle: true,
       ),
       body: Stack(
