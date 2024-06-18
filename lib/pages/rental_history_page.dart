@@ -15,11 +15,10 @@ class RentalHistoryPage extends StatefulWidget {
 
 class RentalHistoryPageState extends State<RentalHistoryPage> {
   final FirestoreService _firestoreService = FirestoreService();
-  int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      MainPageState.selectedIndex = index;
     });
     switch (index) {
       case 0:
@@ -123,7 +122,7 @@ class RentalHistoryPageState extends State<RentalHistoryPage> {
             label: 'Rental History',
           ),
         ],
-        currentIndex: _selectedIndex,
+        currentIndex: MainPageState.selectedIndex,
         selectedItemColor: primary,
         onTap: _onItemTapped,
       ),

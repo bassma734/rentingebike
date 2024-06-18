@@ -19,11 +19,11 @@ class UserInfoPageState extends State<UserInfoPage> {
   final FirestoreService _firestoreService = FirestoreService();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  int _selectedIndex = 0;
   bool _isEditingName = false;
   bool _isEditingEmail = false;
   String _originalName = '';
   String _originalEmail = '';
+  
 
   @override
   void initState() {
@@ -45,7 +45,7 @@ class UserInfoPageState extends State<UserInfoPage> {
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      MainPageState.selectedIndex = index;
     });
     switch (index) {
       case 0:
@@ -101,7 +101,7 @@ class UserInfoPageState extends State<UserInfoPage> {
           await user.reauthenticateWithCredential(credential);
           
           // Update the email
-          await user.updateEmail(_emailController.text);
+          await user.verifyBeforeUpdateEmail(_emailController.text);
           await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
             'email': _emailController.text,
           });
@@ -262,7 +262,7 @@ class UserInfoPageState extends State<UserInfoPage> {
             label: 'Rental History',
           ),
         ],
-        currentIndex: _selectedIndex,
+        currentIndex: MainPageState.selectedIndex,
         selectedItemColor: primary,
         onTap: _onItemTapped,
       ),

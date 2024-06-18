@@ -20,14 +20,14 @@ class MainPage extends StatefulWidget {
   const MainPage({super.key});
 
   @override
-  State<MainPage> createState() => _MainPageState();
+  State<MainPage> createState() => MainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class MainPageState extends State<MainPage> {
   bool hasReservation = false;
   Map<String, dynamic>? reservationData;
   late Ebike ebikemain;
-  int _selectedIndex = 0;
+  static  int selectedIndex = 1;
 
   @override
   void initState() {
@@ -49,7 +49,7 @@ class _MainPageState extends State<MainPage> {
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      selectedIndex = index;
     });
     switch (index) {
       case 0:
@@ -235,7 +235,7 @@ class _MainPageState extends State<MainPage> {
           ),
          
         ],
-        currentIndex: _selectedIndex,
+        currentIndex: selectedIndex,
         selectedItemColor:primary,
         onTap: _onItemTapped,
       ),
