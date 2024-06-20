@@ -7,7 +7,7 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 class MqttService {
   MqttServerClient client =
 
-  MqttServerClient.withPort('broker.emqx.io', 'mobile_App', 1883);
+  MqttServerClient.withPort('localhost', 'mobile_App', 1883);
 
 
   Future<int> connect() async {

@@ -9,8 +9,6 @@ import 'package:renting_app/services/mqtt_service.dart';
 
 
 class SuccessPage extends StatefulWidget {
-  
-
 
   const SuccessPage({super.key});
 
@@ -20,7 +18,7 @@ class SuccessPage extends StatefulWidget {
 
 
 
-class SuccessPageState extends State<ScanQRCodePage> {
+class SuccessPageState extends State<SuccessPage> {
   late MqttService mqttService;
   final String cadenasTopic = "cadenas_topic";
   String rentedebike = ScanQRPCodePageState.code ;
@@ -30,11 +28,14 @@ class SuccessPageState extends State<ScanQRCodePage> {
     super.initState();
     mqttService = MqttService();
     setupMqttClient();
+
   }
 
 Future<void> setupMqttClient() async {
     await mqttService.connect();
     mqttService.subscribe(cadenasTopic);
+    _publishMessage("2nd$rentedebike");
+
   }
 
   void _publishMessage(String message) {
@@ -94,7 +95,6 @@ Future<void> setupMqttClient() async {
 
   void _navigateHome(BuildContext context) async {
     try {
-      _publishMessage("2nd$rentedebike");
 
       await _clearReservation();
       if (context.mounted) {

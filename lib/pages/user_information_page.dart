@@ -208,7 +208,7 @@ class UserInfoPageState extends State<UserInfoPage> {
             ),
           ),
         ),
-        title: const Text('User Information'),
+        title: const Text('User Information' ,),
       ),
       body: Container(
         decoration: const BoxDecoration(
