@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:renting_app/pages/pay.dart';
@@ -6,7 +8,7 @@ import 'package:renting_app/services/mqtt_service.dart';
 import '../core/constants.dart';
 import '../pages/ebike_model.dart';
 import '../services/payment_service.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 class ReservationFormPage extends StatefulWidget {
   final Ebike ebike;
 
@@ -23,6 +25,12 @@ class ReservationFormPageState extends State<ReservationFormPage> {
   final String reservationTopic = "reservation";
   late MqttService mqttService;
   final PaymentService _paymentService = PaymentService();
+  
+  String userName ='';
+  
+  String  userEmail='';
+  
+  String userPhoneNumber ='';
 
   @override
   void initState() {
@@ -38,13 +46,24 @@ class ReservationFormPageState extends State<ReservationFormPage> {
   }
 
   Future<void> _fetchUserId() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
+  User? user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    setState(() {
+      userId = user.uid;
+    });
+
+    // Fetch additional user details from Firestore
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+    if (userDoc.exists) {
       setState(() {
-        userId = user.uid;
+        userName = userDoc.get('name'); // Adjust field name as per your Firestore structure
+        userEmail = userDoc.get('email');
+        userPhoneNumber = userDoc.get('phoneNumber');
       });
     }
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -255,63 +274,66 @@ Future<void> _showTimePickerDialog(BuildContext context) async {
 }
 
   Future<void> _showConfirmationDialog(BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button
-      builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: const Text('Confirm Reservation'),
-          content: const Text('A 5 DT payment is required to confirm your reservation. Tap OK to continue.\n\n'
-                              'Please note: You have a 15-minute grace period after your selected reservation time.'
-                              'If you do not scan the QR code within this time, your reservation will be automatically canceled.'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.of(dialogContext).pop(); // Dismiss the dialog
-              },
-            ),
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () async {
-                Navigator.of(dialogContext).pop(); // Dismiss the dialog
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // user must tap button
+    builder: (BuildContext dialogContext) {
+      return AlertDialog(
+        title: const Text('Confirm Reservation'),
+        content: const Text('A 5 DT payment is required to confirm your reservation. Tap OK to continue.\n\n'
+                            'Please note: You have a 15-minute grace period after your selected reservation time. '
+                            'If you do not scan the QR code within this time, your reservation will be automatically canceled.'),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.of(dialogContext).pop(); // Dismiss the dialog
+            },
+          ),
+          TextButton(
+            child: const Text('OK'),
+            onPressed: () async {
+              Navigator.of(dialogContext).pop(); // Dismiss the dialog
+              
 
-                try {
-                  final paymentUrl = await _paymentService.createPayment(
-                    5.0, // Assuming the payment amount is 5 DT
-                    'Bassma', 
-                    'Zeineb', 
-                    'bessa@gmail.com', 
-                    '+21622334455',
-                  );
-                // Calculate expiration time
+              try {
+                final paymentUrl = await _paymentService.createPayment(
+                  5.0, // Assuming the payment amount is 5 DT
+                  userName, // Use fetched user name
+                  'Res', // Use fetched user name (or adjust as per your requirement)
+                  userEmail, // Use fetched user email
+                  userPhoneNumber, // Use fetched user phone number
+                );
+
                 final DateTime now = DateTime.now();
                 final DateTime selectedDateTime = DateTime(now.year, now.month, now.day, selectedTime.hour, selectedTime.minute);
                 final DateTime expirationTime = selectedDateTime.add(const Duration(minutes: 2));
-                  if (paymentUrl != null) {
-                    Navigator.push(
-                      // ignore: use_build_context_synchronously
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PaymentPage(
-                          paymentUrl: paymentUrl,
-                          nextPage: SuccessfulConfirmationPage(
-                            ebike: widget.ebike,
-                            selectedTime: selectedTime.format(context),
-                            expirationTime: expirationTime,
-                          ),
+
+                if (paymentUrl != null) {
+                  Navigator.push(
+                    // ignore: use_build_context_synchronously
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PaymentPage(
+                        paymentUrl: paymentUrl,
+                        nextPage: SuccessfulConfirmationPage(
+                          ebike: widget.ebike,
+                          selectedTime: selectedTime.format(context),
+                          expirationTime: expirationTime,
                         ),
                       ),
-                    );
-                  }
-                } catch (e) {
-                  debugPrint('Payment creation failed: $e');
+                    ),
+                  );
                 }
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+              } catch (e) {
+                debugPrint('Payment creation failed: $e');
+              }
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
 }

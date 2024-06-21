@@ -54,4 +54,16 @@ class Validator {
     }
     return errorMessage.isNotEmpty ? errorMessage.trim() : null;
   }
+
+  static String? phoneValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Phone number is required';
+    }
+    // You can add more specific validation rules for phone numbers here
+    return null;
+  }
+
+  // Define other validators as needed
 }
+
+

@@ -43,6 +43,8 @@ const MyApp({super.key});
                 
               ),
         ),
+        debugShowCheckedModeBanner: false, // Désactive le bandeau debug
+
         home: StreamBuilder<User?>(
           stream: AuthService.userStream,
           builder: (context, snapshot) {

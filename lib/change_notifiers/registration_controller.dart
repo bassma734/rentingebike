@@ -44,12 +44,22 @@ class RegistrationController extends ChangeNotifier {
 
   String get password => _password;
 
+String _phoneNumber = ''; // Added phoneNumber field
+  set phoneNumber(String value) {
+    _phoneNumber = value;
+    notifyListeners();
+  }
+
+  String get phoneNumber => _phoneNumber.trim();
+
   bool _isLoading = false;
   bool get isLoading => _isLoading;
   set isLoading(bool value) {
     _isLoading = value;
     notifyListeners();
   }
+
+  
 
   Future<void> authenticateWithEmailAndPassword(
       {required BuildContext context}) async {
@@ -60,6 +70,7 @@ class RegistrationController extends ChangeNotifier {
           fullName: fullName,
           email: email,
           password: password,
+          phoneNumber: phoneNumber ,
         );
 
         if (!context.mounted) return;
@@ -134,6 +145,25 @@ class RegistrationController extends ChangeNotifier {
         context: context,
         message: 'An unkown error occurred!',
       );
+    } finally {
+      isLoading = false;
+    }
+  }
+
+
+  Future<void> registerUser({
+    required String fullName,
+    required String email,
+    required String password,
+    required String phoneNumber,
+  }) async {
+    try {
+      isLoading = true;
+      await AuthService.register(fullName:fullName, email:email, password:password, phoneNumber:phoneNumber);
+      // Registration successful, perform any necessary actions here
+    } catch (e) {
+      // Handle registration errors
+      debugPrint('Registration error: $e');
     } finally {
       isLoading = false;
     }

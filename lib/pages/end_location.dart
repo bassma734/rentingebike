@@ -3,6 +3,10 @@ import 'package:renting_app/core/constants.dart';
 import 'package:renting_app/pages/success_page.dart';
 import '../services/payment_service.dart';
 import '../pages/pay.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+
 //import 'dart:async';
 
 class EndLocation extends StatefulWidget {
@@ -19,6 +23,12 @@ class EndLocationState extends State<EndLocation> with SingleTickerProviderState
   late AnimationController _controller;
   late Animation<Offset> _animation;
   late double _amount;
+  String userName ='';
+  String  userEmail='';
+  String userPhoneNumber ='';
+  late String userId;
+
+
 
   @override
   void initState() {
@@ -35,6 +45,8 @@ class EndLocationState extends State<EndLocation> with SingleTickerProviderState
       parent: _controller,
       curve: Curves.easeInOut,
     ));
+     _fetchUserId();
+
   }
 
   @override
@@ -42,12 +54,33 @@ class EndLocationState extends State<EndLocation> with SingleTickerProviderState
     _controller.dispose();
     super.dispose();
   }
+ Future<void> _fetchUserId() async {
+  User? user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    setState(() {
+      userId = user.uid;
+    });
 
+    // Fetch additional user details from Firestore
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+    if (userDoc.exists) {
+      setState(() {
+        userName = userDoc.get('name'); // Adjust field name as per your Firestore structure
+        userEmail = userDoc.get('email');
+        userPhoneNumber = userDoc.get('phoneNumber');
+      });
+    }
+  }
+}
   void _startPayment() async {
     try {
-      final paymentUrl = await _paymentService.createPayment(
-        _amount, 'Bassma', 'Zeineb', 'bessa@gmail.com', '+21622334455',
-      );
+                final paymentUrl = await _paymentService.createPayment(
+                  _amount, // Assuming the payment amount is 5 DT
+                  userName, // Use fetched user name
+                  'Res', // Use fetched user name (or adjust as per your requirement)
+                  userEmail, // Use fetched user email
+                  userPhoneNumber, // Use fetched user phone number
+                );
 
       if (paymentUrl != null) {
         // ignore: use_build_context_synchronously

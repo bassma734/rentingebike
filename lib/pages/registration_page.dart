@@ -8,6 +8,7 @@ import '../widgets/note_button.dart';
 import '../widgets/note_form_field.dart';
 import 'recover_password_page.dart';
 
+
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({super.key});
 
@@ -20,7 +21,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
   late final TextEditingController nameController;
   late final TextEditingController emailController;
   late final TextEditingController passwordController;
+  late final TextEditingController phoneController; // New controller for phone number
   late final GlobalKey<FormState> formKey;
+
   String pageTitle = 'Register'; // Add a title state variable
 
   @override
@@ -30,6 +33,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
     nameController = TextEditingController();
     emailController = TextEditingController();
     passwordController = TextEditingController();
+    phoneController = TextEditingController(); // Initialize phone controller
     formKey = GlobalKey();
   }
 
@@ -38,14 +42,33 @@ class _RegistrationPageState extends State<RegistrationPage> {
     nameController.dispose();
     emailController.dispose();
     passwordController.dispose();
+    phoneController.dispose(); // Dispose phone controller
     super.dispose();
   }
 
   void updateTitle() {
     setState(() {
-      pageTitle = registrationController.isRegisterMode ? 'Register' : 'Sign in'; // Update title based on mode
+      pageTitle =
+          registrationController.isRegisterMode ? 'Register' : 'Sign in'; // Update title based on mode
     });
   }
+
+  /*void _registerUser() {
+    if (formKey.currentState!.validate()) {
+      registrationController.registerUser(
+        fullName: nameController.text.trim(),
+        email: emailController.text.trim(),
+        password: passwordController.text,
+        phoneNumber: phoneController.text.trim(), // Pass phone number to registration
+      );
+
+      // Optionally, you can clear the form fields after registration
+      nameController.clear();
+      emailController.clear();
+      passwordController.clear();
+      phoneController.clear(); // Clear phone number field
+    }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -114,18 +137,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       ),
                       const SizedBox(height: 48),
                       if (registrationController.isRegisterMode)
-                        NoteFormField(
-                          controller: nameController,
-                          labelText: 'Full name',
-                          fillColor: Colors.white,
-                          filled: true,
-                          textCapitalization: TextCapitalization.sentences,
-                          textInputAction: TextInputAction.next,
-                          validator: Validator.nameValidator,
-                          onChanged: (newValue) {
-                            registrationController.fullName = newValue;
-                          },
-                        ),
+
+                      NoteFormField(
+                        controller: nameController,
+                        labelText: 'Full name',
+                        fillColor: Colors.white,
+                        filled: true,
+                        textCapitalization: TextCapitalization.sentences,
+                        textInputAction: TextInputAction.next,
+                        validator: Validator.nameValidator,
+                        onChanged: (newValue) {
+                          registrationController.fullName = newValue;
+                        },
+                      ),
                       const SizedBox(height: 8),
                       NoteFormField(
                         controller: emailController,
@@ -149,6 +173,18 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         validator: Validator.passwordValidator,
                         onChanged: (newValue) {
                           registrationController.password = newValue;
+                        },
+                      ),
+                      const SizedBox(height: 8),
+                      NoteFormField(
+                        controller: phoneController,
+                        labelText: 'Phone number',
+                        fillColor: Colors.white,
+                        filled: true,
+                        keyboardType: TextInputType.phone,
+                        textInputAction: TextInputAction.done,
+                        onChanged: (newValue) {
+                          registrationController.phoneNumber = newValue;
                         },
                       ),
                       const SizedBox(height: 12),
@@ -181,13 +217,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                 : () {
                                     if (formKey.currentState?.validate() ?? false) {
                                       registrationController.authenticateWithEmailAndPassword(context: context);
-                                    }
-                                  },
+                                    }                              
+                                        },
                             child: isLoading
                                 ? const SizedBox(
                                     width: 24,
                                     height: 24,
-                                    child: CircularProgressIndicator(color: Colors.white),
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                    ),
                                   )
                                 : Text(
                                     registrationController.isRegisterMode
@@ -217,23 +255,24 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () {
-                                registrationController.authenticateWithGoogle(context: context);
+                                registrationController
+                                    .authenticateWithGoogle(context: context);
                               },
                               style: ElevatedButton.styleFrom(
-                                foregroundColor: Colors.black, backgroundColor: Colors.white, // Button text color
+                                foregroundColor: Colors.black, backgroundColor: Colors.white,
                                 padding: const EdgeInsets.symmetric(vertical: 12),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 textStyle: const TextStyle(fontSize: 16),
-                                elevation: 5, // Add shadow for better appearance
+                                elevation: 5,
                               ),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Image.asset(
                                     'assets/google_logo.png',
-                                    height: 24, // Adjust the height as needed
+                                    height: 24,
                                   ),
                                   const SizedBox(width: 12),
                                   const Text(
@@ -265,7 +304,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
                                   setState(() {
-                                    registrationController.isRegisterMode = !registrationController.isRegisterMode;
+                                    registrationController.isRegisterMode =
+                                        !registrationController.isRegisterMode;
                                     updateTitle(); // Update the title when mode changes
                                   });
                                 },

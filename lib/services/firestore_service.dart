@@ -8,12 +8,13 @@ class FirestoreService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // Add or update user information
-  Future<void> addUser(String userId, String name, String email) {
+  Future<void> addUser(String userId, String name, String email, String? phoneNumber) {
     return _db.collection('users').doc(userId).set({
       'name': name,
       'email': email,
       'reservation': null,
       'reservation_time': null,
+      'phoneNumber':phoneNumber ,
       'status' :null,
 
 
