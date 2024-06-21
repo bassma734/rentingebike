@@ -9,7 +9,7 @@ import 'package:renting_app/services/mqtt_service.dart';
 
 
 class SuccessPage extends StatefulWidget {
-
+  
   const SuccessPage({super.key});
 
   @override
@@ -53,7 +53,7 @@ Future<void> setupMqttClient() async {
         await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
           'reservation': null,
           'reservation_time': null,
-          'status' : null ,
+          'status': null,
         });
 
         // Add rental record to user's document
